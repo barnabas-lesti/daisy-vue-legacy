@@ -14,6 +14,7 @@ module.exports = {
     'semi': [ 2, 'always' ],
     'curly': [ 2, 'multi' ],
     'space-before-function-paren': [ 2, 'always' ],
+    'space-infix-ops': 0,
     'sort-vars': 2,
     'dot-notation': 0,
     'vue/singleline-html-element-content-newline': 0,
