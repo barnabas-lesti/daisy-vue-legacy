@@ -1,8 +1,10 @@
+const config = require('./src/server/core/config');
+
 module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: process.env.VUE_APP_DEV_SERVER_PORT,
+    port: config.CLIENT_DEV_SERVER_PORT,
   },
 
   transpileDependencies: [
