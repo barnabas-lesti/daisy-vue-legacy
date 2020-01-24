@@ -4,7 +4,7 @@ module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: config.CLIENT_DEV_SERVER_PORT,
+    port: config.private.CLIENT_DEV_SERVER_PORT,
   },
 
   transpileDependencies: [
@@ -17,8 +17,8 @@ module.exports = {
     },
   },
 
-  chainWebpack: config => {
-    config.module
+  chainWebpack: webpackConfig => {
+    webpackConfig.module
       .rule('yaml')
       .test(/\.ya?ml$/)
       .use('json-loader')
@@ -27,5 +27,15 @@ module.exports = {
       .use('yaml-loader')
       .loader('yaml-loader')
       .end();
+
+    webpackConfig
+      .plugin('define')
+      .tap(definitions => {
+        const { private: privateEnvConfig, ...publicEnvConfig } = config;
+        definitions[0] = Object.assign(definitions[0], {
+          'window.publicEnvConfig': JSON.stringify(publicEnvConfig),
+        });
+        return definitions;
+      });
   },
 };

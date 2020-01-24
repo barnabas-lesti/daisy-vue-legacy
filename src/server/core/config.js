@@ -3,11 +3,24 @@ const requireYml = require('require-yml');
 
 const POPULATION_REGEX = /<(.*?)>/g;
 const TOKEN_TO_KEY_REGEX = /<|>/g;
-
 const APP_ROOT_PATH = path.join(__dirname, '../../../');
 const ENV_FOLDER_PATH = path.join(APP_ROOT_PATH, './env');
 
-const packageJson = require(path.join(APP_ROOT_PATH, 'package.json'));
+const { private: privateEnvConfig, ...publicEnvConfig } = getEnvConfig();
+
+module.exports = {
+  ENV: process.env.NODE_ENV || 'development',
+  IS_PRODUCTION: process.env.NODE_ENV === 'production',
+  IS_TEST: process.env.NODE_ENV === 'test',
+
+  ...publicEnvConfig,
+
+  private: {
+    APP_ROOT_PATH,
+
+    ...privateEnvConfig,
+  },
+};
 
 function getEnvConfig () {
   const rawEnvConfigFromConfigFiles = getRawEnvConfigFromConfigFiles();
@@ -75,17 +88,3 @@ function populateConfigString (configString, rawEnvConfig) {
 
   return populatedConfigString;
 }
-
-module.exports = {
-  APP_NAME: packageJson.name,
-  APP_VERSION: packageJson.version,
-  APP_ABBREVIATION: packageJson.app.abbreviation,
-
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  IS_PRODUCTION: process.env.NODE_ENV === 'production',
-  IS_TEST: process.env.NODE_ENV === 'test',
-
-  APP_ROOT_PATH,
-
-  ...getEnvConfig(),
-};

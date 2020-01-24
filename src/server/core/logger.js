@@ -6,9 +6,9 @@ const config = require('./config');
 
 const { combine, colorize, label, timestamp, printf } = winston.format;
 
-const LOGS_FOLDER_PATH = path.join(config.APP_ROOT_PATH, './logs');
+const LOGS_FOLDER_PATH = path.join(config.private.APP_ROOT_PATH, './logs');
 
-if (config.CLEAN_LOGS_FOLDER) cleanLogsFolder();
+if (config.private.CLEAN_LOGS_FOLDER) cleanLogsFolder();
 
 const baseFormatConfig = [
   label({ label: config.APP_ABBREVIATION }),
@@ -24,7 +24,7 @@ const transports = [
     ),
   }),
 
-  ...(config.LOG_TO_FILE ? [ new winston.transports.File({
+  ...(config.private.LOG_TO_FILE ? [ new winston.transports.File({
     level: 'info',
     filename: generateLogFilePath(),
   }) ] : []),

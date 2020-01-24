@@ -1,2 +1,3 @@
-// TODO: Implement config resolving logic
-export default {};
+export default {
+  ...window.publicEnvConfig,
+};
