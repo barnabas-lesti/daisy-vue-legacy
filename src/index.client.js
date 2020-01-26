@@ -1,4 +1,8 @@
 // Feature imports
+import './client/home';
+import './client/preferences';
 
 // Core import
-import './client/core/app';
+import { app } from './client/core';
+
+app.start();

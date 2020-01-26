@@ -3,20 +3,37 @@ import VueRouter from 'vue-router';
 
 import store from './store';
 
+const { config } = store.state.core;
+
 Vue.use(VueRouter);
 
-const routes = [
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  // },
-];
+class Router {
+  constructor () {
+    this._vueRouter = new VueRouter({
+      mode: 'history',
+      base: config.BASE_URL,
+    });
+  }
 
-const router = new VueRouter({
-  mode: 'history',
-  base: store.state.core.config.BASE_URL,
-  routes,
-});
+  registerRoute (route) {
+    this.registerRoutes([ route ]);
+  }
 
-export default router;
+  registerRoutes (routes) {
+    this._vueRouter.addRoutes(routes);
+  }
+
+  registerSidebarItem (sidebarItem) {
+    this.registerSidebarItems([ sidebarItem ]);
+  }
+
+  registerSidebarItems (sidebarItems) {
+    store.commit('core/pushSidebarItems', sidebarItems);
+  }
+
+  getVueRouter () {
+    return this._vueRouter;
+  }
+}
+
+export default new Router();

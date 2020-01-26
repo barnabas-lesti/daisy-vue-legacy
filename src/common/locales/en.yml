@@ -1,1 +1,8 @@
-#
+core:
+  appTitle: Aurora
+
+home:
+  title: Home
+
+preferences:
+  title: Preferences

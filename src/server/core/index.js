@@ -4,20 +4,27 @@ const bodyParser = require('body-parser');
 const config = require('./config');
 const logger = require('./logger');
 
-const expressApp = express();
-
 class App {
+  constructor () {
+    this._expressApp = express();
+  }
+
   async start () {
     logger.info(`Using configuration: "${config.NODE_ENV}"`);
 
-    expressApp.use('*', [
+    this._expressApp.use('*', [
       bodyParser.json(),
     ]);
 
-    const server = await expressApp.listen(config.private.PORT);
+    const server = await this._expressApp.listen(config.private.PORT);
     const { address } = server.address();
     logger.info(`Server running at http://${address}:${config.private.PORT}`);
   }
 }
 
-module.exports = new App();
+module.exports = {
+  config,
+  logger,
+
+  app: new App(),
+};
