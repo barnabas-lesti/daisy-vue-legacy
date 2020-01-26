@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
-import config from './config';
+import store from './store';
+
+const { config } = store.state.core;
 
 Vue.use(VueI18n);
 

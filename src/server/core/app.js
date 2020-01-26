@@ -6,11 +6,9 @@ const logger = require('./logger');
 
 const expressApp = express();
 
-console.log(config);
-
 class App {
   async start () {
-    logger.info(`Using configuration: "${config.ENV}"`);
+    logger.info(`Using configuration: "${config.NODE_ENV}"`);
 
     expressApp.use('*', [
       bodyParser.json(),

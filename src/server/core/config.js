@@ -9,7 +9,7 @@ const ENV_FOLDER_PATH = path.join(APP_ROOT_PATH, './env');
 const { private: privateEnvConfig, ...publicEnvConfig } = getEnvConfig();
 
 module.exports = {
-  ENV: process.env.NODE_ENV || 'development',
+  NODE_ENV: process.env.NODE_ENV || 'development',
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
   IS_TEST: process.env.NODE_ENV === 'test',
 
