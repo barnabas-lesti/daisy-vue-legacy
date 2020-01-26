@@ -1,13 +1,13 @@
-import { router } from '../core';
+import router from './router';
 
 router.registerRoute({
   path: '/preferences',
   name: 'preferences',
-  component: () => import(/* webpackChunkName: "preferences" */ './PreferencesView.vue'),
+  component: () => import(/* webpackChunkName: "preferences" */ './views/PreferencesView.vue'),
 });
 
 router.registerSidebarItem({
-  labelKey: 'preferences.title',
+  labelKey: 'core.preferences.title',
   icon: 'fas fa-cog',
   routeToName: 'preferences',
   group: 1,

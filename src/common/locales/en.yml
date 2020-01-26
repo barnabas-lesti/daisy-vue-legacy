@@ -1,8 +1,10 @@
 core:
   appTitle: Aurora
+  preferences:
+    title: Preferences
+    description: Preferences will be stored on your machine.
+    table:
+      darkTheme: Use dark theme?
 
 home:
   title: Home
-
-preferences:
-  title: Preferences

@@ -1,20 +1,30 @@
 import config from '../config';
+import storage from '../storage';
+import eventBus from '../event-bus';
+
+const PREFERENCES_STORAGE_KEY = 'preferences';
 
 export default {
   namespaced: true,
   state: {
     config,
 
-    theme: {
-      isDark: false,
-    },
-
     sidebarItems: [],
+
+    preferences: storage.getFromLocalStorage(PREFERENCES_STORAGE_KEY) || {
+      isDarkTheme: false,
+    },
   },
 
   mutations: {
-    pushSidebarItems (state, sidebarItems) {
-      state.sidebarItems.push(...sidebarItems);
+    pushSidebarItems ({ sidebarItems }, newItems) {
+      sidebarItems.push(...newItems);
+    },
+    updatePreferences (store, update) {
+      const updatedPreferences = { ...store.preferences, ...update };
+      store.preferences = updatedPreferences;
+      storage.saveToLocalStorage(PREFERENCES_STORAGE_KEY, updatedPreferences);
+      eventBus.$emit('core/preferencesUpdated', updatedPreferences);
     },
   },
 

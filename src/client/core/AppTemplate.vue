@@ -23,7 +23,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Sidebar from './templates/Sidebar.vue';
+import Sidebar from './components/sidebar/Sidebar.vue';
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
   },
   data: () => ({
     sidebar: {
-      isOpen: true,
+      isOpen: false,
     },
   }),
 

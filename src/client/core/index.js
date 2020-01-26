@@ -3,10 +3,14 @@ import Vue from 'vue';
 import router from './router';
 import store from './store';
 import i18n from './i18n';
+import storage from './storage';
+import eventBus from './event-bus';
 
 import vuetify from './plugins/vuetify';
 
 import AppTemplate from './AppTemplate.vue';
+
+import './routes';
 
 class App {
   constructor () {
@@ -38,6 +42,8 @@ export {
   router,
   store,
   i18n,
+  storage,
+  eventBus,
 
   app,
 };
