@@ -4,8 +4,8 @@ import Vuetify from 'vuetify/lib';
 import 'typeface-roboto/index.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import store from '../store';
-import eventBus from '../event-bus';
+import store from './store';
+import eventService from '../services/event-service';
 
 Vue.use(Vuetify);
 
@@ -24,7 +24,7 @@ const vuetify = new Vuetify({
   },
 });
 
-eventBus.$on('core/preferencesUpdated', preferences => {
+eventService.$on('core/preferencesUpdated', preferences => {
   vuetify.framework.theme.dark = preferences.isDarkTheme;
 });
 

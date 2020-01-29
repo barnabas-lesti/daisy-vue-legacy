@@ -1,17 +1,16 @@
 <template lang="pug">
   v-app.app
     sidebar(
+      v-if='user'
       v-model='sidebar.isOpen'
       :items='groupedSidebarItems'
     )
 
-    v-app-bar(
-      app
-      dense
-      clipped-left
+    nav-bar(
+      v-if='user'
+      :user='user'
+      @toggle-sidebar='sidebar.isOpen = !sidebar.isOpen'
     )
-      v-app-bar-nav-icon(@click='sidebar.isOpen = !sidebar.isOpen')
-      v-toolbar-title {{ $t('core.appTitle') }}
 
     v-content
       v-container(fluid)
@@ -21,12 +20,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
+import NavBar from './components/nav-bar/NavBar.vue';
 import Sidebar from './components/sidebar/Sidebar.vue';
 
 export default {
   components: {
+    NavBar,
     Sidebar,
   },
   data: () => ({
@@ -36,6 +37,7 @@ export default {
   }),
 
   computed: {
+    ...mapState('core', [ 'user' ]),
     ...mapGetters('core', [ 'groupedSidebarItems' ]),
   },
 };

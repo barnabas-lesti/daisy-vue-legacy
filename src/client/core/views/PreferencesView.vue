@@ -1,12 +1,12 @@
 <template lang="pug">
   .preferences.view
-    h1 {{ $t('core.preferences.title') }}
-    p.caption.font-italic {{ $t('core.preferences.description') }}
+    h1 {{ $t('core.views.preferences.title') }}
+    p.caption.font-italic {{ $t('core.views.preferences.description') }}
 
     v-simple-table
       tbody
         tr
-          td {{ $t('core.preferences.table.darkTheme') }}
+          td {{ $t('core.views.preferences.table.darkTheme') }}
           td
             v-switch(
               v-model="isDarkTheme"
@@ -15,10 +15,6 @@
 
 <script>
 export default {
-  data: () => ({
-    switch1: true,
-  }),
-
   computed: {
     isDarkTheme: {
       get () { return this.$store.state.core.preferences.isDarkTheme; },
