@@ -1,49 +1,25 @@
 import Vue from 'vue';
 
-import router from './router';
-import store from './store';
-import i18n from './i18n';
-import storage from './storage';
-import eventBus from './event-bus';
-
+import router from './plugins/router';
+import store from './plugins/store';
+import i18n from './plugins/i18n';
 import vuetify from './plugins/vuetify';
 
-import AppTemplate from './AppTemplate.vue';
+import App from './App.vue';
 
-import './routes';
+Vue.config.productionTip = false;
 
-class App {
-  constructor () {
-    Vue.config.productionTip = false;
+function bootstrap () {
+  new Vue({
+    store,
+    router,
+    i18n,
+    vuetify,
 
-    this._vueApp = new Vue({
-      store,
-      router: router.getVueRouter(),
-      i18n: i18n.getVueI18n(),
-
-      vuetify,
-
-      render: h => h(AppTemplate),
-    });
-  }
-
-  start () {
-    this._vueApp.$mount('#app');
-  }
-
-  getVueApp () {
-    return this._vueApp;
-  }
+    render: h => h(App),
+  }).$mount('#app');
 }
 
-const app = new App();
-
 export {
-  router,
-  store,
-  i18n,
-  storage,
-  eventBus,
-
-  app,
+  bootstrap,
 };

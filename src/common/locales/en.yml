@@ -1,10 +1,17 @@
 core:
   appTitle: Aurora
-  preferences:
-    title: Preferences
-    description: Preferences will be stored on your machine.
-    table:
-      darkTheme: Use dark theme?
 
-home:
-  title: Home
+  views:
+    home:
+      title: Home
+
+    preferences:
+      title: Preferences
+      description: Preferences will be stored on your machine.
+      table:
+        darkTheme: Use dark theme?
+
+    signIn:
+      title: Sign in
+      signInAs: Sign in as {name}?
+      signInAsHint: Currently this option is baked in to the app, but I guess you've figured it out already.

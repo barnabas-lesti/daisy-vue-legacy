@@ -1,7 +1,7 @@
 <template lang="pug">
   v-list-item.sidebar-list-item(
-    :to='{ name: item.routeToName }'
-    color='primary'
+    :to="{ name: item.routeToName }"
+    color="primary"
     link
     dense
   )

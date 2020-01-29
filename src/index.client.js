@@ -1,7 +1,7 @@
 // Feature imports
-import './client/home';
+// import './client/home';
 
 // Core import
-import { app } from './client/core';
+import { bootstrap } from './client/core';
 
-app.start();
+bootstrap();
