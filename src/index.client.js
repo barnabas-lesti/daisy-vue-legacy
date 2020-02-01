@@ -1,5 +1,5 @@
 // Feature imports
-// import './client/home';
+import './client/wallet';
 
 // Core import
 import { bootstrap } from './client/core';
