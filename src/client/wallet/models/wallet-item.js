@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { DATE_FORMAT, categories, currencies, itemTypes, paymentTypes } from '../constants';
+// import { DATE_FORMAT, categories, currencies, itemTypes, paymentTypes } from '../constants';
 
 export default class WalletItem {
   constructor ({ category, creatorId, currency, id, itemType, name, paymentType, transactionDate, value } = {}) {

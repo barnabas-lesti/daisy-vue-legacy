@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
-const { private: { MONGO_URI } } = require('./config');
+const config = require('./config');
 const logger = require('./logger');
+
+const MONGO_URI = config.get('private.core.MONGO_URI');
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
@@ -16,14 +18,16 @@ class Db {
 
   async connect () {
     try {
-      const mongoUri = MONGO_URI || await this._createInMemoryMongoDb();
-      ({ connection: this._connection } = await mongoose.connect(mongoUri));
-
-      if (MONGO_URI) {
+      const mongoUriFromConfig = MONGO_URI;
+      if (mongoUriFromConfig) {
+        logger.info('Connecting to MongoDB...');
+        ({ connection: this._connection } = await mongoose.connect(mongoUriFromConfig));
         logger.info('Connected to MongoDB');
-        return;
+      } else {
+        const inMemoryMongoUri = await this._createInMemoryMongoDb();
+        ({ connection: this._connection } = await mongoose.connect(inMemoryMongoUri));
+        logger.warn(`MONGO_URI not set, initialized and connected to In-Memory MongoDB`);
       }
-      logger.warn(`MONGO_URI not set, initialized and connected to In-Memory MongoDB`);
     } catch (error) {
       logger.error(error);
       throw error;
@@ -35,9 +39,9 @@ class Db {
       await this._connection.close();
       this._connection = null;
       logger.success('Disconnected from MongoDB');
-      return;
+    } else {
+      logger.info('No active MongoDB connection, can\'t disconnect');
     }
-    logger.info('No active MongoDB connection, can\'t disconnect');
   }
 
   async _createInMemoryMongoDb () {

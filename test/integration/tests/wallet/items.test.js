@@ -1,24 +1,7 @@
-const { agent, expect, faker } = require('../index');
+const { agent, expect } = require('../core');
+const { cleanDb, createFakeItem, fetchItemFromDb, fetchItemsFromDb, populateDb } = require('./utils');
 
-const WalletItem = require('../../../src/server/wallet/models/wallet-item');
-
-const BASE_URL = '/api/wallet';
-const NUMBER_OF_ITEMS = 10;
-
-const createFakeItem = () => (new WalletItem({
-  name: faker.lorem.words(5),
-  value: faker.random.number(Number.MAX_SAFE_INTEGER),
-})).toObject();
-const cleanDb = () => WalletItem.deleteMany({});
-const populateDb = async () => {
-  const items = [];
-  for (let i = 0; i < NUMBER_OF_ITEMS; i++) {
-    items.push(createFakeItem());
-  }
-  await WalletItem.insertMany(items);
-};
-const fetchItemFromDb = (id) => WalletItem.findById(id);
-const fetchItemsFromDb = () => WalletItem.find({});
+const BASE_URL = '/api/wallet/items';
 
 describe(BASE_URL, () => {
   const get = () => agent().get(BASE_URL);

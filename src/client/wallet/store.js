@@ -16,7 +16,7 @@ store.registerModule('wallet', {
     },
     setItems (state, items) {
       state.items = items.map(item => new WalletItem(item));
-    }
+    },
   },
 
   actions: {

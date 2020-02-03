@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { categories, currencies, itemTypes, paymentTypes } = require('../constants');
+const { categories, currencies, itemTypes, paymentTypes } = require('../config/constants');
 
 const walletItemSchema = new mongoose.Schema({
   category: {
