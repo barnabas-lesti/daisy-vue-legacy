@@ -1,51 +1,66 @@
 <template lang="pug">
   .wallet-item.view
-    h1 {{ $t('wallet.views.walletItem.title') }}
+    v-row
+      v-col
+        h1 {{ $t('wallet.views.walletItem.title') }}
 
-    v-form
-      v-text-field(
-        v-model="form.model.name"
-        :label="$t('wallet.views.walletItem.form.labels.name')"
-      )
-      v-text-field(
-        v-model="form.model.value"
-        :label="$t('wallet.views.walletItem.form.labels.value')"
-        type="number"
-      )
-      v-select(
-        v-model="form.model.currency"
-        :label="$t('wallet.views.walletItem.form.labels.currency')"
-        :items="form.settings.currencies"
-      )
-      v-select(
-        v-model="form.model.itemType"
-        :label="$t('wallet.views.walletItem.form.labels.itemType')"
-        :items="form.settings.itemTypes"
-      )
-      v-select(
-        v-model="form.model.paymentType"
-        :label="$t('wallet.views.walletItem.form.labels.paymentType')"
-        :items="form.settings.paymentTypes"
-      )
-      form-date-picker(
-        v-model="transactionDate"
-        :label="$t('wallet.views.walletItem.form.labels.transactionDate')"
-      )
-      v-select(
-        v-model="form.model.category"
-        :label="$t('wallet.views.walletItem.form.labels.category')"
-        :items="form.settings.categories"
-      )
+    v-row
+      v-col
+        v-form(@submit.prevent="saveItem()")
+          v-text-field(
+            v-model="item.name"
+            :label="$t('wallet.views.walletItem.form.labels.name')"
+            :readonly="form.isLoading"
+          )
+          v-text-field(
+            v-model="item.value"
+            :label="$t('wallet.views.walletItem.form.labels.value')"
+            :readonly="form.isLoading"
+            type="number"
+          )
+          v-select(
+            v-model="item.currency"
+            :label="$t('wallet.views.walletItem.form.labels.currency')"
+            :items="form.settings.currencies"
+            :readonly="form.isLoading"
+          )
+          v-select(
+            v-model="item.itemType"
+            :label="$t('wallet.views.walletItem.form.labels.itemType')"
+            :items="form.settings.itemTypes"
+            :readonly="form.isLoading"
+          )
+          v-select(
+            v-model="item.paymentType"
+            :label="$t('wallet.views.walletItem.form.labels.paymentType')"
+            :items="form.settings.paymentTypes"
+            :readonly="form.isLoading"
+          )
+          form-date-picker(
+            v-model="transactionDate"
+            :label="$t('wallet.views.walletItem.form.labels.transactionDate')"
+            :readonly="form.isLoading"
+          )
+          v-select(
+            v-model="item.category"
+            :label="$t('wallet.views.walletItem.form.labels.category')"
+            :items="form.settings.categories"
+            :readonly="form.isLoading"
+          )
 
-      v-btn(
-        color="primary"
-      ) {{ $t('wallet.views.walletItem.form.labels.submit') }}
+          v-btn(
+            :readonly="form.isLoading"
+            :loading="form.isLoading"
+            color="primary"
+            type="submit"
+          ) {{ $t('wallet.views.walletItem.form.labels.submit') }}
 
-    pre {{ form.model }}
+    pre {{ item }}
 </template>
 
 <script>
-import WalletItem from '../models/wallet-item';
+import { mapState } from 'vuex';
+
 import { categories, currencies, itemTypes, paymentTypes } from '../constants';
 
 import { FormDatePicker } from '../../core/components';
@@ -58,8 +73,7 @@ export default {
   data () {
     return {
       form: {
-        datePickerMenu: false,
-        model: new WalletItem(),
+        isLoading: true,
         settings: {
           categories: categories.map(item => ({ text: this.$t(`wallet.common.categories.${item}`), value: item })),
           currencies: currencies.map(item => ({ text: this.$t(`wallet.common.currencies.${item}`), value: item })),
@@ -71,19 +85,27 @@ export default {
   },
 
   computed: {
+    ...mapState('wallet', [ 'item' ]),
+
     transactionDate: {
-      get () { return this.form.model.getFormattedTransactionDate(); },
-      set (newValue) { this.form.model.setFormattedTransactionDate(newValue); },
+      get () { return this.item.getFormattedTransactionDate(); },
+      set (newValue) { this.item.setFormattedTransactionDate(newValue); },
     },
   },
 
-  created () {
-    const { itemId } = this.$route.params;
-    if (itemId) {
-      // TODO: Fetch from server
-    } else {
-      // TODO: check/set as a new empty item
-    }
+  methods: {
+    async saveItem () {
+      this.form.isLoading = true;
+      await this.$store.dispatch('wallet/saveItem', this.item);
+      this.form.isLoading = false;
+    },
+  },
+
+  async created () {
+    const { id } = this.$route.params;
+    if (id) await this.$store.dispatch('wallet/fetchItem', id);
+
+    this.form.isLoading = false;
   },
 };
 </script>

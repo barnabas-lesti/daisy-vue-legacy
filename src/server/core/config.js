@@ -33,10 +33,20 @@ function getEnvConfig () {
 
 function getRawEnvConfigFromConfigFiles () {
   const rawConfigPack = requireYml(ENV_FOLDER_PATH);
+  const { private: defaultPrivate, ...defaultPublic } = rawConfigPack.default || {};
+  const { private: envPrivate, ...envPublic } = rawConfigPack[process.env.NODE_ENV] || {};
+  const { private: localPrivate, ...localPublic } = rawConfigPack.local || {};
+
   return {
-    ...(rawConfigPack.default || {}),
-    ...(rawConfigPack[process.env.NODE_ENV] || {}),
-    ...(rawConfigPack.local || {}),
+    ...defaultPublic,
+    ...envPublic,
+    ...localPublic,
+
+    private: {
+      ...defaultPrivate,
+      ...envPrivate,
+      ...localPrivate,
+    },
   };
 }
 

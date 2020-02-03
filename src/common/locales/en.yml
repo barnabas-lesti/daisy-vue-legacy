@@ -46,7 +46,7 @@ wallet:
       title: Wallet
 
     walletItem:
-      title: Wallet item
+      title: Create/edit item
       form:
         labels:
           category: Category

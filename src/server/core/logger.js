@@ -13,7 +13,7 @@ if (config.private.CLEAN_LOGS_FOLDER) cleanLogsFolder();
 const baseFormatConfig = [
   label({ label: config.APP_ABBREVIATION }),
   timestamp(),
-  printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message}`),
+  printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message.toString()}`),
 ];
 
 const transports = [

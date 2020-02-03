@@ -12,7 +12,7 @@ router.addRoutes([
     component: () => import(/* webpackChunkName: "wallet-item" */ './views/WalletItem.vue'),
   },
   {
-    path: '/wallet/:itemId',
+    path: '/wallet/:id',
     name: 'walletItem',
     component: () => import(/* webpackChunkName: "wallet-item" */ './views/WalletItem.vue'),
   },

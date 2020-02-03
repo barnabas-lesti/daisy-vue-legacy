@@ -1,12 +1,14 @@
 <template lang="pug">
   v-menu.form-date-picker(
     v-model="menu"
+    :disabled="disabled"
   )
     template(v-slot:activator="{ on }")
       v-text-field(
         v-model="_value"
         v-on="on"
         :label="label"
+        :disabled="disabled"
         readonly
       )
     v-date-picker(
@@ -33,6 +35,7 @@ export default {
   props: {
     value: String,
     label: String,
+    disabled: Boolean,
   },
   data: () => ({
     menu: false,
