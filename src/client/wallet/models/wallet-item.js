@@ -1,25 +1,55 @@
-import moment from 'moment';
+const mongoose = require('mongoose');
 
-// import { DATE_FORMAT, categories, currencies, itemTypes, paymentTypes } from '../constants';
+const { categories, currencies, itemTypes, paymentTypes } = require('../config/constants');
 
-export default class WalletItem {
-  constructor ({ category, creatorId, currency, id, itemType, name, paymentType, transactionDate, value } = {}) {
-    this.category = category || categories[0];
-    this.creatorId = creatorId;
-    this.currency = currency || currencies[0];
-    this.id = id;
-    this.itemType = itemType || itemTypes[0];
-    this.name = name;
-    this.paymentType = paymentType || paymentTypes[0];
-    this.transactionDate = transactionDate || (new Date()).getTime();
-    this.value = value || 0;
-  }
+const walletItemSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    enum: categories,
+    default: categories[0],
+  },
+  creatorId: {
+    // TODO: Make required and implement population
+    type: String,
+  },
+  currency: {
+    type: String,
+    enum: currencies,
+    default: currencies[0],
+  },
+  itemType: {
+    type: String,
+    enum: itemTypes,
+    default: itemTypes[0],
+  },
+  name: {
+    required: true,
+    trim: true,
+    type: String,
+  },
+  paymentType: {
+    type: String,
+    enum: paymentTypes,
+    default: paymentTypes[0],
+  },
+  transactionDate: {
+    type: Date,
+    default: new Date(),
+  },
+  value: {
+    required: true,
+    type: Number,
+  },
+}, {
+  id: true,
+  toJSON: {
+    versionKey: false,
+    virtuals: true,
+  },
+  toObject: {
+    versionKey: false,
+    virtuals: true,
+  },
+});
 
-  getFormattedTransactionDate () {
-    return moment(this.transactionDate).format(DATE_FORMAT);
-  }
-
-  setFormattedTransactionDate (value) {
-    this.transactionDate = parseInt(moment(value, DATE_FORMAT).format('x'), 10);
-  }
-}
+module.exports = mongoose.model('WalletItem', walletItemSchema);

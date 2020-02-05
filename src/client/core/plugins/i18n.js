@@ -5,8 +5,6 @@ import store from './store';
 
 const { config } = store.state.core;
 
-Vue.use(VueI18n);
-
 function loadMessages () {
   const locales = require.context('../../../common/locales', true, /[A-Za-z0-9-_,\s]+\.ya?ml$/i);
   const messages = {};
@@ -20,8 +18,10 @@ function loadMessages () {
   return messages;
 }
 
+Vue.use(VueI18n);
+
 export default new VueI18n({
-  locale: config.DEFAULT_LOCALE,
-  fallbackLocale: config.DEFAULT_LOCALE,
+  locale: config.LOCALES_DEFAULT,
+  fallbackLocale: config.LOCALES_DEFAULT,
   messages: loadMessages(),
 });

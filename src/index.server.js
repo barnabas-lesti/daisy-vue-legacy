@@ -1,9 +1,3 @@
-// Feature imports
-require('./server/wallet');
+const { server } = require('./server');
 
-// Core import
-const { app } = require('./server/core');
-
-app.start();
-
-module.exports = { app };
+server.start();

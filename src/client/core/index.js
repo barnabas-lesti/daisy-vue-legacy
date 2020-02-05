@@ -9,17 +9,20 @@ import App from './App.vue';
 
 Vue.config.productionTip = false;
 
-function bootstrap () {
-  new Vue({
-    store,
-    router,
-    i18n,
-    vuetify,
+class Client {
+  constructor () {
+    this._vueApp = null;
+  }
 
-    render: h => h(App),
-  }).$mount('#app');
+  start () {
+    this._vueApp = new Vue({
+      store,
+      router,
+      i18n,
+      vuetify,
+      render: h => h(App),
+    }).$mount('#app');
+  }
 }
 
-export {
-  bootstrap,
-};
+export const client = new Client();

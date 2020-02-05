@@ -3,22 +3,17 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "test:int": "cross-env NODE_ENV=test mocha --config ./test/integration/.mocharc.js",
-    "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint",
-    "build:prod": "vue-cli-service build",
     "start:client:dev": "vue-cli-service serve ./src/index.client",
-    "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --watch ./src/server --watch ./src/common --watch ./env --ext js,yml"
-  },
-  "app": {
-    "abbreviation": "awa"
+    "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --watch ./src/server --watch ./env --ext js,yml",
+    "test": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint",
+    "build:prod": "vue-cli-service build"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
     "config": "^3.2.5",
     "express": "^4.17.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.8.11",
     "require-yml": "^1.3.2",
     "vue": "^2.6.10",
     "vue-i18n": "^8.0.0",
@@ -39,15 +34,10 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
     "cross-env": "^6.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "faker": "^4.1.0",
     "json-loader": "^0.5.7",
-    "lint-staged": "^9.5.0",
-    "mongodb-memory-server": "^6.2.4",
     "node-sass": "^4.12.0",
     "nodemon": "^2.0.2",
     "pug": "^2.0.4",
