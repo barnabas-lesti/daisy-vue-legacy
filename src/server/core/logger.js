@@ -4,16 +4,20 @@ const winston = require('winston');
 
 const config = require('./config');
 
+const APP_ABBREVIATION = config.get('private.core.APP_ABBREVIATION');
+const CLEAN_LOGS_FOLDER = config.get('private.core.CLEAN_LOGS_FOLDER');
+const LOG_TO_FILE = config.get('private.core.LOG_TO_FILE');
+const LOGS_FOLDER_PATH = path.join(__dirname, '../../../logs');
+const IS_TEST = process.env.NODE_ENV === 'test';
+
 const { combine, colorize, label, timestamp, printf } = winston.format;
 
-const LOGS_FOLDER_PATH = path.join(config.private.APP_ROOT_PATH, './logs');
-
-if (config.private.CLEAN_LOGS_FOLDER) cleanLogsFolder();
+if (CLEAN_LOGS_FOLDER) cleanLogsFolder();
 
 const baseFormatConfig = [
-  label({ label: config.APP_ABBREVIATION }),
+  label({ label: APP_ABBREVIATION }),
   timestamp(),
-  printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message}`),
+  printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message.toString()}`),
 ];
 
 const transports = [
@@ -24,14 +28,14 @@ const transports = [
     ),
   }),
 
-  ...(config.private.LOG_TO_FILE ? [ new winston.transports.File({
+  ...(LOG_TO_FILE ? [ new winston.transports.File({
     level: 'info',
     filename: generateLogFilePath(),
   }) ] : []),
 ];
 
 const logger = winston.createLogger({
-  level: config.IS_TEST ? 'error': 'info',
+  level: IS_TEST ? 'error': 'info',
   format: combine(...baseFormatConfig),
   exitOnError: false,
   transports,

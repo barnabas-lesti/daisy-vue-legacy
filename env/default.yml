@@ -1,8 +1,10 @@
-APP_ABBREVIATION: 'awa'
-DEFAULT_LOCALE: 'en'
+public:
 
 private:
-  PORT: 8080
-  CLIENT_DEV_SERVER_PORT: 3000
-  CLEAN_LOGS_FOLDER: true
-  LOG_TO_FILE: false
+  core:
+    APP_ABBREVIATION: 'awa'
+    PORT: 8080
+    CLIENT_DEV_SERVER_PORT: 3000
+    CLEAN_LOGS_FOLDER: true
+    LOG_TO_FILE: false
+    MONGO_URI: null

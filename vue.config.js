@@ -4,7 +4,7 @@ module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: config.private.CLIENT_DEV_SERVER_PORT,
+    port: config.get('core.CLIENT_DEV_SERVER_PORT'),
   },
 
   transpileDependencies: [
@@ -31,9 +31,10 @@ module.exports = {
     webpackConfig
       .plugin('define')
       .tap(definitions => {
-        const { private: privateEnvConfig, ...publicEnvConfig } = config;
         definitions[0] = Object.assign(definitions[0], {
-          'window.publicEnvConfig': JSON.stringify(publicEnvConfig),
+          'window.config': JSON.stringify({
+
+          }),
         });
         return definitions;
       });
