@@ -1,7 +1,7 @@
 // Feature imports
-import './client/wallet';
+// import './client/health';
 
 // Core import
-import { bootstrap } from './client/core';
+import { client } from './client/core';
 
-bootstrap();
+client.start();

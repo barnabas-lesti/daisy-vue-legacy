@@ -9,14 +9,12 @@ import eventService from '../services/event-service';
 
 Vue.use(Vuetify);
 
-const { isDarkTheme } = store.state.core.preferences;
-
 const vuetify = new Vuetify({
   icons: {
     iconfont: 'fa',
   },
   theme: {
-    dark: isDarkTheme,
+    dark: store.state.core.preferences.isDarkTheme,
     themes: {
       light: {},
       dark: {},

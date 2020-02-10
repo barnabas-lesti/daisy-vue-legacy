@@ -1,10 +1,10 @@
-const config = require('./src/server/core/config');
+const config = require('./src/server/config');
 
 module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: config.get('core.CLIENT_DEV_SERVER_PORT'),
+    port: config.get('DEV_CLIENT_PORT'),
   },
 
   transpileDependencies: [
@@ -32,8 +32,8 @@ module.exports = {
       .plugin('define')
       .tap(definitions => {
         definitions[0] = Object.assign(definitions[0], {
-          'window.config': JSON.stringify({
-
+          'window.appConfig': JSON.stringify({
+            LOCALES_DEFAULT: config.get('LOCALES_DEFAULT'),
           }),
         });
         return definitions;

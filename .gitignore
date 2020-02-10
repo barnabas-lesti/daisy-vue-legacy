@@ -9,6 +9,7 @@ node_modules
 # Sensitive env config
 env/*
 !env/default.yml
+!env/index.js
 
 # Logs
 npm-debug.log*
