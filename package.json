@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start:client:dev": "vue-cli-service serve ./src/index.client",
-    "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --watch ./src/server --watch ./env --ext js,yml",
+    "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --config ./nodemon.json",
     "test": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "build:prod": "vue-cli-service build"

@@ -1,5 +1,5 @@
 // Feature imports
-// import './client/wallet';
+// import './client/health';
 
 // Core import
 import { client } from './client/core';

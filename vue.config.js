@@ -1,10 +1,10 @@
-const env = require('./env');
+const config = require('./src/server/config');
 
 module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: 3000,
+    port: config.get('DEV_CLIENT_PORT'),
   },
 
   transpileDependencies: [
@@ -33,7 +33,7 @@ module.exports = {
       .tap(definitions => {
         definitions[0] = Object.assign(definitions[0], {
           'window.appConfig': JSON.stringify({
-            LOCALES_DEFAULT: env.get('LOCALES_DEFAULT'),
+            LOCALES_DEFAULT: config.get('LOCALES_DEFAULT'),
           }),
         });
         return definitions;
