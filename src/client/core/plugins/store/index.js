@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import storageService from '../../services/storage-service';
+import storage from '../storage';
 
 import state from './state';
 import mutations from './mutations';
@@ -10,7 +10,18 @@ import getters from './getters';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+class Store extends Vuex.Store {
+  constructor (...args) {
+    super(...args);
+
+    this.mapActions = Vuex.mapActions;
+    this.mapGetters = Vuex.mapGetters;
+    this.mapMutations = Vuex.mapMutations;
+    this.mapState = Vuex.mapState;
+  }
+}
+
+const store = new Store({
   modules: {
     core: {
       namespaced: true,
@@ -22,7 +33,7 @@ const store = new Vuex.Store({
   },
 });
 
-store.commit('core/updatePreferences', storageService.getFromLocalStorage('core.preferences'));
-store.commit('core/setUser', storageService.getFromLocalStorage('core.user'));
+// TODO: not good here
+store.commit('core/updatePreferences', storage.getFromLocalStorage('core.preferences'));
 
 export default store;

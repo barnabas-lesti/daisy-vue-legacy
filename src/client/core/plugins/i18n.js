@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
-import store from './store';
-
-const { config } = store.state.core;
+import config from '../config';
 
 function loadMessages () {
   const locales = require.context('../../../common/locales', true, /[A-Za-z0-9-_,\s]+\.ya?ml$/i);
@@ -21,7 +19,7 @@ function loadMessages () {
 Vue.use(VueI18n);
 
 export default new VueI18n({
-  locale: config.LOCALES_DEFAULT,
-  fallbackLocale: config.LOCALES_DEFAULT,
+  locale: config.DEFAULT_LOCALE,
+  fallbackLocale: config.DEFAULT_LOCALE,
   messages: loadMessages(),
 });

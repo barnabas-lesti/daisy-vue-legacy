@@ -1,11 +1,10 @@
 import Vue from 'vue';
 
-import router from './plugins/router';
-import store from './plugins/store';
-import i18n from './plugins/i18n';
-import vuetify from './plugins/vuetify';
-
+import plugins from './plugins';
 import App from './App.vue';
+
+import './routes';
+import './sidebar-items';
 
 Vue.config.productionTip = false;
 
@@ -16,10 +15,7 @@ class Client {
 
   start () {
     this._vueApp = new Vue({
-      store,
-      router,
-      i18n,
-      vuetify,
+      ...plugins,
       render: h => h(App),
     }).$mount('#app');
   }

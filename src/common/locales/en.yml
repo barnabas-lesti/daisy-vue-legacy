@@ -16,44 +16,44 @@ core:
       table:
         darkTheme: Use dark theme?
 
+    register:
+      title: Register
+      registerForm:
+        signInLink: Already have an account? Sign in!
+        labels:
+          email: Email
+          password: Password
+          passwordConfirm: Password confirmation
+          submit: Register
+        errors:
+          email:
+            required: Email is required
+            email: Email format is invalid
+          password:
+            required: Password is required
+          passwordConfirm:
+            required: Password confirmation is required
+            match: Passwords must match
+          server:
+            alreadyExists: User with given email address already exists
+            unknown: Unknown error occurred
+
     signIn:
       title: Sign in
-      signInAs: Sign in as {name}?
-      signInAsHint: Currently this option is baked in to the app, but I guess you've figured it out already.
-
-wallet:
-  common:
-    categories:
-      ENTERTAINMENT: Entertainment
-      FOOD_AND_DRINKS: Food & drinks
-      HOUSING: Housing
-      SHOPPING: Shopping
-      TRAVEL: Travel
-    currencies:
-      EUR: EUR
-      HUF: HUF
-      USD: USD
-    itemTypes:
-      EXPENSE: Expense
-      INCOME: Income
-    paymentTypes:
-      CASH: Cash
-      CREDIT_CARD: Credit card
-      TRANSFER: Transfer
-
-  views:
-    wallet:
-      title: Wallet
-
-    walletItem:
-      title: Create/edit item
-      form:
+      signInForm:
+        registerLink: Don't have an account? Register!
         labels:
-          category: Category
-          currency: Currency
-          itemType: Item type
-          name: Name
-          paymentType: Payment type
-          transactionDate: Transaction date
-          value: Value
-          submit: Save
+          email: Email
+          password: Password
+          submit: Sign in
+        errors:
+          email:
+            required: Email is required
+            email: Email format is invalid
+          password:
+            required: Password is required
+          server:
+            invalidCredentials: Invalid credentials
+            notFound: User not found
+            sessionExpired: Session expired, please sign in again
+            unknown: Unknown error occurred

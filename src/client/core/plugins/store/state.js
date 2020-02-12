@@ -1,14 +1,18 @@
+import config from '../../config';
+
 export default {
   config: {
     BASE_URL: process.env.BASE_URL,
-    ...window.appConfig,
+    ...config,
   },
 
   sidebarItems: [],
 
+  user: null,
+  authHeader: null,
+
+  // TODO: merge with user
   preferences: {
     isDarkTheme: false,
   },
-
-  user: null,
 };

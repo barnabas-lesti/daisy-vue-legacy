@@ -1,5 +1,7 @@
-import storageService from '../../services/storage-service';
-import eventService from '../../services/event-service';
+import http from '../http';
+import storage from '../storage';
+
+import { User } from '../../models';
 
 export default {
   pushSidebarItems ({ sidebarItems }, newItems) {
@@ -9,13 +11,21 @@ export default {
   updatePreferences (state, update) {
     const updatedPreferences = { ...state.preferences, ...update };
     state.preferences = updatedPreferences;
-    storageService.saveToLocalStorage('core.preferences', updatedPreferences);
-    eventService.$emit('core/preferencesUpdated', updatedPreferences);
+    storage.saveToLocalStorage('core.preferences', updatedPreferences);
   },
 
   setUser (state, user) {
-    state.user = user;
-    storageService.saveToLocalStorage('core.user', user);
-    eventService.$emit(user ? 'core/userSignedIn' : 'core/userSignedOut');
+    state.user = user ? new User(user) : null;
+  },
+  setAuthHeader (state, authHeader) {
+    if (authHeader) {
+      state.authHeader = authHeader;
+      http.setAuthHeader(authHeader);
+      storage.saveToLocalStorage('core.authHeader', authHeader);
+    } else {
+      state.authHeader = null;
+      http.clearAuthHeader();
+      storage.removeFromLocalStorage('core.authHeader');
+    }
   },
 };
