@@ -7,9 +7,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ './views/Home.vue'),
   },
   {
-    path: '/preferences',
-    name: 'preferences',
-    component: () => import(/* webpackChunkName: "preferences" */ './views/Preferences.vue'),
+    path: '/profile',
+    name: 'profile',
+    component: () => import(/* webpackChunkName: "profile" */ './views/Profile.vue'),
   },
   {
     path: '/register',
@@ -26,7 +26,10 @@ const routes = [
   {
     path: '/sign-out',
     name: 'signOut',
-    beforeEnter: () => store.dispatch('core/signOut'),
+    beforeEnter: async () => {
+      await store.dispatch('core/signOut');
+      router.push({ name: 'signIn' });
+    },
   },
 ];
 
@@ -47,6 +50,3 @@ router.beforeEach((to, from, next) => {
 
   return next();
 });
-
-// eventBus.$on('core/signedIn', () => router.push({ name: 'home' }));
-// eventBus.$on('core/signedOut', () => router.push({ name: 'signIn' }));

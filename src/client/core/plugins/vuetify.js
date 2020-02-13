@@ -4,8 +4,6 @@ import Vuetify from 'vuetify/lib';
 import 'typeface-roboto/index.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import store from './store';
-
 Vue.use(Vuetify);
 
 const vuetify = new Vuetify({
@@ -13,7 +11,6 @@ const vuetify = new Vuetify({
     iconfont: 'fa',
   },
   theme: {
-    dark: store.state.core.preferences.isDarkTheme,
     themes: {
       light: {},
       dark: {},

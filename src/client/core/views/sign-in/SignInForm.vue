@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import config from '../../config';
-
 export default {
   props: {
     email: String,
@@ -49,7 +47,7 @@ export default {
       rules: {
         email: [
           v => !!v || this.$t('core.views.signIn.signInForm.errors.email.required'),
-          v => !!config.EMAIL_REGEX.test(v) || this.$t('core.views.signIn.signInForm.errors.email.email'),
+          v => !!this.$config.EMAIL_REGEX.test(v) || this.$t('core.views.signIn.signInForm.errors.email.email'),
         ],
         password: [
           v => !!v || this.$t('core.views.signIn.signInForm.errors.password.required'),

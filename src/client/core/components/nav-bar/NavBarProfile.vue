@@ -18,14 +18,18 @@
           icon
         )
           v-avatar(size="2rem")
+            v-icon(v-if="!user.profileImageUrl") fas fa-user
             img(
+              v-else
               :src="user.profileImageUrl"
               :alt="user.fullName"
             )
       v-list(tile)
         v-list-item(link)
           v-list-item-avatar
+            v-icon(v-if="!user.profileImageUrl") fas fa-user
             img(
+              v-else
               :src="user.profileImageUrl"
               :alt="user.fullName"
             )
@@ -35,9 +39,15 @@
       v-divider
       v-list(tile)
         v-list-item(
+          :to="{ name: 'profile' }"
+        )
+          v-list-item-title {{ $t('core.components.navBar.profile') }}
+      v-divider
+      v-list(tile)
+        v-list-item(
           :to="{ name: 'signOut' }"
         )
-          v-list-item-title Sign out
+          v-list-item-title {{ $t('core.components.navBar.signOut') }}
 </template>
 
 <script>

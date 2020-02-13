@@ -6,7 +6,11 @@
           h1.text-center.mb-2 {{ $t('core.views.signIn.title') }}
       v-row
         v-col
-          .d-flex(v-if="authHeader && !serverError") Signing in...
+          .d-flex.justify-center(v-if="authHeader && !serverError")
+            v-progress-circular(
+              color="primary"
+              indeterminate
+            )
           sign-in-form(
             v-else
             :email="email"
@@ -22,7 +26,11 @@
             v-card-title
               h1.text-center.mb-2 {{ $t('core.views.signIn.title') }}
             v-card-text
-              .d-flex(v-if="authHeader && !serverError") Signing in...
+              v-progress-circular(
+                v-if="authHeader && !serverError"
+                color="primary"
+                indeterminate
+              )
               sign-in-form(
                 v-else
                 :email="email"

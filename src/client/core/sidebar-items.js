@@ -8,9 +8,9 @@ router.addSidebarItems([
     group: 0,
   },
   {
-    labelKey: 'core.views.preferences.title',
+    labelKey: 'core.views.profile.title',
     icon: 'fas fa-cog',
-    routeToName: 'preferences',
+    routeToName: 'profile',
     group: 1,
   },
 ]);

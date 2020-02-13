@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import config from '../../config';
-
 export default {
   props: {
     loading: Boolean,
@@ -57,7 +55,7 @@ export default {
       rules: {
         email: [
           v => !!v || this.$t('core.views.register.registerForm.errors.email.required'),
-          v => !!config.EMAIL_REGEX.test(v) || this.$t('core.views.register.registerForm.errors.email.email'),
+          v => !!this.$config.EMAIL_REGEX.test(v) || this.$t('core.views.register.registerForm.errors.email.email'),
         ],
         password: [
           v => !!v || this.$t('core.views.register.registerForm.errors.password.required'),

@@ -5,16 +5,14 @@ core:
     formDatePicker:
       cancel: Cancel
       save: Save
+    navBar:
+      profile: Profile
+      signOut: Sign out
+
 
   views:
     home:
       title: Home
-
-    preferences:
-      title: Preferences
-      description: Preferences will be stored on your machine.
-      table:
-        darkTheme: Use dark theme?
 
     register:
       title: Register
@@ -57,3 +55,8 @@ core:
             notFound: User not found
             sessionExpired: Session expired, please sign in again
             unknown: Unknown error occurred
+
+    profile:
+      title: Profile
+      labels:
+        fullName: Full name

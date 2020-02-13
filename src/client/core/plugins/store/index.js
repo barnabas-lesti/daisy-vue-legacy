@@ -33,7 +33,4 @@ const store = new Store({
   },
 });
 
-// TODO: not good here
-store.commit('core/updatePreferences', storage.getFromLocalStorage('core.preferences'));
-
 export default store;

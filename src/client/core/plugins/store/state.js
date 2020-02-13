@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '../config';
 
 export default {
   config: {
@@ -10,9 +10,4 @@ export default {
 
   user: null,
   authHeader: null,
-
-  // TODO: merge with user
-  preferences: {
-    isDarkTheme: false,
-  },
 };

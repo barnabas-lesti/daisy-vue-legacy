@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
-import config from '../config';
+import config from './config';
 
 function loadMessages () {
   const locales = require.context('../../../common/locales', true, /[A-Za-z0-9-_,\s]+\.ya?ml$/i);

@@ -1,5 +1,5 @@
-import http from '../http';
 import storage from '../storage';
+import eventBus from '../event-bus';
 
 import { User } from '../../models';
 
@@ -8,24 +8,12 @@ export default {
     sidebarItems.push(...newItems);
   },
 
-  updatePreferences (state, update) {
-    const updatedPreferences = { ...state.preferences, ...update };
-    state.preferences = updatedPreferences;
-    storage.saveToLocalStorage('core.preferences', updatedPreferences);
-  },
-
   setUser (state, user) {
     state.user = user ? new User(user) : null;
   },
   setAuthHeader (state, authHeader) {
-    if (authHeader) {
-      state.authHeader = authHeader;
-      http.setAuthHeader(authHeader);
-      storage.saveToLocalStorage('core.authHeader', authHeader);
-    } else {
-      state.authHeader = null;
-      http.clearAuthHeader();
-      storage.removeFromLocalStorage('core.authHeader');
-    }
+    state.authHeader = authHeader;
+    eventBus.$emit('core/authHeaderSet', authHeader);
+    storage.saveToLocalStorage('core.authHeader', authHeader);
   },
 };
