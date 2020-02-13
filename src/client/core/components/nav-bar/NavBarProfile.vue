@@ -25,7 +25,10 @@
               :alt="user.fullName"
             )
       v-list(tile)
-        v-list-item(link)
+        v-list-item(
+          :to="{ name: 'profile' }"
+          link
+        )
           v-list-item-avatar
             v-icon(v-if="!user.profileImageUrl") fas fa-user
             img(
@@ -36,12 +39,6 @@
           v-list-item-content
             v-list-item-title.title {{ user.fullName }}
             v-list-item-subtitle {{ user.email }}
-      v-divider
-      v-list(tile)
-        v-list-item(
-          :to="{ name: 'profile' }"
-        )
-          v-list-item-title {{ $t('core.components.navBar.profile') }}
       v-divider
       v-list(tile)
         v-list-item(

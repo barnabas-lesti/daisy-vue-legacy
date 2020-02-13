@@ -1,4 +1,6 @@
 <template lang="pug">
   .home.view
-    h1 {{ $t('core.views.home.title') }}
+    v-row
+      v-col
+        h1 {{ $t('core.views.home.title') }}
 </template>

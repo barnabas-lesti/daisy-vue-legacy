@@ -14,6 +14,10 @@
 
     v-content
       v-container(fluid)
+        v-breadcrumbs.ma-0.pa-0(
+          v-if="user && breadcrumbs && breadcrumbs.length > 0"
+          :items="breadcrumbs"
+        )
         router-view
 
     v-footer(app)
@@ -37,7 +41,7 @@ export default {
   }),
 
   computed: {
-    ...mapState('core', [ 'user' ]),
+    ...mapState('core', [ 'user', 'breadcrumbs' ]),
     ...mapGetters('core', [ 'groupedSidebarItems' ]),
   },
 };

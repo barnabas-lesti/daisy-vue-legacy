@@ -1,6 +1,6 @@
 import { router, store } from './plugins';
 
-const routes = [
+router.addRoutes([
   {
     path: '/home',
     name: 'home',
@@ -15,13 +15,17 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import(/* webpackChunkName: "register" */ './views/register/Register.vue'),
-    isPublic: true,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: '/sign-in',
     name: 'signIn',
     component: () => import(/* webpackChunkName: "sign-in" */ './views/sign-in/SignIn.vue'),
-    isPublic: true,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: '/sign-out',
@@ -31,22 +35,22 @@ const routes = [
       router.push({ name: 'signIn' });
     },
   },
-];
+]);
 
-router.addRoutes(routes);
-
-router.beforeEach((to, from, next) => {
+const auth = () => (to, from, next) => {
   const { name, fullPath } = to;
   const { user } = store.state.core;
 
-  const currentRoute = routes.filter(route => route.name === name)[0];
-  if (!user && !currentRoute.isPublic) {
+  console.log(router.getRoutes())
+  const currentRoute = router.getRoutes().filter(route => route.name === name)[0];
+  if (!user && !currentRoute.meta.isPublic) {
     return next({ name: 'signIn', query: { referer: fullPath } });
   }
 
-  if (user && currentRoute.isPublic) {
+  if (user && currentRoute.meta.isPublic) {
     return next({ name: 'home' });
   }
 
   return next();
-});
+};
+router.beforeEach(auth());

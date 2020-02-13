@@ -58,5 +58,32 @@ core:
 
     profile:
       title: Profile
-      labels:
-        fullName: Full name
+      general:
+        title: General
+        labels:
+          email: Email
+          fullName: Full name
+          profileImageUrl: Profile image URL
+          submit: Update profile
+        errors:
+          server:
+            unknown: Unknown error occurred
+
+      password:
+        title: Password
+        labels:
+          password: Current password
+          newPassword: New password
+          newPasswordConfirm: Password confirmation
+          submit: Update password
+        errors:
+          password:
+            required: Current password is required
+          newPassword:
+            required: New password is required
+          newPasswordConfirm:
+            required: New password confirmation is required
+            match: New password and its confirmation must match
+          server:
+            invalidCredentials: Old password incorrect
+            unknown: Unknown error occurred

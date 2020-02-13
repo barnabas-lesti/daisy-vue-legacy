@@ -23,6 +23,24 @@ class Http {
    * @param {String} path
    * @param {Object=} payload
    */
+  async delete (path, payload) {
+    const data = await this._sendRequest(this._axios.delete, path, payload);
+    return data;
+  }
+
+  /**
+   * @param {String} path
+   * @param {Object=} payload
+   */
+  async patch (path, payload) {
+    const data = await this._sendRequest(this._axios.patch, path, payload);
+    return data;
+  }
+
+  /**
+   * @param {String} path
+   * @param {Object=} payload
+   */
   async put (path, payload) {
     const data = await this._sendRequest(this._axios.put, path, payload);
     return data;

@@ -50,7 +50,11 @@ export default {
         await this.$store.dispatch('core/register', form);
         this.$router.push({ name: 'signIn', params: { email: form.email } });
       } catch ({ error }) {
-        const typeKey = error === 'ALREADY_EXISTS' ? 'alreadyExists' : 'unknown';
+        let typeKey;
+        switch (error) {
+          case 'ALREADY_EXISTS': typeKey = 'alreadyExists'; break;
+          default: typeKey = 'unknown';
+        }
         this.serverError = this.$t(`core.views.register.registerForm.errors.server.${typeKey}`);
       }
       this.isLoading = false;

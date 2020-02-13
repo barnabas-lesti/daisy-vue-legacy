@@ -76,7 +76,12 @@ export default {
         await this.$store.dispatch('core/signInWithCredentials', form);
         this._navigateToReferer();
       } catch ({ error }) {
-        const typeKey = serverErrorLocaleMap[error] || 'unknown';
+        let typeKey;
+        switch (error) {
+          case 'NOT_FOUND': typeKey = 'invalidCredentials'; break;
+          case 'INVALID_CREDENTIALS': typeKey = 'invalidCredentials'; break;
+          default: typeKey = 'unknown';
+        }
         this.serverError = this.$t(`core.views.signIn.signInForm.errors.server.${typeKey}`);
       }
       this.isLoading = false;
@@ -89,9 +94,14 @@ export default {
         await this.$store.dispatch('core/signInWithAuthHeader', authHeader);
         this._navigateToReferer();
       } catch ({ error }) {
-        this.$store.dispatch('core/signOut');
-        const typeKey = serverErrorLocaleMap[error] || 'unknown';
+        let typeKey;
+        switch (error) {
+          case 'NOT_FOUND': typeKey = 'notFound'; break;
+          case 'UNAUTHORIZED': typeKey = 'sessionExpired'; break;
+          default: typeKey = 'unknown';
+        }
         this.serverError = this.$t(`core.views.signIn.signInForm.errors.server.${typeKey}`);
+        this.$store.dispatch('core/signOut');
       }
       this.isLoading = false;
     },
