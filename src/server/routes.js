@@ -1,10 +1,10 @@
+const path = require('path');
 const express = require('express');
 
 const router = express.Router();
 
 router.get('*', (req, res) => {
-  // TODO: Implement html return.
-  res.sendStatus(200);
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 module.exports = router;

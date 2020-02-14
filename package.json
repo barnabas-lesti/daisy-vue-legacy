@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start:client:dev": "vue-cli-service serve ./src/index.client",
+    "start:client:dev": "vue-cli-service serve ./src/index.client --mode=development",
     "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --config ./nodemon.json",
     "test": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "build:prod": "vue-cli-service build"
+    "build:dev": "vue-cli-service build ./src/index.client --mode=development"
   },
   "dependencies": {
     "axios": "^0.19.2",

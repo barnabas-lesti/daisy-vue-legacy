@@ -5,12 +5,13 @@ import store from './store';
 import config from './config';
 
 class Route {
-  constructor ({ path, name, component, meta, beforeEnter }) {
+  constructor ({ path, name, component, meta, beforeEnter, redirect }) {
     this.path = path;
     this.name = name;
     this.component = component;
     this.meta = meta || {};
     this.beforeEnter = beforeEnter;
+    this.redirect = redirect;
   }
 }
 

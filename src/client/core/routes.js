@@ -2,7 +2,7 @@ import { router, store } from './plugins';
 
 router.addRoutes([
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: () => import(/* webpackChunkName: "home" */ './views/Home.vue'),
   },
@@ -35,13 +35,17 @@ router.addRoutes([
       router.push({ name: 'signIn' });
     },
   },
+  {
+    path: '*',
+    name: 'notFound',
+    redirect: { name: 'home' },
+  },
 ]);
 
 const auth = () => (to, from, next) => {
   const { name, fullPath } = to;
   const { user } = store.state.core;
 
-  console.log(router.getRoutes())
   const currentRoute = router.getRoutes().filter(route => route.name === name)[0];
   if (!user && !currentRoute.meta.isPublic) {
     return next({ name: 'signIn', query: { referer: fullPath } });
