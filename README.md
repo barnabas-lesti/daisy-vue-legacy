@@ -1,34 +1,30 @@
-# aurora-web-app
+# Aurora Web App
 
-## Project setup
-```
-yarn install
-```
+Web application and data API for Aurora.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Development
 
-### Compiles and minifies for production
-```
-yarn build
-```
+```bash
+# Install dependencies
+npm install
 
-### Run your unit tests
-```
-yarn test:unit
-```
+# Start the development server
+npm run start:server:dev
 
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
+# Start the client dev/hot-reload server
+npm run start:client:dev
 
-### Lints and fixes files
-```
-yarn lint
+# Lint and autofix formatting errors
+npm run lint
+
+# Run e2e tests in terminal
+npm run test
+
+# Run e2e tests with electron display
+npm run test:open
+
+# Build the client bundle
+npm run build:dev
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+_Yarn can also be used of course._
