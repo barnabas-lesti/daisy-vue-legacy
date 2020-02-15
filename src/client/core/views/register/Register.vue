@@ -8,7 +8,7 @@
         v-col
           register-form(
             :loading="isLoading"
-            :server-error="serverError"
+            :server-error-type="serverErrorType"
             @submit="register($event)"
           )
 
@@ -21,7 +21,7 @@
             v-card-text
               register-form(
                 :loading="isLoading"
-                :server-error="serverError"
+                :server-error-type="serverErrorType"
                 @submit="register($event)"
               )
 
@@ -38,24 +38,23 @@ export default {
   data () {
     return {
       isLoading: false,
-      serverError: '',
+      serverErrorType: '',
     };
   },
 
   methods: {
     async register (form) {
-      this.serverError = '';
+      this.serverErrorType = '';
       this.isLoading = true;
       try {
         await this.$store.dispatch('core/register', form);
+        this.$store.dispatch('core/notify/success', this.$t('core.views.register.notifications.success'));
         this.$router.push({ name: 'signIn', params: { email: form.email } });
       } catch ({ error }) {
-        let typeKey;
         switch (error) {
-          case 'ALREADY_EXISTS': typeKey = 'alreadyExists'; break;
-          default: typeKey = 'unknown';
+          case 'ALREADY_EXISTS': this.serverErrorType = 'alreadyExists'; break;
+          default: this.serverErrorType = 'unknown';
         }
-        this.serverError = this.$t(`core.views.register.registerForm.errors.server.${typeKey}`);
       }
       this.isLoading = false;
     },

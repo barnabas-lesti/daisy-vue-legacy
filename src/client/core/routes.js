@@ -4,6 +4,7 @@ router.addRoutes([
   {
     path: '/',
     name: 'home',
+    exact: true,
     component: () => import(/* webpackChunkName: "home" */ './views/Home.vue'),
   },
   {

@@ -1,5 +1,7 @@
 import http from '../http';
 
+import { Notification } from '../../models';
+
 export default {
   async register (context, user) {
     await http.put('/api/auth/register', user);
@@ -27,4 +29,31 @@ export default {
     const updatedUser = await http.patch('/api/auth/profile', update);
     context.commit('setUser', updatedUser);
   },
+
+  async notify (context, payload) {
+    const notification = new Notification(getNotificationFromPayload(payload));
+    context.commit('pushNotification', notification);
+    return new Promise(resolve => {
+      window.setTimeout(() => {
+        context.commit('removeNotification', notification);
+        resolve();
+      }, 3000);
+    });
+  },
+  async 'notify/success' (context, payload) {
+    return context.dispatch('notify', { type: 'success', ...getNotificationFromPayload(payload) });
+  },
+  async 'notify/info' (context, payload) {
+    return context.dispatch('notify', { type: 'info', ...getNotificationFromPayload(payload) });
+  },
+  async 'notify/warning' (context, payload) {
+    return context.dispatch('notify', { type: 'warning', ...getNotificationFromPayload(payload) });
+  },
+  async 'notify/error' (context, payload) {
+    return context.dispatch('notify', { type: 'error', ...getNotificationFromPayload(payload) });
+  },
 };
+
+function getNotificationFromPayload (payload) {
+  return typeof payload === 'object' ? payload : { text: payload };
+}

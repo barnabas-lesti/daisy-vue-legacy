@@ -16,6 +16,8 @@ core:
 
     register:
       title: Register
+      notifications:
+        success: Registration successful
       registerForm:
         signInLink: Already have an account? Sign in!
         labels:
@@ -38,6 +40,8 @@ core:
 
     signIn:
       title: Sign in
+      notifications:
+        success: 'Signed in as "{email}"'
       signInForm:
         registerLink: Don't have an account? Register!
         labels:

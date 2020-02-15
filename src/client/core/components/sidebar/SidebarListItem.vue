@@ -3,6 +3,7 @@
     :to="{ name: item.routeToName }"
     color="primary"
     :data-qa="`sidebar.${item.routeToName}.link`"
+    :exact="item.exact !== undefined ? item.exact : true"
     link
     dense
   )

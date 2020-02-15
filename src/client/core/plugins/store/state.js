@@ -5,19 +5,9 @@ export default {
     ...config,
   },
 
+  notifications: [],
   sidebarItems: [],
-  breadcrumbs: [
-    // {
-    //   exact: true,
-    //   text: 'Home',
-    //   to: { name: 'home' },
-    // },
-    // {
-    //   exact: true,
-    //   text: 'Profile',
-    //   to: { name: 'profile' },
-    // },
-  ],
+  breadcrumbs: [],
 
   user: null,
   authHeader: null,

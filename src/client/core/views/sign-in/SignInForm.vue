@@ -4,7 +4,7 @@
     data-qa="signInForm"
     @submit.prevent="submit()"
   )
-    .red--text.mb-4(v-if="serverError") {{ serverError }}
+    .red--text.mb-4(v-if="serverErrorType") {{ $t(`core.views.signIn.signInForm.errors.server.${serverErrorType}`) }}
     v-text-field(
       v-model="form.email"
       :label="$t('core.views.signIn.signInForm.labels.email')"
@@ -26,8 +26,9 @@
         :loading="loading"
         color="primary"
         type="submit"
-        large
         data-qa="signInForm.submit"
+        large
+        tile
       ) {{ $t('core.views.signIn.signInForm.labels.submit') }}
     .d-flex
       router-link(
@@ -41,7 +42,7 @@ export default {
   props: {
     email: String,
     loading: Boolean,
-    serverError: String,
+    serverErrorType: String,
   },
 
   data () {

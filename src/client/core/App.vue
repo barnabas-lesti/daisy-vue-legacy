@@ -1,16 +1,14 @@
 <template lang="pug">
   v-app.app
-    sidebar(
-      v-if='user'
-      v-model='sidebar.isOpen'
-      :items='groupedSidebarItems'
-    )
-
-    navbar(
-      v-if='user'
-      :user='user'
-      @toggle-sidebar='sidebar.isOpen = !sidebar.isOpen'
-    )
+    template(v-if="user")
+      sidebar(
+        v-model="sidebar.isOpen"
+        :items="groupedSidebarItems"
+      )
+      navbar(
+        :user="user"
+        @toggle-sidebar="sidebar.isOpen = !sidebar.isOpen"
+      )
 
     v-content
       v-container(fluid)
@@ -19,6 +17,7 @@
           :items="breadcrumbs"
         )
         router-view
+        notifications(:items="notifications")
 
     v-footer(app)
 </template>
@@ -27,11 +26,13 @@
 import { mapState, mapGetters } from 'vuex';
 
 import Navbar from './components/navbar/Navbar.vue';
+import Notifications from './components/notifications/Notifications.vue';
 import Sidebar from './components/sidebar/Sidebar.vue';
 
 export default {
   components: {
     Navbar,
+    Notifications,
     Sidebar,
   },
   data: () => ({
@@ -41,7 +42,7 @@ export default {
   }),
 
   computed: {
-    ...mapState('core', [ 'user', 'breadcrumbs' ]),
+    ...mapState('core', [ 'user', 'breadcrumbs', 'notifications' ]),
     ...mapGetters('core', [ 'groupedSidebarItems' ]),
   },
 };

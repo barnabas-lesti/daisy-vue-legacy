@@ -63,6 +63,7 @@ describe('Sign in', () => {
     $password().type(password);
     $submit().click();
 
+    cy.get('[data-qa="notifications"]').contains(new RegExp(`signed.*in.*${email}`, 'i')).should('be.visible');
     cy.url().should('not.include', '/sign-in');
     cy.url().should('include', '?test=10');
   });

@@ -2,17 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import store from './store';
-
-class Route {
-  constructor ({ path, name, component, meta, beforeEnter, redirect }) {
-    this.path = path;
-    this.name = name;
-    this.component = component;
-    this.meta = meta || {};
-    this.beforeEnter = beforeEnter;
-    this.redirect = redirect;
-  }
-}
+import { Route } from '../models';
 
 class Router extends VueRouter {
   constructor (...args) {

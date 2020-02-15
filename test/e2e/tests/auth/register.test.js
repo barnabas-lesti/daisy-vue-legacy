@@ -63,6 +63,7 @@ describe('Register', () => {
     $passwordConfirm().type(password);
     $submit().click();
 
+    cy.get('[data-qa="notifications"]').contains(/registration.*successful/i).should('be.visible');
     cy.url().should('include', '/sign-in');
 
     const $signInForm = () => cy.get('[data-qa="signInForm"]');

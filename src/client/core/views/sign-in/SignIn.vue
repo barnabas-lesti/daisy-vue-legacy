@@ -6,7 +6,7 @@
           h1.text-center.mb-2 {{ $t('core.views.signIn.title') }}
       v-row
         v-col
-          .d-flex.justify-center(v-if="authHeader && !serverError")
+          .d-flex.justify-center(v-if="authHeader && !serverErrorType")
             v-progress-circular(
               color="primary"
               indeterminate
@@ -15,7 +15,7 @@
             v-else
             :email="email"
             :loading="isLoading"
-            :server-error="serverError"
+            :server-error-type="serverErrorType"
             @submit="signInWithCredentials($event)"
           )
 
@@ -27,7 +27,7 @@
               h1.text-center.mb-2 {{ $t('core.views.signIn.title') }}
             v-card-text
               v-progress-circular(
-                v-if="authHeader && !serverError"
+                v-if="authHeader && !serverErrorType"
                 color="primary"
                 indeterminate
               )
@@ -35,7 +35,7 @@
                 v-else
                 :email="email"
                 :loading="isLoading"
-                :server-error="serverError"
+                :server-error-type="serverErrorType"
                 @submit="signInWithCredentials($event)"
               )
 </template>
@@ -54,7 +54,7 @@ export default {
     return {
       email: '',
       isLoading: false,
-      serverError: '',
+      serverErrorType: '',
     };
   },
 
@@ -64,37 +64,34 @@ export default {
 
   methods: {
     async signInWithCredentials (form) {
-      this.serverError = '';
+      this.serverErrorType = '';
       this.isLoading = true;
       try {
         await this.$store.dispatch('core/signInWithCredentials', form);
+        this.$store.dispatch('core/notify/success', this.$t('core.views.signIn.notifications.success', { email: form.email }));
         this._navigateToReferer();
       } catch ({ error }) {
-        let typeKey;
         switch (error) {
-          case 'NOT_FOUND': typeKey = 'invalidCredentials'; break;
-          case 'INVALID_CREDENTIALS': typeKey = 'invalidCredentials'; break;
-          default: typeKey = 'unknown';
+          case 'NOT_FOUND': this.serverErrorType = 'invalidCredentials'; break;
+          case 'INVALID_CREDENTIALS': this.serverErrorType = 'invalidCredentials'; break;
+          default: this.serverErrorType = 'unknown';
         }
-        this.serverError = this.$t(`core.views.signIn.signInForm.errors.server.${typeKey}`);
       }
       this.isLoading = false;
     },
 
     async signInWithHeader (authHeader) {
-      this.serverError = '';
+      this.serverErrorType = '';
       this.isLoading = true;
       try {
         await this.$store.dispatch('core/signInWithAuthHeader', authHeader);
         this._navigateToReferer();
       } catch ({ error }) {
-        let typeKey;
         switch (error) {
-          case 'NOT_FOUND': typeKey = 'notFound'; break;
-          case 'UNAUTHORIZED': typeKey = 'sessionExpired'; break;
-          default: typeKey = 'unknown';
+          case 'NOT_FOUND': this.serverErrorType = 'notFound'; break;
+          case 'UNAUTHORIZED': this.serverErrorType = 'sessionExpired'; break;
+          default: this.serverErrorType = 'unknown';
         }
-        this.serverError = this.$t(`core.views.signIn.signInForm.errors.server.${typeKey}`);
         this.$store.dispatch('core/signOut');
       }
       this.isLoading = false;

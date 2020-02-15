@@ -21,11 +21,13 @@
       v-btn(
         color="primary"
         text
+        tile
         @click="menu = false"
       ) {{ $t('core.components.formDatePicker.cancel') }}
       v-btn(
         color="primary"
         text
+        tile
         @click="$datePicker.menu.save(_value)"
       ) {{ $t('core.components.formDatePicker.save') }}
 </template>

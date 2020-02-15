@@ -4,7 +4,8 @@
     data-qa="registerForm"
     @submit.prevent="submit()"
   )
-    .red--text.mb-4(v-if="serverError") {{ serverError }}
+    .red--text.mb-4(v-if="serverErrorType")
+      | {{ $t(`core.views.register.registerForm.errors.server.${serverErrorType}`) }}
     v-text-field(
       v-model="form.email"
       :label="$t('core.views.register.registerForm.labels.email')"
@@ -34,8 +35,9 @@
         :loading="loading"
         color="primary"
         type="submit"
-        large
         data-qa="registerForm.submit"
+        large
+        tile
       ) {{ $t('core.views.register.registerForm.labels.submit') }}
     .d-flex
       router-link(
@@ -48,7 +50,7 @@
 export default {
   props: {
     loading: Boolean,
-    serverError: String,
+    serverErrorType: String,
     model: Object,
   },
 

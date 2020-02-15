@@ -40,6 +40,7 @@
               type="submit"
               data-qa="generalForm.submit"
               large
+              tile
             ) {{ $t('core.views.profile.general.labels.submit') }}
         v-divider
 
@@ -83,6 +84,7 @@
               type="submit"
               data-qa="passwordForm.submit"
               large
+              tile
             ) {{ $t('core.views.profile.password.labels.submit') }}
 </template>
 

@@ -17,11 +17,11 @@ npm run start:client:dev
 # Lint and autofix formatting errors
 npm run lint
 
-# Run e2e tests in terminal
+# Run e2e tests with electron display
 npm run test
 
-# Run e2e tests with electron display
-npm run test:open
+# Run e2e tests in terminal
+npm run test:run
 
 # Build the client bundle
 npm run build:dev

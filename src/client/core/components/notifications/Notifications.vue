@@ -1,0 +1,49 @@
+<template lang="pug">
+  .notifications(
+    :class="$vuetify.breakpoint.xs ? '' : 'notifications__non-mobile'"
+    data-qa="notifications"
+  )
+    v-alert(
+      v-for="item in items"
+      :key="item.id"
+      :type="item.type || 'info'"
+      :value="!item.fading"
+      :icon="false"
+      class="notifications__item"
+      tile
+      :data-lofasz="item.id"
+    ) {{ item.textKey ? $t(item.textKey) : item.text }}
+</template>
+
+<script>
+export default {
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.notifications {
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+
+  &__non-mobile {
+    width: auto;
+    padding: 12px;
+  }
+
+  &__item {
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+</style>

@@ -16,4 +16,11 @@ export default {
     eventBus.$emit('core/authHeaderSet', authHeader);
     storage.saveToLocalStorage('core.authHeader', authHeader);
   },
+
+  pushNotification (state, notification) {
+    state.notifications.push(notification);
+  },
+  removeNotification (state, { id }) {
+    state.notifications = state.notifications.filter(item => item.id !== id);
+  },
 };

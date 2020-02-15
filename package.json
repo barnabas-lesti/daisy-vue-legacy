@@ -7,8 +7,8 @@
   "scripts": {
     "start:client:dev": "vue-cli-service serve ./src/index.client --mode=development",
     "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --config ./nodemon.json",
-    "test": "cypress run --config-file test/cypress.json",
-    "test:open": "cypress open --config-file test/cypress.json",
+    "test": "cypress open --config-file test/cypress.json",
+    "test:run": "cypress run --config-file test/cypress.json",
     "lint": "eslint . --fix",
     "build:dev": "vue-cli-service build ./src/index.client --mode=development"
   },
@@ -37,7 +37,7 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "cross-env": "^6.0.3",
-    "cypress": "^4.0.1",
+    "cypress": "4.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-cypress": "^2.9.0",
     "eslint-plugin-vue": "^5.0.0",
