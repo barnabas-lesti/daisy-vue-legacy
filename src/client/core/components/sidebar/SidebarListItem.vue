@@ -2,6 +2,7 @@
   v-list-item.sidebar-list-item(
     :to="{ name: item.routeToName }"
     color="primary"
+    :data-qa="`sidebar.${item.routeToName}.link`"
     link
     dense
   )

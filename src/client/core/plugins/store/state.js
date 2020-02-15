@@ -2,7 +2,6 @@ import config from '../config';
 
 export default {
   config: {
-    BASE_URL: process.env.BASE_URL,
     ...config,
   },
 

@@ -4,54 +4,61 @@
       v-col
         h1 {{ $t('core.views.profile.title') }}
 
-    v-row
+    v-row.profile__general
       v-col(md="6")
         h2 {{ $t('core.views.profile.general.title') }}
-        .red--text.mb-4(v-if="general.serverError") {{ general.serverError }}
         v-form(
           ref="generalForm"
+          data-qa="generalForm"
           @submit.prevent="updateProfile()"
         )
+          .red--text.mb-4(v-if="general.serverError") {{ general.serverError }}
           v-text-field(
             v-model="user.email"
             :label="$t('core.views.profile.general.labels.email')"
             name="email"
             type="email"
+            data-qa="generalForm.email"
             disabled
           )
           v-text-field(
             v-model="general.form.fullName"
             :label="$t('core.views.profile.general.labels.fullName')"
             name="fullName"
+            data-qa="generalForm.fullName"
           )
           v-text-field(
             v-model="general.form.profileImageUrl"
             :label="$t('core.views.profile.general.labels.profileImageUrl')"
             name="profileImageUrl"
+            data-qa="generalForm.profileImageUrl"
           )
           .d-flex.my-4.justify-end
             v-btn(
               :loading="general.isLoading"
               color="primary"
               type="submit"
+              data-qa="generalForm.submit"
               large
             ) {{ $t('core.views.profile.general.labels.submit') }}
         v-divider
 
-    v-row
+    v-row.profile__password
       v-col(md="6")
         h2 {{ $t('core.views.profile.password.title') }}
-        .red--text.mb-4(v-if="password.serverError") {{ password.serverError }}
         v-form(
           ref="passwordForm"
+          data-qa="passwordForm"
           @submit.prevent="updatePassword()"
         )
+          .red--text.mb-4(v-if="password.serverError") {{ password.serverError }}
           v-text-field(
             v-model="password.form.password"
             :label="$t('core.views.profile.password.labels.password')"
             :rules="password.rules.password"
             name="password"
             type="password"
+            data-qa="passwordForm.password"
           )
           v-text-field(
             v-model="password.form.newPassword"
@@ -59,6 +66,7 @@
             :rules="password.rules.newPassword"
             name="newPassword"
             type="password"
+            data-qa="passwordForm.newPassword"
           )
           v-text-field(
             v-model="password.form.newPasswordConfirm"
@@ -66,12 +74,14 @@
             :rules="password.rules.newPasswordConfirm"
             name="newPasswordConfirm"
             type="password"
+            data-qa="passwordForm.newPasswordConfirm"
           )
           .d-flex.my-4.justify-end
             v-btn(
               :loading="password.isLoading"
               color="primary"
               type="submit"
+              data-qa="passwordForm.submit"
               large
             ) {{ $t('core.views.profile.password.labels.submit') }}
 </template>

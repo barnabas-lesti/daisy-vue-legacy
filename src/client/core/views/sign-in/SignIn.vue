@@ -45,12 +45,6 @@ import { mapState } from 'vuex';
 
 import SignInForm from './SignInForm';
 
-const serverErrorLocaleMap = {
-  'NOT_FOUND': 'invalidCredentials',
-  'INVALID_CREDENTIALS': 'invalidCredentials',
-  'UNAUTHORIZED': 'sessionExpired',
-};
-
 export default {
   components: {
     SignInForm,

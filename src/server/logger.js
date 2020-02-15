@@ -5,7 +5,7 @@ const { combine, colorize, label, timestamp, printf } = winston.format;
 
 const config = require('./config');
 
-const ABBREVIATION = config.get('ABBREVIATION');
+const LOGS_LABEL = config.get('LOGS_LABEL');
 const IS_TEST = process.env.NODE_ENV === 'test';
 const LOGS_CLEAN_FOLDER = config.get('LOGS_CLEAN_FOLDER');
 const LOGS_TO_FILE = config.get('LOGS_TO_FILE');
@@ -14,7 +14,7 @@ const LOGS_FOLDER_PATH = config.get('LOGS_FOLDER_ABSOLUTE_PATH') || path.join(__
 if (LOGS_CLEAN_FOLDER) cleanLogsFolder();
 
 const baseFormat = [
-  label({ label: ABBREVIATION }),
+  label({ label: LOGS_LABEL }),
   timestamp(),
   colorize(),
   printf(({ timestamp, label, level, message, stack }) => {

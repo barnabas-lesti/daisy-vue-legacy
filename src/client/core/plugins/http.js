@@ -4,14 +4,14 @@ import config from './config';
 import eventBus from './event-bus';
 import store from './store';
 
-const { API_URL, DEV_API_RESPONSE_DELAY } = config;
+const { BASE_URL, DEV_API_RESPONSE_DELAY } = config;
 
 class Http {
   constructor () {
     this._authHeader = null;
 
     this._axios = axios.create({
-      baseURL: API_URL,
+      baseURL: BASE_URL,
     });
 
     this._watchStoreAuthHeader();

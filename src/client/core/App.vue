@@ -6,7 +6,7 @@
       :items='groupedSidebarItems'
     )
 
-    nav-bar(
+    navbar(
       v-if='user'
       :user='user'
       @toggle-sidebar='sidebar.isOpen = !sidebar.isOpen'
@@ -26,12 +26,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 
-import NavBar from './components/nav-bar/NavBar.vue';
+import Navbar from './components/navbar/Navbar.vue';
 import Sidebar from './components/sidebar/Sidebar.vue';
 
 export default {
   components: {
-    NavBar,
+    Navbar,
     Sidebar,
   },
   data: () => ({

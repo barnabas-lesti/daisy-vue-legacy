@@ -1,40 +1,47 @@
 <template lang="pug">
-  .register-form
+  v-form.register-form(
+    ref="form"
+    data-qa="registerForm"
+    @submit.prevent="submit()"
+  )
     .red--text.mb-4(v-if="serverError") {{ serverError }}
-    v-form(
-      ref="form"
-      @submit.prevent="submit()"
+    v-text-field(
+      v-model="form.email"
+      :label="$t('core.views.register.registerForm.labels.email')"
+      :rules="rules.email"
+      name="email"
+      type="email"
+      data-qa="registerForm.email"
     )
-      v-text-field(
-        v-model="form.email"
-        :label="$t('core.views.register.registerForm.labels.email')"
-        :rules="rules.email"
-        name="email"
-        type="email"
-      )
-      v-text-field(
-        v-model="form.password"
-        :label="$t('core.views.register.registerForm.labels.password')"
-        :rules="rules.password"
-        name="password"
-        type="password"
-      )
-      v-text-field(
-        v-model="form.passwordConfirm"
-        :label="$t('core.views.register.registerForm.labels.passwordConfirm')"
-        :rules="rules.passwordConfirm"
-        name="passwordConfirm"
-        type="password"
-      )
-      .d-flex.my-4.justify-end
-        v-btn(
-          :loading="loading"
-          color="primary"
-          type="submit"
-          large
-        ) {{ $t('core.views.register.registerForm.labels.submit') }}
-      .d-flex
-        router-link(:to={ name: 'signIn' }) {{ $t('core.views.register.registerForm.signInLink') }}
+    v-text-field(
+      v-model="form.password"
+      :label="$t('core.views.register.registerForm.labels.password')"
+      :rules="rules.password"
+      name="password"
+      type="password"
+      data-qa="registerForm.password"
+    )
+    v-text-field(
+      v-model="form.passwordConfirm"
+      :label="$t('core.views.register.registerForm.labels.passwordConfirm')"
+      :rules="rules.passwordConfirm"
+      name="passwordConfirm"
+      type="password"
+      data-qa="registerForm.passwordConfirm"
+    )
+    .d-flex.my-4.justify-end
+      v-btn(
+        :loading="loading"
+        color="primary"
+        type="submit"
+        large
+        data-qa="registerForm.submit"
+      ) {{ $t('core.views.register.registerForm.labels.submit') }}
+    .d-flex
+      router-link(
+        :to={ name: 'signIn' }
+        data-qa="registerForm.signInLink"
+      ) {{ $t('core.views.register.registerForm.signInLink') }}
 </template>
 
 <script>

@@ -1,25 +1,27 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+const { createUser } = require('../data');
+
+Cypress.Commands.add('registerUser', (user) => {
+  user = user || createUser();
+  return cy.request('PUT', '/api/auth/register', user);
+});
+
+Cypress.Commands.add('signInUser', (user) => {
+  user = user || createUser();
+  cy.request('POST', '/api/auth/sign-in', user)
+    .then(res => {
+      const { authHeader } = res.body;
+      window.localStorage.setItem('core.authHeader', JSON.stringify(authHeader));
+      return res;
+    });
+});
+
+Cypress.Commands.add('registerAndSignInUser', (user) => {
+  user = user || createUser();
+  cy.registerUser(user);
+  return cy.signInUser(user);
+});
+
+Cypress.Commands.add('signOutUser', () => {
+  window.localStorage.removeItem('core.authHeader');
+  cy.visit('/');
+});

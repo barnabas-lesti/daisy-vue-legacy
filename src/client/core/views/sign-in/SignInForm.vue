@@ -1,33 +1,39 @@
 <template lang="pug">
-  .sign-in-form
+  v-form.sign-in-form(
+    ref="form"
+    data-qa="signInForm"
+    @submit.prevent="submit()"
+  )
     .red--text.mb-4(v-if="serverError") {{ serverError }}
-    v-form(
-      ref="form"
-      @submit.prevent="submit()"
+    v-text-field(
+      v-model="form.email"
+      :label="$t('core.views.signIn.signInForm.labels.email')"
+      :rules="rules.email"
+      name="email"
+      type="email"
+      data-qa="signInForm.email"
     )
-      v-text-field(
-        v-model="form.email"
-        :label="$t('core.views.signIn.signInForm.labels.email')"
-        :rules="rules.email"
-        name="email"
-        type="email"
-      )
-      v-text-field(
-        v-model="form.password"
-        :label="$t('core.views.signIn.signInForm.labels.password')"
-        :rules="rules.password"
-        name="password"
-        type="password"
-      )
-      .d-flex.mb-4.justify-end
-        v-btn(
-          :loading="loading"
-          color="primary"
-          type="submit"
-          large
-        ) {{ $t('core.views.signIn.signInForm.labels.submit') }}
-      .d-flex
-        router-link(:to={ name: 'register' }) {{ $t('core.views.signIn.signInForm.registerLink') }}
+    v-text-field(
+      v-model="form.password"
+      :label="$t('core.views.signIn.signInForm.labels.password')"
+      :rules="rules.password"
+      name="password"
+      type="password"
+      data-qa="signInForm.password"
+    )
+    .d-flex.mb-4.justify-end
+      v-btn(
+        :loading="loading"
+        color="primary"
+        type="submit"
+        large
+        data-qa="signInForm.submit"
+      ) {{ $t('core.views.signIn.signInForm.labels.submit') }}
+    .d-flex
+      router-link(
+        :to={ name: 'register' }
+        data-qa="signInForm.registerLink"
+      ) {{ $t('core.views.signIn.signInForm.registerLink') }}
 </template>
 
 <script>

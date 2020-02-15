@@ -5,6 +5,7 @@ node_modules
 # Tests
 /tests/e2e/videos/
 /tests/e2e/screenshots/
+/cypress
 
 # Sensitive env config
 env/*

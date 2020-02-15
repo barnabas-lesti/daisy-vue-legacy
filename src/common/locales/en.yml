@@ -5,7 +5,7 @@ core:
     formDatePicker:
       cancel: Cancel
       save: Save
-    navBar:
+    navbar:
       profile: Profile
       signOut: Sign out
 
@@ -85,5 +85,5 @@ core:
             required: New password confirmation is required
             match: New password and its confirmation must match
           server:
-            invalidCredentials: Old password incorrect
+            invalidCredentials: Old password invalid
             unknown: Unknown error occurred

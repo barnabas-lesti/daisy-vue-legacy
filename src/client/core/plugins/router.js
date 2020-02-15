@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import store from './store';
-import config from './config';
 
 class Route {
   constructor ({ path, name, component, meta, beforeEnter, redirect }) {
@@ -39,7 +38,7 @@ class Router extends VueRouter {
 Vue.use(VueRouter);
 const router = new Router({
   mode: 'history',
-  base: config.BASE_URL,
+  // base: config.BASE_URL,
 });
 
 export default router;
