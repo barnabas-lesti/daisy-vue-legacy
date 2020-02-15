@@ -1,14 +1,14 @@
 const config = require('./src/server/config');
 
-const BASE_URL = config.get('BASE_URL');
-const DEFAULT_LOCALE = config.get('DEFAULT_LOCALE');
-const DEV_API_RESPONSE_DELAY = config.get('DEV_API_RESPONSE_DELAY');
+const BASE_URL = config().get('BASE_URL');
+const DEFAULT_LOCALE = config().get('DEFAULT_LOCALE');
+const DEV_API_RESPONSE_DELAY = config().get('DEV_API_RESPONSE_DELAY');
 
 module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: config.get('DEV_CLIENT_PORT'),
+    port: config().get('DEV_CLIENT_PORT'),
     proxy: {
       '/api': {
         target: BASE_URL,

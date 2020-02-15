@@ -1,3 +1,5 @@
 const path = require('path');
-process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '../../env');
-module.exports = require('config');
+const { config } = require('@barnabas-lesti/aurora/server');
+
+config(path.join(__dirname, '../../env'));
+module.exports = config;

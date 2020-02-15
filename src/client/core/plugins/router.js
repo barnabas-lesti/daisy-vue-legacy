@@ -38,7 +38,6 @@ class Router extends VueRouter {
 Vue.use(VueRouter);
 const router = new Router({
   mode: 'history',
-  // base: config.BASE_URL,
 });
 
 export default router;
