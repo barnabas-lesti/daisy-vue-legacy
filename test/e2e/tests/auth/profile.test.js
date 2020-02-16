@@ -60,6 +60,7 @@ describe('Profile', () => {
     $generalForm().submit();
     $fullName().should('have.value', update.fullName);
     $profileImageUrl().should('have.value', update.profileImageUrl);
+    cy.get('[data-qa="notifications"]').contains(/profile.*updated/i).should('be.visible');
   });
 
   it('Should display profile info in the navbar', () => {
@@ -125,6 +126,7 @@ describe('Profile', () => {
     $newPasswordConfirm().clear().type(update.password);
     $passwordForm().submit();
     $passwordForm().contains(/password.*invalid/i).should('not.be.visible');
+    cy.get('[data-qa="notifications"]').contains(/password.*updated/i).should('be.visible');
 
     cy.signOutUser();
     cy.visit('/sign-in');

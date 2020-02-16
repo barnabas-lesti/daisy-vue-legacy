@@ -53,6 +53,7 @@ export default {
       } catch ({ error }) {
         switch (error) {
           case 'ALREADY_EXISTS': this.serverErrorType = 'alreadyExists'; break;
+          case 'REGISTRATION_DISABLED': this.serverErrorType = 'registrationDisabled'; break;
           default: this.serverErrorType = 'unknown';
         }
       }

@@ -35,6 +35,7 @@ core:
             required: Password confirmation is required
             match: Passwords must match
           server:
+            registrationDisabled: Registration is currently disabled
             alreadyExists: User with given email address already exists
             unknown: Unknown error occurred
 
@@ -64,6 +65,8 @@ core:
       title: Profile
       general:
         title: General
+        notifications:
+          updated: Profile updated
         labels:
           email: Email
           fullName: Full name
@@ -72,9 +75,10 @@ core:
         errors:
           server:
             unknown: Unknown error occurred
-
       password:
         title: Password
+        notifications:
+          updated: Password updated
         labels:
           password: Current password
           newPassword: New password

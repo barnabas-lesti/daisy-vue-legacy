@@ -130,6 +130,7 @@ export default {
         this.general.isLoading = true;
         try {
           await this.$store.dispatch('core/updateProfile', this.general.form);
+          this.$store.dispatch('core/notify/success', this.$t('core.views.profile.general.notifications.updated'));
         } catch ({ error }) {
           const typeKey = 'unknown';
           this.serverError = this.$t(`core.views.profile.general.errors.server.${typeKey}`);
@@ -143,6 +144,7 @@ export default {
         this.password.isLoading = true;
         try {
           await this.$store.dispatch('core/updatePassword', this.password.form);
+          this.$store.dispatch('core/notify/success', this.$t('core.views.profile.password.notifications.updated'));
         } catch ({ error }) {
           let typeKey;
           switch (error) {
