@@ -45,8 +45,8 @@
             data-qa="navbar.profile.items.profile.fullName"
           ) {{ user.fullName }}
           v-list-item-subtitle(data-qa="navbar.profile.items.profile.email") {{ user.email }}
-    v-divider
-    v-list(tile)
+
+      v-divider
       v-list-item(
         :to="{ name: 'signOut' }"
         data-qa="navbar.profile.items.signOut.link"
