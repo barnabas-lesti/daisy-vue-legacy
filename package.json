@@ -5,12 +5,15 @@
   "author": "Barnabas Lesti <barnabas.lesti@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start:client:dev": "vue-cli-service serve ./src/index.client --mode=development",
-    "start:server:dev": "cross-env NODE_ENV=development nodemon ./src/index.server --config ./nodemon.json",
-    "test": "cypress open --config-file test/cypress.json",
-    "test:run": "cypress run --config-file test/cypress.json",
+    "build": "vue-cli-service build ./src/index.client --mode development",
+    "build:prod": "vue-cli-service build ./src/index.client --mode production",
     "lint": "eslint . --fix",
-    "build:dev": "vue-cli-service build ./src/index.client --mode=development"
+    "start": "cross-env NODE_ENV=development nodemon ./src/index.server --config ./nodemon.json",
+    "start:prod": "cross-env NODE_ENV=production forever start ./src/index.server.js",
+    "start:client": "vue-cli-service serve ./src/index.client --mode=development",
+    "stop:prod": "forever stop ./src/index.server.js",
+    "test": "cypress open --config-file test/cypress.json",
+    "test:run": "cypress run --config-file test/cypress.json"
   },
   "dependencies": {
     "@barnabas-lesti/aurora": "^1.0.1",
