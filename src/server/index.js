@@ -3,21 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const proxy = require('express-http-proxy');
 const cors = require('cors');
-const { logger } = require('@barnabas-lesti/aurora/server');
 
 const config = require('./config');
-
-logger({
-  label: config().get('LOGS_LABEL'),
-  clean: config().get('LOGS_CLEAN_FOLDER'),
-  toFile: config().get('LOGS_TO_FILE'),
-  folderPath: config().get('LOGS_FOLDER_ABSOLUTE_PATH') || path.join(__dirname, '../../logs'),
-});
-
-const NODE_ENV = process.env.NODE_ENV;
-const PORT = config().get('PORT');
-const SERVICES = config().get('SERVICES');
-const DIST_FOLDER_PATH = path.join(__dirname, '../../dist');
+const logger = require('./logger');
 
 class Server {
   constructor () {
@@ -25,7 +13,7 @@ class Server {
 
     this._app.use([
       bodyParser.json(),
-      express.static(DIST_FOLDER_PATH),
+      express.static(config.DIST_FOLDER_PATH),
     ]);
     this._cors();
     this._serviceProxy();
@@ -33,10 +21,10 @@ class Server {
   }
 
   async start () {
-    logger().info(`Using configuration: "${NODE_ENV}"`);
-    const server = await this._app.listen(PORT);
+    logger.info(`Using configuration: "${config.env.NODE_ENV}"`);
+    const server = await this._app.listen(config.env.PORT);
     const { address } = server.address();
-    logger().info(`Server running at http://${address}:${PORT}`);
+    logger.info(`Server running at http://${address}:${config.env.PORT}`);
   }
 
   getApp () {
@@ -50,13 +38,14 @@ class Server {
   }
 
   _serviceProxy () {
+    const { SERVICES } = config.env;
     for (const servicePrefix of Object.keys(SERVICES)) {
       this._app.use(`/api/${servicePrefix}`, proxy(SERVICES[servicePrefix]));
     }
   }
 
   _spaResolver () {
-    this._app.use((req, res) => res.sendFile(path.join(DIST_FOLDER_PATH, 'index.html')));
+    this._app.use((req, res) => res.sendFile(path.join(config.DIST_FOLDER_PATH, 'index.html')));
   }
 }
 

@@ -3,7 +3,7 @@ import Vue from 'vue';
 const { localStorage } = window;
 
 class Storage {
-  saveToLocalStorage (key, data) {
+  saveToLocalStorage (key, data = null) {
     localStorage.setItem(key, JSON.stringify(data));
   }
   getFromLocalStorage (key) {

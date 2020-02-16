@@ -1,17 +1,13 @@
 const config = require('./src/server/config');
 
-const BASE_URL = config().get('BASE_URL');
-const DEFAULT_LOCALE = config().get('DEFAULT_LOCALE');
-const DEV_API_RESPONSE_DELAY = config().get('DEV_API_RESPONSE_DELAY');
-
 module.exports = {
   lintOnSave: false,
 
   devServer: {
-    port: config().get('DEV_CLIENT_PORT'),
+    port: config.env.DEV_CLIENT_PORT,
     proxy: {
       '/api': {
-        target: BASE_URL,
+        target: config.env.BASE_URL,
       },
     },
   },
@@ -40,11 +36,16 @@ module.exports = {
     webpackConfig
       .plugin('define')
       .tap(definitions => {
+        const { AUTH_HEADER, EMAIL_REGEX, DEFAULT_LOCALE, env: { BASE_URL, DEV_API_RESPONSE_DELAY } } = config;
         definitions[0] = Object.assign(definitions[0], {
-          'window.appConfig': JSON.stringify({
-            BASE_URL,
+          'window.__AURORA_CONFIG__': JSON.stringify({
+            AUTH_HEADER,
+            EMAIL_REGEX,
             DEFAULT_LOCALE,
-            DEV_API_RESPONSE_DELAY,
+            env: {
+              BASE_URL,
+              DEV_API_RESPONSE_DELAY,
+            },
           }),
         });
         return definitions;

@@ -1,13 +1,16 @@
 import Vue from 'vue';
 
-const { appConfig } = window;
+const { __AURORA_CONFIG__: appConfig } = window;
 
 const config = {
-  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-
+  AUTH_HEADER: appConfig.AUTH_HEADER,
+  EMAIL_REGEX: new RegExp(appConfig.EMAIL_REGEX),
   DEFAULT_LOCALE: appConfig.DEFAULT_LOCALE,
-  BASE_URL: appConfig.BASE_URL,
-  DEV_API_RESPONSE_DELAY: appConfig.DEV_API_RESPONSE_DELAY,
+
+  env: {
+    BASE_URL: appConfig.env.BASE_URL,
+    DEV_API_RESPONSE_DELAY: appConfig.env.DEV_API_RESPONSE_DELAY,
+  },
 };
 
 Vue.prototype.$config = config;

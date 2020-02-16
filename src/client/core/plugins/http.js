@@ -4,7 +4,7 @@ import config from './config';
 import eventBus from './event-bus';
 import store from './store';
 
-const { BASE_URL, DEV_API_RESPONSE_DELAY } = config;
+const { AUTH_HEADER, env: { BASE_URL, DEV_API_RESPONSE_DELAY } } = config;
 
 class Http {
   constructor () {
@@ -79,34 +79,24 @@ class Http {
   }
 
   /**
-   * @param {Object} authHeader
+   * @param {String} authHeader
    */
-  setAuthHeader ({ name, value }) {
-    this._authHeader = { name, value };
-    this._axios.defaults.headers.common[name] = value;
-  }
-
-  clearAuthHeader () {
-    if (this._authHeader) {
-      this._axios.defaults.headers.common[this._authHeader.name] = null;
-      this._authHeader = null;
-    }
+  setAuthHeader (authHeader) {
+    this._authHeader = authHeader;
+    this._axios.defaults.headers.common[AUTH_HEADER] = authHeader;
   }
 
   _watchStoreAuthHeader () {
     eventBus.$on('core/authHeaderSet', authHeader => {
-      if (authHeader) return this.setAuthHeader(authHeader);
-      return this.clearAuthHeader();
+      this.setAuthHeader(authHeader);
     });
   }
 
   _watchResponseAuthHeader () {
     this._axios.interceptors.response.use(response => {
-      if (this._authHeader) {
-        const responseAuthHeaderValue = response.headers[this._authHeader.name];
-        if (responseAuthHeaderValue !== this._authHeader.value) {
-          store.commit('core/setAuthHeader', { name: this._authHeader.name, value: responseAuthHeaderValue });
-        }
+      const responseAuthHeaderValue = response.headers[AUTH_HEADER];
+      if (responseAuthHeaderValue !== this._authHeader) {
+        store.commit('core/setAuthHeader', responseAuthHeaderValue);
       }
       return response;
     });
