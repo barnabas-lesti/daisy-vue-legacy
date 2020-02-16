@@ -5,6 +5,7 @@ DEFAULT_LOCALE: en
 
 SERVICES:
   auth: http://localhost:8070/
+  health: http://localhost:8060/
 
 LOGS_LABEL: awa
 LOGS_CLEAN_FOLDER: true
