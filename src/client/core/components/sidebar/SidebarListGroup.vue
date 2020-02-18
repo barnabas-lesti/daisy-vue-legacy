@@ -1,9 +1,7 @@
 <template lang="pug">
   v-list-group.sidebar-list-group(
-    :key="forceRefreshKey"
+    :value="isActive"
     :prepend-icon="group.icon"
-    :group="getActivePath()"
-    @click="onClick($event)"
   )
     template(v-slot:activator)
       v-list-item-title {{ group.label || $t(group.labelKey) }}
@@ -25,28 +23,15 @@ export default {
   props: {
     group: Object,
   },
-  data () {
-    return {
-      forceRefreshKey: this.generateKey(),
-      listGroupValue: false,
-    };
+  computed: {
+    isActive () {
+      return this.$route.path.indexOf(this.getActivePath()) !== -1;
+    },
   },
   methods: {
-    generateKey: () => new Date().getTime(),
-    forceUpdate () {
-      // Built in force update doesn't work... :(
-      this.forceRefreshKey = this.generateKey();
-    },
     getActivePath () {
       const { route } = this.$router.resolve({ name: this.group.routeName });
       return route.path;
-    },
-
-    onClick (event) {
-      if (this.$route.name !== this.group.routeName) {
-        this.$router.push({ name: this.group.routeName });
-      }
-      this.forceUpdate();
     },
   },
 };
