@@ -3,7 +3,7 @@
     template(v-if="user")
       sidebar(
         v-model="sidebar.isOpen"
-        :items="groupedSidebarItems"
+        :items="sortedSidebarItems"
       )
       navbar(
         :user="user"
@@ -43,7 +43,7 @@ export default {
 
   computed: {
     ...mapState('core', [ 'user', 'breadcrumbs', 'notifications' ]),
-    ...mapGetters('core', [ 'groupedSidebarItems' ]),
+    ...mapGetters('core', [ 'sortedSidebarItems' ]),
   },
 };
 </script>

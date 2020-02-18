@@ -11,7 +11,6 @@
       :icon="false"
       class="notifications__item"
       tile
-      :data-lofasz="item.id"
     ) {{ item.textKey ? $t(item.textKey) : item.text }}
 </template>
 

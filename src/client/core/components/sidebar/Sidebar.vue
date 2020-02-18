@@ -15,6 +15,7 @@
       clipped
     )
       sidebar-list(:items="items")
+
 </template>
 
 <script>
@@ -26,7 +27,7 @@ export default {
   },
   props: {
     value: Boolean,
-    items: Object,
+    items: Array,
   },
   computed: {
     model: {

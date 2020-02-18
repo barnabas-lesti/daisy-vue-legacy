@@ -4,8 +4,12 @@ router.addRoutes([
   {
     path: '/',
     name: 'home',
-    exact: true,
-    component: () => import(/* webpackChunkName: "home" */ './views/Home.vue'),
+    redirect: { name: 'dashboard' },
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
   },
   {
     path: '/profile',

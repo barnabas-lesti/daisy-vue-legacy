@@ -5,7 +5,6 @@ import i18n from './i18n';
 import router from './router';
 import storage from './storage';
 import store from './store';
-import vuetify from './vuetify';
 
 export default {
   config,
@@ -15,16 +14,9 @@ export default {
   router,
   storage,
   store,
-  vuetify,
 };
 
 export {
-  config,
-  eventBus,
-  http,
-  i18n,
   router,
-  storage,
   store,
-  vuetify,
 };

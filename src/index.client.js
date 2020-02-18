@@ -1,5 +1,5 @@
 // Feature imports
-// import './client/health';
+import './client/health';
 
 // Core import
 import { client } from './client/core';

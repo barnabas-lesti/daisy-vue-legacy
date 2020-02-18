@@ -15,7 +15,7 @@
           v-icon(
             v-if="!user.profileImageUrl"
             data-qa="navbar.profile.activator.icon"
-          ) fas fa-user
+          ) {{ $icons.mdiAccount }}
           img(
             v-else
             :src="user.profileImageUrl"
@@ -32,7 +32,7 @@
           v-icon(
             v-if="!user.profileImageUrl"
             data-qa="navbar.profile.items.profile.icon"
-          ) fas fa-user
+          ) {{ $icons.mdiAccount }}
           img(
             v-else
             :src="user.profileImageUrl"

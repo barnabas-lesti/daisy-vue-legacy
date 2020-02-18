@@ -1,10 +1,11 @@
 import Vue from 'vue';
 
 import plugins from './plugins';
+import theme from './theme';
+
 import App from './App.vue';
 
 import './routes';
-import './sidebar-items';
 
 Vue.config.productionTip = false;
 
@@ -16,6 +17,8 @@ class Client {
   start () {
     this._vueApp = new Vue({
       ...plugins,
+      ...theme,
+
       render: h => h(App),
     }).$mount('#app');
   }

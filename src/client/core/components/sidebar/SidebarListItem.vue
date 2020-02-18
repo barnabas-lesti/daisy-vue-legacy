@@ -1,11 +1,11 @@
 <template lang="pug">
   v-list-item.sidebar-list-item(
-    :to="{ name: item.routeToName }"
+    :to="{ name: item.routeName }"
     color="primary"
-    :data-qa="`sidebar.${item.routeToName}.link`"
+    :data-qa="`sidebar.${item.routeName}.link`"
     :exact="item.exact !== undefined ? item.exact : true"
     link
-    dense
+    :dense="dense"
   )
     v-list-item-icon
       v-icon {{ item.icon }}
@@ -17,6 +17,7 @@
 export default {
   props: {
     item: Object,
+    dense: Boolean,
   },
 };
 </script>

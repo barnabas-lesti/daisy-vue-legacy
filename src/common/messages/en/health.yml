@@ -1,0 +1,12 @@
+views:
+  health:
+    title: Health
+
+  diet:
+    title: Diet
+
+  exercise:
+    title: Exercise
+
+  calculator:
+    title: Calculator

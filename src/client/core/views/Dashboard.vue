@@ -1,8 +1,8 @@
 <template lang="pug">
-  .home.view
+  .dashboard.view
     v-row
       v-col
-        h1 {{ $t('core.views.home.title') }}
+        h1 {{ $t('core.views.dashboard.title') }}
 
 </template>
 
