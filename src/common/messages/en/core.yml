@@ -7,6 +7,11 @@ components:
   navbar:
     profile: Profile
     signOut: Sign out
+  modal:
+    confirm: Confirm
+    cancel: Cancel
+    remove: Delete
+    removeWarning: Are you sure you want to delete the item?
 
 views:
   dashboard:

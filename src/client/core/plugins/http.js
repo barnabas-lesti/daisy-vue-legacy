@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Vue from 'vue';
 
 import config from './config';
 import eventBus from './event-bus';
@@ -111,4 +112,6 @@ class Http {
   }
 }
 
-export default new Http();
+const http = new Http();
+Vue.prototype.$http = http;
+export default http;

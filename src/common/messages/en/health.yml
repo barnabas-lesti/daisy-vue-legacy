@@ -1,9 +1,41 @@
+components:
+  editFoodModal:
+    newTitle: New food
+    editTitle: Edit food
+    form:
+      name: Name
+      description: Description
+      calories: Calories
+      carbs: Carbs (g)
+      protein: Protein (g)
+      fat: Fat (g)
+    errors:
+      name:
+        required: Name is required
+      server:
+        unknown: Unknown error occurred
+  
+  dietTable:
+    noData: No items available
+    noResults: No items found
+    loading: Loading items...
+    itemsPerPage: Per page
+    itemsPerPageAll: All
+    name: Name
+    type: Type
+    calories: Calories
+    carbs: Carbs (g)
+    protein: Protein (g)
+    fat: Fat (g)
+
 views:
   health:
     title: Health
 
   diet:
     title: Diet
+    search: Search
+    newButton: Create food
 
   exercise:
     title: Exercise

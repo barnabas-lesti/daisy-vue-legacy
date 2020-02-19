@@ -7,6 +7,12 @@ import {
   mdiCardsHeart,
   mdiWeightLifter,
   mdiCalculator,
+  mdiMagnify,
+  mdiFoodVariant,
+  mdiClose,
+  mdiCheck,
+  mdiPlus,
+  mdiDelete,
 } from '@mdi/js';
 
 const usedIcons = {
@@ -16,6 +22,12 @@ const usedIcons = {
   mdiCardsHeart,
   mdiWeightLifter,
   mdiCalculator,
+  mdiMagnify,
+  mdiFoodVariant,
+  mdiClose,
+  mdiCheck,
+  mdiPlus,
+  mdiDelete,
 };
 
 Vue.prototype.$icons = usedIcons;

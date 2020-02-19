@@ -19,4 +19,5 @@ export default {
 export {
   router,
   store,
+  http,
 };
