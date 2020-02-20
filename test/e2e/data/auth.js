@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-const createUser = () => {
+const generateUser = () => {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   return {
@@ -12,6 +12,5 @@ const createUser = () => {
 };
 
 module.exports = {
-  faker,
-  createUser,
+  generateUser,
 };

@@ -1,7 +1,7 @@
 <template lang="pug">
   v-form.sign-in-form(
     ref="form"
-    data-qa="signInForm"
+    data-qa="signIn.form"
     @submit.prevent="submit()"
   )
     .red--text.mb-4(v-if="serverErrorType") {{ $t(`core.views.signIn.signInForm.errors.server.${serverErrorType}`) }}
@@ -11,7 +11,7 @@
       :rules="rules.email"
       name="email"
       type="email"
-      data-qa="signInForm.email"
+      data-qa="signIn.form.email"
     )
     v-text-field(
       v-model="form.password"
@@ -19,21 +19,21 @@
       :rules="rules.password"
       name="password"
       type="password"
-      data-qa="signInForm.password"
+      data-qa="signIn.form.password"
     )
     .d-flex.mb-4.justify-end
       v-btn(
         :loading="loading"
         color="primary"
         type="submit"
-        data-qa="signInForm.submit"
+        data-qa="signIn.form.submit"
         large
         tile
       ) {{ $t('core.views.signIn.signInForm.labels.submit') }}
     .d-flex
       router-link(
         :to={ name: 'register' }
-        data-qa="signInForm.registerLink"
+        data-qa="signIn.form.registerLink"
       ) {{ $t('core.views.signIn.signInForm.registerLink') }}
 </template>
 

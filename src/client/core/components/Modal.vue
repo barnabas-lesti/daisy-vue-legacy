@@ -5,6 +5,7 @@
     :hide-overlay="$vuetify.breakpoint.xs"
     :transition="$vuetify.breakpoint.xs ? 'dialog-bottom-transition' : ''"
     max-width="40rem"
+    data-qa="modal"
   )
     v-card.pa-sm-4(tile)
       v-toolbar.modal__toolbar(
@@ -17,6 +18,7 @@
         v-toolbar-items
           v-btn(
             :loading="loading"
+            data-qa="modal.mobile.confirm"
             icon
             dark
             @click="confirm()"
@@ -24,23 +26,26 @@
             v-icon {{ $icons.mdiCheck }}
           v-btn(
             v-if="withRemove"
+            data-qa="modal.mobile.remove"
             icon
             dark
             @click="remove()"
           )
             v-icon {{ $icons.mdiDelete }}
           v-btn(
+            data-qa="modal.mobile.cancel"
             icon
             dark
             @click="cancel()"
           )
             v-icon {{ $icons.mdiClose }}
       v-card-title.pa-4.pb-0(v-if="!$vuetify.breakpoint.xs") {{ title }}
-      v-card-text.pa-4
+      v-card-text.pa-4(data-qa="modal.content")
         slot
       v-card-actions(v-if="!$vuetify.breakpoint.xs")
         v-spacer
         v-btn(
+          data-qa="modal.desktop.cancel"
           text
           tile
           @click="cancel()"
@@ -48,6 +53,7 @@
         v-btn(
           v-if="withRemove"
           color="red lighten-2"
+          data-qa="modal.desktop.remove"
           dark
           tile
           @click="remove()"
@@ -55,8 +61,8 @@
         v-btn(
           :loading="loading"
           color="primary"
+          data-qa="modal.desktop.confirm"
           tile
-          
           @click="confirm()"
         ) {{ $t('core.components.modal.confirm') }}
 
@@ -69,12 +75,14 @@
         v-card-actions
           v-spacer
           v-btn(
+            data-qa="modal.remove.cancel"
             tile
             text
             @click="confirmRemoveDialog = false;"
           ) {{ $t('core.components.modal.cancel') }}
           v-btn(
             color="primary"
+            data-qa="modal.remove.confirm"
             tile
             text
             @click="confirmRemove()"

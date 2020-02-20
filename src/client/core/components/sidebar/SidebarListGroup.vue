@@ -4,7 +4,7 @@
     :prepend-icon="group.icon"
   )
     template(v-slot:activator)
-      v-list-item-title {{ group.label || $t(group.labelKey) }}
+      v-list-item-title(:data-qa="`sidebar.${group.routeName}.link`") {{ group.label || $t(group.labelKey) }}
     sidebar-list-item(
       v-for="item in group.items"
       :key="item.label || item.labelKey"

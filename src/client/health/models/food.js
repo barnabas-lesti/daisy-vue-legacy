@@ -2,7 +2,6 @@ const units = {
   G: 'g',
   ML: 'ml',
   PIECES: 'pieces',
-  CAL: 'cal',
 };
 const unitValues = Object.keys(units).map(key => units[key]);
 

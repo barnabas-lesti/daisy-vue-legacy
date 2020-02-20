@@ -1,3 +1,9 @@
+common:
+  units:
+    g: g
+    ml: ml
+    pieces: pieces
+
 components:
   editFoodModal:
     newTitle: New food
@@ -9,6 +15,9 @@ components:
       carbs: Carbs (g)
       protein: Protein (g)
       fat: Fat (g)
+      serving:
+        unit: Serving unit
+        value: Serving value
     errors:
       name:
         required: Name is required
@@ -22,6 +31,7 @@ components:
     itemsPerPage: Per page
     itemsPerPageAll: All
     name: Name
+    serving: Serving
     type: Type
     calories: Calories
     carbs: Carbs (g)

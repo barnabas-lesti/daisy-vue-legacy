@@ -1,22 +1,24 @@
-const { faker, createUser } = require('../../data');
+const data = require('../../data');
 
-describe('Register', () => {
-  const $registerLink = () => cy.get('[data-qa="registerForm.signInLink"]');
-  const $form = () => cy.get('[data-qa="registerForm"]');
-  const $email = () => $form().get('[data-qa="registerForm.email"]');
-  const $password = () => $form().get('[data-qa="registerForm.password"]');
-  const $passwordConfirm = () => $form().get('[data-qa="registerForm.passwordConfirm"]');
-  const $submit = () => $form().get('[data-qa="registerForm.submit"]');
+const $form = () => cy.get('[data-qa="register.form"]');
+const $email = () => $form().get('[data-qa="register.form.email"]');
+const $password = () => $form().get('[data-qa="register.form.password"]');
+const $passwordConfirm = () => $form().get('[data-qa="register.form.passwordConfirm"]');
+const $submitButton = () => $form().get('[data-qa="register.form.submit"]');
+const $signInLink = () => cy.get('[data-qa="register.form.signInLink"]');
+const $notifications = () => cy.get('[data-qa="notifications"]');
+const $signInFormEmail = () => cy.get('[data-qa="signIn.form.email"]');
 
+describe('Auth / Register', () => {
   it('Should have a link to the sign in page', () => {
     cy.visit('/register');
-    $registerLink().click();
+    $signInLink().click();
     cy.url().should('include', '/sign-in');
   });
 
   it('Should validate the fields before submit', () => {
-    const { email, password } = createUser();
-    const notMatchingPassword = faker.internet.password(12);
+    const { email, password } = data.auth.generateUser();
+    const notMatchingPassword = data.faker.internet.password(12);
 
     cy.visit('/register');
 
@@ -39,34 +41,31 @@ describe('Register', () => {
   });
 
   it('Should not allow registration with already registered email', () => {
-    const existingUser = createUser();
-    const { email, password } = existingUser;
-    cy.registerUser(existingUser);
+    cy['auth/registerUser']()
+      .then(user => {
+        cy.visit('/register');
 
-    cy.visit('/register');
+        $email().type(user.email);
+        $password().type(user.password);
+        $passwordConfirm().type(user.password);
+        $form().submit();
 
-    $email().type(email);
-    $password().type(password);
-    $passwordConfirm().type(password);
-    $form().submit();
-
-    $form().contains(/email.*exists/i).should('be.visible');
+        $form().contains(/email.*exists/i).should('be.visible');
+      });
   });
 
   it('Should register a new user', () => {
-    const { email, password } = createUser();
+    const user = data.auth.generateUser();
 
     cy.visit('/register');
 
-    $email().type(email);
-    $password().type(password);
-    $passwordConfirm().type(password);
-    $submit().click();
+    $email().type(user.email);
+    $password().type(user.password);
+    $passwordConfirm().type(user.password);
+    $submitButton().click();
 
-    cy.get('[data-qa="notifications"]').contains(/registration.*successful/i).should('be.visible');
+    $notifications().contains(/registration.*successful/i).should('be.visible');
     cy.url().should('include', '/sign-in');
-
-    const $signInForm = () => cy.get('[data-qa="signInForm"]');
-    $signInForm().get('[data-qa="signInForm.email"]').should('have.value', email);
+    $signInFormEmail().should('have.value', user.email);
   });
 });

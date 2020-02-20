@@ -14,9 +14,12 @@
       :mobile-breakpoint="mobileBreakpoint"
       :footer-props="footer"
       ref="table"
+      data-qa="health.diet.table"
     )
       template(v-slot:item.type="{ item }")
-        v-icon {{ getItemIcon(item.type) }}
+        v-icon(:data-qa="`health.diet.table.icon.${item.type}`") {{ getItemIcon(item.type) }}
+      template(v-slot:item.serving="{ item }")
+        .diet-table__table__serving {{ item.serving.value }} {{ $t(`health.common.units.${item.serving.unit}`)}}
 
 </template>
 
@@ -42,6 +45,7 @@ export default {
       loadingText: this.$t('health.components.dietTable.loading'),
       headers: [
         { text: this.$t('health.components.dietTable.name'), value: 'name', align: 'left' },
+        { text: this.$t('health.components.dietTable.serving'), value: 'serving' },
         { text: this.$t('health.components.dietTable.calories'), value: 'nutrition.calories' },
         { text: this.$t('health.components.dietTable.carbs'), value: 'nutrition.carbs' },
         { text: this.$t('health.components.dietTable.protein'), value: 'nutrition.protein' },
@@ -79,6 +83,9 @@ export default {
 
 <style lang="sass">
 .diet-table__table
+  &__serving
+    min-width: 7rem
+
   th:first-of-type, td:first-of-type
     padding-left: 0
     min-width: 12rem

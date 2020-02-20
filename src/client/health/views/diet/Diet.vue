@@ -8,6 +8,7 @@
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
         v-btn(
           color="primary"
+          data-qa="health.diet.food.create"
           tile
           @click="newFood()"
         ) {{ $t('health.views.diet.newButton') }}
@@ -16,6 +17,7 @@
           v-model="search"
           :label="$t('health.views.diet.search')"
           :append-icon="$icons.mdiMagnify"
+          data-qa="health.diet.search"
           single-line
           hide-details
         )
@@ -50,12 +52,14 @@
         v-btn(
           v-model="fab"
           color="primary"
+          data-qa="health.diet.fab"
           fab
         )
           v-icon(v-if="fab") {{ $icons.mdiClose}}
           v-icon(v-else) {{ $icons.mdiPlus }}
       v-btn(
         color="green"
+        data-qa="health.diet.fab.food.create"
         dark
         fab
         small
