@@ -11,7 +11,7 @@
     v-form(
       v-if="form"
       ref="form"
-      data-qa="health.diet.food.form"
+      data-qa="views.diet.food.form"
       @submit.prevent="confirm()"
     )
       .red--text.mb-4(v-if="serverErrorType")
@@ -21,22 +21,22 @@
         :label="$t('health.components.editFoodModal.form.name')"
         :rules="rules.name"
         name="name"
-        data-qa="health.diet.food.form.name"
+        data-qa="views.diet.food.form.name"
       )
       v-text-field(
         v-model="form.description"
         :label="$t('health.components.editFoodModal.form.description')"
         name="description"
-        data-qa="health.diet.food.form.description"
+        data-qa="views.diet.food.form.description"
       )
       .diet-food-modal__serving
         v-text-field(
           v-model="form.serving.value"
           :label="$t('health.components.editFoodModal.form.serving.value')"
           name="servingValue"
-          data-qa="health.diet.food.form.serving.value"
+          data-qa="views.diet.food.form.serving.value"
         )
-        .diet-food-modal__serving__unit(data-qa="health.diet.food.form.serving.unit")
+        .diet-food-modal__serving__unit(data-qa="views.diet.food.form.serving.unit")
           v-select(
             v-model="form.serving.unit"
             :items="units"
@@ -48,28 +48,28 @@
         :label="$t('health.components.editFoodModal.form.calories')"
         name="calories"
         type="number"
-        data-qa="health.diet.food.form.calories"
+        data-qa="views.diet.food.form.calories"
       )
       v-text-field(
         v-model="form.nutrition.carbs"
         :label="$t('health.components.editFoodModal.form.carbs')"
         name="carbs"
         type="number"
-        data-qa="health.diet.food.form.carbs"
+        data-qa="views.diet.food.form.carbs"
       )
       v-text-field(
         v-model="form.nutrition.protein"
         :label="$t('health.components.editFoodModal.form.protein')"
         name="protein"
         type="number"
-        data-qa="health.diet.food.form.protein"
+        data-qa="views.diet.food.form.protein"
       )
       v-text-field(
         v-model="form.nutrition.fat"
         :label="$t('health.components.editFoodModal.form.fat')"
         name="fat"
         type="number"
-        data-qa="health.diet.food.form.fat"
+        data-qa="views.diet.food.form.fat"
       )
       v-btn.d-none(type="submit")
 

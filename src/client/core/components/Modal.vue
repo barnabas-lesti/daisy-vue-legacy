@@ -4,10 +4,11 @@
     :fullscreen="$vuetify.breakpoint.xs"
     :hide-overlay="$vuetify.breakpoint.xs"
     :transition="$vuetify.breakpoint.xs ? 'dialog-bottom-transition' : ''"
+    :scrollable="!$vuetify.breakpoint.xs"
     max-width="40rem"
     data-qa="modal"
   )
-    v-card.pa-sm-4(tile)
+    v-card(tile)
       v-toolbar.modal__toolbar(
         v-if="$vuetify.breakpoint.xs"
         color="primary"
@@ -39,32 +40,35 @@
             @click="cancel()"
           )
             v-icon {{ $icons.mdiClose }}
-      v-card-title.pa-4.pb-0(v-if="!$vuetify.breakpoint.xs") {{ title }}
+      v-card-title.pa-4(v-if="!$vuetify.breakpoint.xs") {{ title }}
+      v-divider
       v-card-text.pa-4(data-qa="modal.content")
         slot
-      v-card-actions(v-if="!$vuetify.breakpoint.xs")
-        v-spacer
-        v-btn(
-          data-qa="modal.desktop.cancel"
-          text
-          tile
-          @click="cancel()"
-        ) {{ $t('core.components.modal.cancel') }}
-        v-btn(
-          v-if="withRemove"
-          color="red lighten-2"
-          data-qa="modal.desktop.remove"
-          dark
-          tile
-          @click="remove()"
-        ) {{ $t('core.components.modal.remove') }}
-        v-btn(
-          :loading="loading"
-          color="primary"
-          data-qa="modal.desktop.confirm"
-          tile
-          @click="confirm()"
-        ) {{ $t('core.components.modal.confirm') }}
+      template(v-if="!$vuetify.breakpoint.xs")
+        v-divider
+        v-card-actions.pa-4
+          v-spacer
+          v-btn(
+            data-qa="modal.desktop.cancel"
+            text
+            tile
+            @click="cancel()"
+          ) {{ $t('core.components.modal.cancel') }}
+          v-btn(
+            v-if="withRemove"
+            color="red lighten-2"
+            data-qa="modal.desktop.remove"
+            dark
+            tile
+            @click="remove()"
+          ) {{ $t('core.components.modal.remove') }}
+          v-btn(
+            :loading="loading"
+            color="primary"
+            data-qa="modal.desktop.confirm"
+            tile
+            @click="confirm()"
+          ) {{ $t('core.components.modal.confirm') }}
 
     v-dialog(
       v-model="confirmRemoveDialog"

@@ -1,16 +1,9 @@
 const data = require('../../data');
 
-const $form = () => cy.get('[data-qa="signIn.form"]');
-const $email = () => $form().get('[data-qa="signIn.form.email"]');
-const $password = () => $form().get('[data-qa="signIn.form.password"]');
-const $submitButton = () => $form().get('[data-qa="signIn.form.submit"]');
-const $registerLink = () => cy.get('[data-qa="signIn.form.registerLink"]');
-const $notifications = () => cy.get('[data-qa="notifications"]');
-
 describe('Auth / Sign in', () => {
   it('Should have a link to the registration page', () => {
     cy.visit('/sign-in');
-    $registerLink().click();
+    cy.get('[data-qa="views.signIn.form.registerLink"]').click();
     cy.url().should('include', '/register');
   });
 
@@ -20,34 +13,34 @@ describe('Auth / Sign in', () => {
   });
 
   it('Should validate the fields before submit', () => {
-    const user = data.auth.generateUser();
+    const user = data.generateUser();
     cy.visit('/sign-in');
 
-    $form().submit();
-    $form().contains(/email.*required/i).should('be.visible');
-    $form().contains(/password.*required/i).should('be.visible');
+    cy.get('[data-qa="views.signIn.form"]').submit();
+    cy.get('[data-qa="views.signIn.form"]').contains(/email.*required/i).should('be.visible');
+    cy.get('[data-qa="views.signIn.form"]').contains(/password.*required/i).should('be.visible');
 
-    $email().type(user.email);
-    $password().type(user.password);
-    $form().contains(/email.*required/i).should('not.exist');
-    $form().contains(/password.*required/i).should('not.exist');
+    cy.get('[data-qa="views.signIn.form.email"]').type(user.email);
+    cy.get('[data-qa="views.signIn.form.password"]').type(user.password);
+    cy.get('[data-qa="views.signIn.form"]').contains(/email.*required/i).should('not.exist');
+    cy.get('[data-qa="views.signIn.form"]').contains(/password.*required/i).should('not.exist');
   });
 
   it('Should display error if authentication fails', () => {
     cy['auth/registerUser']()
       .then(user => {
-        const nonExistingUser = data.auth.generateUser();
+        const nonExistingUser = data.generateUser();
         cy.visit('/sign-in');
 
-        $email().type(nonExistingUser.email);
-        $password().type(nonExistingUser.password);
-        $form().submit();
-        $form().contains(/invalid.*credentials/i).should('be.visible');
+        cy.get('[data-qa="views.signIn.form.email"]').type(nonExistingUser.email);
+        cy.get('[data-qa="views.signIn.form.password"]').type(nonExistingUser.password);
+        cy.get('[data-qa="views.signIn.form"]').submit();
+        cy.get('[data-qa="views.signIn.form"]').contains(/invalid.*credentials/i).should('be.visible');
 
-        $email().clear().type(user.email);
-        $password().type(nonExistingUser.password);
-        $form().submit();
-        $form().contains(/invalid.*credentials/i).should('be.visible');
+        cy.get('[data-qa="views.signIn.form.email"]').clear().type(user.email);
+        cy.get('[data-qa="views.signIn.form.password"]').type(nonExistingUser.password);
+        cy.get('[data-qa="views.signIn.form"]').submit();
+        cy.get('[data-qa="views.signIn.form"]').contains(/invalid.*credentials/i).should('be.visible');
       });
   });
 
@@ -56,11 +49,11 @@ describe('Auth / Sign in', () => {
       .then(user => {
         cy.visit('/?test=10');
 
-        $email().type(user.email);
-        $password().type(user.password);
-        $submitButton().click();
+        cy.get('[data-qa="views.signIn.form.email"]').type(user.email);
+        cy.get('[data-qa="views.signIn.form.password"]').type(user.password);
+        cy.get('[data-qa="views.signIn.form.submit"]').click();
 
-        $notifications().contains(new RegExp(`signed.*in.*${user.email}`, 'i')).should('be.visible');
+        cy.get('[data-qa="notifications"]').contains(new RegExp(`signed.*in.*${user.email}`, 'i')).should('be.visible');
         cy.url().should('not.include', '/sign-in');
         cy.url().should('include', '?test=10');
       });

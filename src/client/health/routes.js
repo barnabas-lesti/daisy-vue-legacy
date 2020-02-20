@@ -17,11 +17,11 @@ router.addSidebarItems([
         icon: icons.mdiFoodApple,
         routeName: 'health.diet',
       },
-      {
-        labelKey: 'health.views.exercise.title',
-        icon: icons.mdiWeightLifter,
-        routeName: 'health.exercise',
-      },
+      // {
+      //   labelKey: 'health.views.exercise.title',
+      //   icon: icons.mdiWeightLifter,
+      //   routeName: 'health.exercise',
+      // },
     ],
   },
 ]);
@@ -43,9 +43,9 @@ router.addRoutes([
     name: 'health.diet',
     component: () => import(/* webpackChunkName: "health.diet" */ './views/diet/Diet.vue'),
   },
-  {
-    path: '/health/exercise',
-    name: 'health.exercise',
-    component: () => import(/* webpackChunkName: "health.exercise" */ './views/Exercise.vue'),
-  },
+  // {
+  //   path: '/health/exercise',
+  //   name: 'health.exercise',
+  //   component: () => import(/* webpackChunkName: "health.exercise" */ './views/Exercise.vue'),
+  // },
 ]);

@@ -25,6 +25,7 @@ components:
         unknown: Unknown error occurred
   
   dietTable:
+    search: Search
     noData: No items available
     noResults: No items found
     loading: Loading items...
@@ -52,3 +53,7 @@ views:
 
   calculator:
     title: Calculator
+    search: Search
+    changeItems: Add/remove items
+    selectModal:
+      title: Add/remove items

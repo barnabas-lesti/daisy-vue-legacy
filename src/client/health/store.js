@@ -10,6 +10,10 @@ store.registerModule('health', {
       food: [],
       recipes: [],
     },
+
+    calculator: {
+      items: [],
+    },
   },
   mutations: {
     'diet/setFood' (state, food = []) {
@@ -35,6 +39,10 @@ store.registerModule('health', {
     'diet/setRecipes' (state, recipes = []) {
       state.diet.recipes = recipes.map(item => new Recipe(item));
     },
+
+    'calculator/setItems' (state, items) {
+      state.calculator.items = items.splice(0);
+    },
   },
   actions: {
     async 'diet/fetchFood' (context) {
@@ -59,6 +67,10 @@ store.registerModule('health', {
       // TODO: Uncomment when API is ready
       // const recipes = await http.get('/api/health/diet/recipes');
       // context.commit('diet/setRecipes', recipes);
+    },
+
+    'calculator/setItems' (context, items) {
+      context.commit('calculator/setItems', items);
     },
   },
 });

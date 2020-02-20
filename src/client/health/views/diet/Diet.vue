@@ -8,7 +8,7 @@
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
         v-btn(
           color="primary"
-          data-qa="health.diet.food.create"
+          data-qa="views.diet.food.create"
           tile
           @click="newFood()"
         ) {{ $t('health.views.diet.newButton') }}
@@ -17,7 +17,7 @@
           v-model="search"
           :label="$t('health.views.diet.search')"
           :append-icon="$icons.mdiMagnify"
-          data-qa="health.diet.search"
+          data-qa="views.diet.search"
           single-line
           hide-details
         )
@@ -25,7 +25,7 @@
     v-row
       v-col
         diet-table(
-          v-model="search"
+          :search="search"
           :items="items"
           :loading="isLoading"
           @select="openModal($event)"
@@ -43,23 +43,23 @@
 
     v-speed-dial(
       v-if="$vuetify.breakpoint.xs"
-      v-model="fab"
+      v-model="isFabActive"
       bottom
       right
       fixed
     )
       template(v-slot:activator)
         v-btn(
-          v-model="fab"
+          v-model="isFabActive"
           color="primary"
-          data-qa="health.diet.fab"
+          data-qa="views.diet.fab"
           fab
         )
-          v-icon(v-if="fab") {{ $icons.mdiClose}}
+          v-icon(v-if="isFabActive") {{ $icons.mdiClose}}
           v-icon(v-else) {{ $icons.mdiPlus }}
       v-btn(
         color="green"
-        data-qa="health.diet.fab.food.create"
+        data-qa="views.diet.fab.createFood"
         dark
         fab
         small
@@ -69,10 +69,9 @@
 </template>
 
 <script>
-import CalculatorItem from '../../models/calculator-item';
-
+import { DietItem } from '../../models';
+import { DietTable } from '../../components';
 import DietFoodModal from './DietFoodModal.vue';
-import DietTable from './DietTable.vue';
 
 export default {
   components: {
@@ -81,11 +80,11 @@ export default {
   },
   data () {
     return {
-      types: CalculatorItem.types,
+      types: DietItem.types,
       isLoading: false,
+      isFabActive: false,
       search: '',
       selection: null,
-      fab: null,
       serverErrorType: '',
     };
   },
@@ -93,15 +92,15 @@ export default {
     items () {
       const { food, recipes } = this.$store.state.health.diet;
       return [
-        ...(food.map(item => CalculatorItem.convertFromFood(item))),
-        ...(recipes.map(item => CalculatorItem.convertFromRecipe(item))),
+        ...(food.map(item => DietItem.convertFromFood(item))),
+        ...(recipes.map(item => DietItem.convertFromRecipe(item))),
       ];
     },
   },
 
   methods: {
     newFood () {
-      this.openModal(new CalculatorItem({ type: CalculatorItem.types.FOOD }));
+      this.openModal(new DietItem({ type: DietItem.types.FOOD }));
     },
     openModal (item) {
       this.selection = item;

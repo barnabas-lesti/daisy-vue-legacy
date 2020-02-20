@@ -1,7 +1,7 @@
-const data = require('../../data');
+const data = require('../data');
 
 Cypress.Commands.add('auth/registerUser', () => {
-  const user = data.auth.generateUser();
+  const user = data.generateUser();
   cy.request('PUT', '/api/auth/register', user)
     .then(({ body }) => {
       return { ...body, ...user };
@@ -22,4 +22,16 @@ Cypress.Commands.add('auth/signIn', () => {
 
 Cypress.Commands.add('auth/signOut', () => {
   window.localStorage.removeItem('core.authHeader');
+});
+
+Cypress.Commands.add('health/diet/createFood', (foodArray) => {
+  const authHeader = window.localStorage.getItem('core.authHeader');
+  for (const food of foodArray) {
+    cy.request({
+      url: '/api/health/diet/food',
+      body: food,
+      method: 'PUT',
+      headers: { 'authorization': authHeader },
+    });
+  }
 });
