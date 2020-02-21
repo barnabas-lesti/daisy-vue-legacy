@@ -41,7 +41,7 @@ router.addRoutes([
   {
     path: '/health/diet',
     name: 'health.diet',
-    component: () => import(/* webpackChunkName: "health.diet" */ './views/diet/Diet.vue'),
+    component: () => import(/* webpackChunkName: "health.diet" */ './views/Diet.vue'),
   },
   // {
   //   path: '/health/exercise',

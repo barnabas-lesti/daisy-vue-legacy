@@ -4,6 +4,10 @@
       v-col
         h1 {{ $t('health.views.calculator.title') }}
 
+    v-row(v-if="summary")
+      v-col
+        nutrients-chart(:nutrients="summary")
+
     v-row
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
         v-btn(
@@ -16,7 +20,7 @@
         v-text-field(
           v-model="calculatorSearch"
           :label="$t('health.views.calculator.search')"
-          :append-icon="$icons.mdiMagnify"
+          :append-icon="$theme.icons.mdiMagnify"
           data-qa="views.calculator.search"
           single-line
           hide-details
@@ -28,23 +32,27 @@
           :search="calculatorSearch"
           :items="calculatorItems"
           :loading="isLoading"
+          with-amount
+          without-serving
+          @select="onMainTableSelect($event)"
         )
 
-    modal(
+    select-modal(
       v-model="isSelectModalOpen"
-      :title="$t('health.views.calculator.selectModal.title')"
       :loading="isLoading"
+      :source-items="sourceItems"
+      :selected-items="selectedItems"
       @cancel="onSelectModalCancel()"
-      @confirm="onSelectModalConfirm()"
+      @confirm="onSelectModalConfirm($event)"
     )
-      diet-table(
-        v-model="selectedItems"
-        :items="sourceItems"
-        :loading="isLoading"
-        selectable
-        with-search
-        @select="onSelect($event)"
-      )
+
+    food-modal(
+      v-model="selectedItem && selectedItem.type === types.FOOD"
+      :item="selectedItem"
+      :loading="isLoading"
+      readonly
+      @cancel="selectedItem = null;"
+    )
 
     v-btn(
       v-if="$vuetify.breakpoint.xs"
@@ -56,18 +64,19 @@
       fixed
       @click="openSelectModal()"
     )
-      v-icon {{ $icons.mdiPlus }}
+      v-icon {{ $theme.icons.mdiPlus }}
 </template>
 
 <script>
 import { DietItem } from '../models';
-import { Modal } from '../../core/components';
-import { DietTable } from '../components';
+import { DietTable, FoodModal, NutrientsChart, SelectModal } from '../components';
 
 export default {
   components: {
-    Modal,
     DietTable,
+    FoodModal,
+    NutrientsChart,
+    SelectModal,
   },
   data () {
     return {
@@ -75,7 +84,11 @@ export default {
       isSelectModalOpen: false,
       calculatorSearch: '',
       sourceSearch: '',
+      selectedItem: null,
       selectedItems: [],
+      chartOptions: {},
+
+      types: DietItem.types,
     };
   },
   computed: {
@@ -89,15 +102,13 @@ export default {
     calculatorItems () {
       return this.$store.state.health.calculator.items;
     },
+    summary () {
+      return this.$store.getters['health/calculatorSummary'];
+    },
   },
   methods: {
-    onSelect (item) {
-      const alreadySelected = !!this.selectedItems.filter(({ id }) => id === item.id)[0];
-      if (alreadySelected) {
-        this.selectedItems = this.selectedItems.filter(({ id }) => id !== item.id);
-      } else {
-        this.selectedItems.push(item);
-      }
+    onMainTableSelect (item) {
+      this.selectedItem = item;
     },
     openSelectModal () {
       this.selectedItems = [...this.calculatorItems];
@@ -105,11 +116,9 @@ export default {
     },
     onSelectModalCancel () {
       this.isSelectModalOpen = false;
-      this.selectedItems = [];
     },
-    onSelectModalConfirm () {
-      this.$store.dispatch('health/calculator/setItems', this.selectedItems);
-      this.selectedItems = [];
+    onSelectModalConfirm (selectedItems) {
+      this.$store.dispatch('health/calculator/setItems', selectedItems);
       this.isSelectModalOpen = false;
     },
 

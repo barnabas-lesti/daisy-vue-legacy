@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 import {
   mdiViewDashboard,
   mdiFoodApple,
@@ -29,7 +27,5 @@ const usedIcons = {
   mdiPlus,
   mdiDelete,
 };
-
-Vue.prototype.$icons = usedIcons;
 
 export default usedIcons;

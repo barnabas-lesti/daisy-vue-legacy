@@ -5,9 +5,23 @@ common:
     pieces: pieces
 
 components:
-  editFoodModal:
-    newTitle: New food
-    editTitle: Edit food
+  selectModal:
+    title: 'Add/remove items'
+  nutrientsChart:
+    table:
+      calories: Calories
+      carbs: Carbs
+      protein: Protein
+      fat: Fat
+    legend:
+      carbs: Carbs (g)
+      protein: Protein (g)
+      fat: Fat (g)
+  foodModal:
+    title:
+      new: New food
+      edit: Edit food
+      view: View food
     form:
       name: Name
       description: Description
@@ -32,6 +46,7 @@ components:
     itemsPerPage: Per page
     itemsPerPageAll: All
     name: Name
+    amount: Amount
     serving: Serving
     type: Type
     calories: Calories

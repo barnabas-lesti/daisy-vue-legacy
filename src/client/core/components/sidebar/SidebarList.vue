@@ -39,12 +39,12 @@ export default {
     return {
       dashboard: new SidebarItem({
         labelKey: 'core.views.dashboard.title',
-        icon: this.$icons.mdiViewDashboard,
+        icon: this.$theme.icons.mdiViewDashboard,
         routeName: 'dashboard',
       }),
       profile: new SidebarItem({
         labelKey: 'core.views.profile.title',
-        icon: this.$icons.mdiAccount,
+        icon: this.$theme.icons.mdiAccount,
         routeName: 'profile',
       }),
     };

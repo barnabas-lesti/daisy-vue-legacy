@@ -4,7 +4,7 @@
       v-if="withSearch"
       v-model="searchString"
       :label="$t('health.components.dietTable.search')"
-      :append-icon="$icons.mdiMagnify"
+      :append-icon="$theme.icons.mdiMagnify"
       data-qa="health.components.dietTable.search"
       single-line
       hide-details
@@ -30,11 +30,33 @@
         span.pl-10 {{ header.text }}
       template(v-slot:item.name="{ item }")
         .d-flex.align-center.py-2
-          v-icon(:data-qa="`health.components.dietTable.icon.${item.type}`") {{ getItemIcon(item.type) }}
+          v-icon(
+            color="grey"
+            :data-qa="`health.components.dietTable.icon.${item.type}`"
+          ) {{ getItemIcon(item.type) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving="{ item }")
-        .diet-table__table__serving {{ item.serving.value }} {{ $t(`health.common.units.${item.serving.unit}`)}}
-
+        span {{ item.serving.value }} {{ $t(`health.common.units.${item.serving.unit}`)}}
+      template(v-slot:item.amount="{ item }")
+        v-edit-dialog(
+          @save="onAmountSave(item)"
+          @cancel="onAmountCancel(item)"
+        )
+          v-chip(
+            color="grey lighten-2"
+            label
+            link
+          ) {{ item.amount }} {{ $t(`health.common.units.${item.serving.unit}`)}}
+          template(v-slot:input)
+            v-text-field(
+               v-model="item.amount"
+               type="number"
+               single-line
+            )
+      template(v-slot:item.nutrients.calories="{ item }") {{ formatNutrients(item, item.nutrients.calories) }}
+      template(v-slot:item.nutrients.carbs="{ item }") {{ formatNutrients(item, item.nutrients.carbs) }}
+      template(v-slot:item.nutrients.protein="{ item }") {{ formatNutrients(item, item.nutrients.protein) }}
+      template(v-slot:item.nutrients.fat="{ item }") {{ formatNutrients(item, item.nutrients.fat) }}
 </template>
 
 <script>
@@ -46,6 +68,8 @@ export default {
     selectable: Boolean,
     search: String,
     withSearch: Boolean,
+    withAmount: Boolean,
+    withoutServing: Boolean,
     value: Array,
     items: {
       type: Array,
@@ -63,11 +87,16 @@ export default {
       loadingText: this.$t('health.components.dietTable.loading'),
       headers: [
         { text: this.$t('health.components.dietTable.name'), value: 'name', align: 'left', width: '15rem' },
-        { text: this.$t('health.components.dietTable.serving'), value: 'serving', width: '9rem' },
-        { text: this.$t('health.components.dietTable.calories'), value: 'nutrition.calories', width: '7rem' },
-        { text: this.$t('health.components.dietTable.carbs'), value: 'nutrition.carbs', width: '7rem' },
-        { text: this.$t('health.components.dietTable.protein'), value: 'nutrition.protein', width: '7rem' },
-        { text: this.$t('health.components.dietTable.fat',), value: 'nutrition.fat', width: '7rem' },
+        ...(this.withAmount
+          ? [{ text: this.$t('health.components.dietTable.amount'), value: 'amount', width: '9rem' }] : []
+        ),
+        ...(!this.withoutServing
+          ? [{ text: this.$t('health.components.dietTable.serving'), value: 'serving', width: '9rem' }] : []
+        ),
+        { text: this.$t('health.components.dietTable.calories'), value: 'nutrients.calories', width: '7rem' },
+        { text: this.$t('health.components.dietTable.carbs'), value: 'nutrients.carbs', width: '7rem' },
+        { text: this.$t('health.components.dietTable.protein'), value: 'nutrients.protein', width: '7rem' },
+        { text: this.$t('health.components.dietTable.fat',), value: 'nutrients.fat', width: '7rem' },
       ],
       footer: {
         itemsPerPageAllText: this.$t('health.components.dietTable.itemsPerPageAll'),
@@ -83,11 +112,25 @@ export default {
   },
 
   methods: {
+    formatNutrients (item, nutrients) {
+      if (this.withAmount) {
+        const mulitplier = item.amount / item.serving.value;
+        return parseFloat(nutrients * mulitplier).toFixed(2);
+      }
+
+      return nutrients;
+    },
     getItemIcon (type) {
       switch (type) {
-        case DietItem.types.RECIPE: return this.$icons.mdiFoodVariant;
-        case DietItem.types.FOOD: return this.$icons.mdiFoodApple;
+        case DietItem.types.RECIPE: return this.$theme.icons.mdiFoodVariant;
+        case DietItem.types.FOOD: return this.$theme.icons.mdiFoodApple;
       }
+    },
+    onAmountSave (item) {
+      item.amount = parseFloat(item.amount || 0);
+    },
+    onAmountCancel (item) {
+      item.amount = item.serving.value;
     },
   },
   mounted () {

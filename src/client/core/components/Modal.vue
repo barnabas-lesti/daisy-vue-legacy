@@ -11,35 +11,36 @@
     v-card(tile)
       v-toolbar.modal__toolbar(
         v-if="$vuetify.breakpoint.xs"
-        color="primary"
+        :color="headerColor || 'primary'"
         dark
       )
         v-toolbar-title {{ title }}
         v-spacer
         v-toolbar-items
           v-btn(
+            v-if="!readonly"
             :loading="loading"
             data-qa="modal.mobile.confirm"
             icon
             dark
             @click="confirm()"
           )
-            v-icon {{ $icons.mdiCheck }}
+            v-icon {{ $theme.icons.mdiCheck }}
           v-btn(
-            v-if="withRemove"
+            v-if="!readonly && withRemove"
             data-qa="modal.mobile.remove"
             icon
             dark
             @click="remove()"
           )
-            v-icon {{ $icons.mdiDelete }}
+            v-icon {{ $theme.icons.mdiDelete }}
           v-btn(
             data-qa="modal.mobile.cancel"
             icon
             dark
             @click="cancel()"
           )
-            v-icon {{ $icons.mdiClose }}
+            v-icon {{ $theme.icons.mdiClose }}
       v-card-title.pa-4(v-if="!$vuetify.breakpoint.xs") {{ title }}
       v-divider
       v-card-text.pa-4(data-qa="modal.content")
@@ -55,7 +56,7 @@
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
           v-btn(
-            v-if="withRemove"
+            v-if="!readonly && withRemove"
             color="red lighten-2"
             data-qa="modal.desktop.remove"
             dark
@@ -63,6 +64,7 @@
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
           v-btn(
+            v-if="!readonly"
             :loading="loading"
             color="primary"
             data-qa="modal.desktop.confirm"
@@ -71,6 +73,7 @@
           ) {{ $t('core.components.modal.confirm') }}
 
     v-dialog(
+      v-if="!readonly"
       v-model="confirmRemoveDialog"
       max-width="16rem"
     )
@@ -100,6 +103,8 @@ export default {
     title: String,
     loading: Boolean,
     withRemove: Boolean,
+    headerColor: String,
+    readonly: Boolean,
   },
   data () {
     return {
@@ -116,14 +121,14 @@ export default {
     },
   },
   methods: {
-    confirm () {
-      if (!this.loading) this.$emit('confirm');
-    },
     cancel () {
       if (!this.loading) this.$emit('cancel');
     },
+    confirm () {
+      if (!this.readonly && !this.loading) this.$emit('confirm');
+    },
     remove () {
-      if (!this.loading) this.confirmRemoveDialog = true;
+      if (!this.readonly && !this.loading) this.confirmRemoveDialog = true;
     },
     confirmRemove () {
       this.confirmRemoveDialog = false;

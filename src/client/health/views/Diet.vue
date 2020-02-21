@@ -16,7 +16,7 @@
         v-text-field(
           v-model="search"
           :label="$t('health.views.diet.search')"
-          :append-icon="$icons.mdiMagnify"
+          :append-icon="$theme.icons.mdiMagnify"
           data-qa="views.diet.search"
           single-line
           hide-details
@@ -31,7 +31,7 @@
           @select="openModal($event)"
         )
 
-    diet-food-modal(
+    food-modal(
       v-model="selection && selection.type === types.FOOD"
       :item="selection"
       :loading="isLoading"
@@ -55,27 +55,26 @@
           data-qa="views.diet.fab"
           fab
         )
-          v-icon(v-if="isFabActive") {{ $icons.mdiClose}}
-          v-icon(v-else) {{ $icons.mdiPlus }}
+          v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
+          v-icon(v-else) {{ $theme.icons.mdiPlus }}
       v-btn(
-        color="green"
+        color="green lighten-1"
         data-qa="views.diet.fab.createFood"
         dark
         fab
         small
         @click="newFood()"
       )
-        v-icon {{ $icons.mdiFoodApple }}
+        v-icon {{ $theme.icons.mdiFoodApple }}
 </template>
 
 <script>
-import { DietItem } from '../../models';
-import { DietTable } from '../../components';
-import DietFoodModal from './DietFoodModal.vue';
+import { DietItem } from '../models';
+import { DietTable, FoodModal } from '../components';
 
 export default {
   components: {
-    DietFoodModal,
+    FoodModal,
     DietTable,
   },
   data () {

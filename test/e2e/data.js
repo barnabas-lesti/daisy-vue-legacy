@@ -22,7 +22,7 @@ const generateFood = () => ({
     unit: randomUnit(),
     value: randomFloat(1024),
   },
-  nutrition: {
+  nutrients: {
     calories: randomFloat(4096),
     carbs: randomFloat(2048),
     fat: randomFloat(2048),

@@ -11,12 +11,13 @@ export default class DietItem extends Food {
   /**
    * @param {DietItem} args
    */
-  constructor (args) {
+  constructor (args = {}) {
     super(args);
     /**
      * @type {String}
      */
-    this.type = args.type;
+    this.type = args.type || types.FOOD;
+    this.amount = (args.serving && args.serving.value) || 0;
   }
 
   /**

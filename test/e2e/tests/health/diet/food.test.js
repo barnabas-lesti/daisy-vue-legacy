@@ -139,10 +139,10 @@ function fillInForm (food) {
   cy.get('[data-qa="views.diet.food.form.serving.unit"]').click();
   cy.get('.v-select-list').contains(food.serving.unit).click();
   cy.get('[data-qa="views.diet.food.form.serving.value"]').clear().type(food.serving.value);
-  cy.get('[data-qa="views.diet.food.form.calories"]').clear().type(food.nutrition.calories);
-  cy.get('[data-qa="views.diet.food.form.carbs"]').clear().type(food.nutrition.carbs);
-  cy.get('[data-qa="views.diet.food.form.protein"]').clear().type(food.nutrition.protein);
-  cy.get('[data-qa="views.diet.food.form.fat"]').clear().type(food.nutrition.fat);
+  cy.get('[data-qa="views.diet.food.form.calories"]').clear().type(food.nutrients.calories);
+  cy.get('[data-qa="views.diet.food.form.carbs"]').clear().type(food.nutrients.carbs);
+  cy.get('[data-qa="views.diet.food.form.protein"]').clear().type(food.nutrients.protein);
+  cy.get('[data-qa="views.diet.food.form.fat"]').clear().type(food.nutrients.fat);
 }
 
 function verifyFieldsInForm (food) {
@@ -150,19 +150,19 @@ function verifyFieldsInForm (food) {
   cy.get('[data-qa="views.diet.food.form.description"]').invoke('val').should('eq', food.description);
   cy.get('[data-qa="views.diet.food.form.serving.unit"]').get('[name="servingUnit"]').invoke('val').should('eq', food.serving.unit);
   cy.get('[data-qa="views.diet.food.form.serving.value"]').invoke('val').should('eq', `${food.serving.value}`);
-  cy.get('[data-qa="views.diet.food.form.calories"]').invoke('val').should('eq', `${food.nutrition.calories}`);
-  cy.get('[data-qa="views.diet.food.form.carbs"]').invoke('val').should('eq', `${food.nutrition.carbs}`);
-  cy.get('[data-qa="views.diet.food.form.protein"]').invoke('val').should('eq', `${food.nutrition.protein}`);
-  cy.get('[data-qa="views.diet.food.form.fat"]').invoke('val').should('eq', `${food.nutrition.fat}`);
+  cy.get('[data-qa="views.diet.food.form.calories"]').invoke('val').should('eq', `${food.nutrients.calories}`);
+  cy.get('[data-qa="views.diet.food.form.carbs"]').invoke('val').should('eq', `${food.nutrients.carbs}`);
+  cy.get('[data-qa="views.diet.food.form.protein"]').invoke('val').should('eq', `${food.nutrients.protein}`);
+  cy.get('[data-qa="views.diet.food.form.fat"]').invoke('val').should('eq', `${food.nutrients.fat}`);
 }
 
 function verifyFieldsInTableRow (food) {
   const $row = () => cy.get('[data-qa="health.components.dietTable"]').get('tbody').contains(food.name).parents('tr');
   $row().contains(food.serving.value);
   $row().contains(food.serving.unit);
-  $row().contains(food.nutrition.calories);
-  $row().contains(food.nutrition.carbs);
-  $row().contains(food.nutrition.protein);
-  $row().contains(food.nutrition.fat);
+  $row().contains(food.nutrients.calories);
+  $row().contains(food.nutrients.carbs);
+  $row().contains(food.nutrients.protein);
+  $row().contains(food.nutrients.fat);
   cy.get('[data-qa="health.components.dietTable.icon.food"]').should('exist');
 }
