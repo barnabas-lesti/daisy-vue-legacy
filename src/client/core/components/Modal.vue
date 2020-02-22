@@ -85,6 +85,7 @@
             data-qa="modal.remove.cancel"
             tile
             text
+            autofocus
             @click="confirmRemoveDialog = false;"
           ) {{ $t('core.components.modal.cancel') }}
           v-btn(

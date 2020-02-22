@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import Food from '../models/food';
 import DoughnutChart from '../../core/components/charts/Doughnut';
 
 export default {
@@ -43,7 +44,7 @@ export default {
     DoughnutChart,
   },
   props: {
-    nutrients: Object,
+    nutrients: Food.Nutrients,
   },
   data () {
     const { colors } = this.$theme;

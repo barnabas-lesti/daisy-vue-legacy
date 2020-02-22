@@ -1,4 +1,4 @@
-import { Food, Recipe } from '../../models';
+import { Food, Recipe, CalculableItem } from '../../models';
 
 export default {
   'diet/setFood' (state, food = []) {
@@ -24,8 +24,24 @@ export default {
   'diet/setRecipes' (state, recipes = []) {
     state.diet.recipes = recipes.map(item => new Recipe(item));
   },
+  'diet/updateRecipe' (state, update) {
+    const recipes = state.diet.recipes.splice(0);
+    for (let i = 0; i < recipes.length; i++) {
+      if (recipes[i].id === update.id) {
+        recipes[i] = new Recipe(update);
+        break;
+      }
+    }
+    state.diet.recipes = recipes;
+  },
+  'diet/addRecipe' (state, recipe) {
+    state.diet.recipes.push(new Recipe(recipe));
+  },
+  'diet/removeRecipe' (state, recipe) {
+    state.diet.recipes = state.diet.recipes.splice(0).filter(item => item.id !== recipe.id);
+  },
 
   'calculator/setItems' (state, items) {
-    state.calculator.items = items.splice(0);
+    state.calculator.items = [...items].map(item => new CalculableItem(item));
   },
 };

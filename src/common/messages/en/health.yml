@@ -37,7 +37,28 @@ components:
         required: Name is required
       server:
         unknown: Unknown error occurred
-  
+  recipeModal:
+    title:
+      new: New recipe
+      edit: Edit recipe
+      view: View recipe
+    form:
+      name: Name
+      description: Description
+      serving:
+        unit: Serving unit
+        value: Serving value
+    onlyShowSelected: Only show selected
+    food: Select ingredients
+    ingredients: Ingredients
+    noIngredients: Add ingredients to see the nutrient breakdown
+    nutrients: Nutrients
+    errors:
+      name:
+        required: Name is required
+      server:
+        unknown: Unknown error occurred
+
   dietTable:
     search: Search
     noData: No items available
@@ -61,7 +82,13 @@ views:
   diet:
     title: Diet
     search: Search
-    newButton: Create food
+    newFoodButton: Create food
+    newRecipeButton: Create recipe
+    showFood: Show food
+    showRecipes: Show recipes
+    notifications:
+      food:
+        success: Food successfully saved
 
   exercise:
     title: Exercise

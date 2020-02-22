@@ -33,6 +33,15 @@ class Router extends VueRouter {
   getRoutes () {
     return this._routes;
   }
+
+  pushQuery (query) {
+    this.push({ query: { ...this.currentRoute.query, ...query } })
+      .catch(() => {}); // To remove the console warning for navigation duplications
+  }
+
+  clearQuery (queryName) {
+    this.pushQuery({ [queryName]: undefined });
+  }
 }
 
 Vue.use(VueRouter);

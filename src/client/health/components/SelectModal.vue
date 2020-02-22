@@ -1,19 +1,18 @@
 <template lang="pug">
   modal.select-modal(
-    v-model="isOpen"
+    v-model="value"
     :title="$t('health.components.selectModal.title')"
     :loading="loading"
     @cancel="$emit('cancel')"
-    @confirm="$emit('confirm', innerSelectedItems)"
+    @confirm="$emit('confirm', localSelectedItems)"
   )
     diet-table(
-      v-model="innerSelectedItems"
-      :items="sourceItems"
+      v-model="localSelectedItems"
+      :items="items"
       :loading="loading"
       selectable
       with-search
       with-amount
-      @select="onSelect($event)"
     )
 </template>
 
@@ -29,32 +28,22 @@ export default {
   props: {
     value: Boolean,
     loading: Boolean,
-    sourceItems: Array,
-    selectedItems: Array,
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    selectedItems: {
+      type: Array,
+      default: () => [],
+    },
   },
   data () {
     return {
-      innerSelectedItems: [...this.selectedItems],
+      localSelectedItems: [...this.selectedItems],
     };
   },
-  computed: {
-    isOpen: {
-      get () { return this.value; },
-      set (newValue) { this.$emit('input', newValue); },
-    },
-  },
-  methods: {
-    onSelect (item) {
-      const alreadySelected = !!this.innerSelectedItems.filter(({ id }) => id === item.id)[0];
-      if (alreadySelected) {
-        this.innerSelectedItems = this.innerSelectedItems.filter(({ id }) => id !== item.id);
-      } else {
-        this.innerSelectedItems.push(item);
-      }
-    },
-  },
   watch: {
-    selectedItems (newValue) { this.innerSelectedItems = [...newValue]; },
+    selectedItems (newValue) { this.localSelectedItems = [...newValue]; },
   },
 };
 </script>

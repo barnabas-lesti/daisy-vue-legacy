@@ -1,85 +1,85 @@
 <template lang="pug">
   modal.food-modal(
-    v-model="value"
+    v-model="isOpen"
     :title="title"
     :loading="loading"
     :headerColor="headerColor"
     :readonly="readonly"
-    :with-remove="form && !!form.id"
+    :with-remove="localItem && !!localItem.id"
     @cancel="cancel()"
     @confirm="confirm()"
     @remove="remove()"
   )
     v-form(
-      v-if="form"
+      v-if="localItem"
       ref="form"
-      data-qa="views.diet.food.form"
+      data-qa="components.foodModal.form"
       @submit.prevent="confirm()"
     )
       .red--text.mb-4(v-if="serverErrorType")
         | {{ $t(`health.components.foodModal.errors.server.${serverErrorType}`) }}
       v-text-field(
-        v-model="form.name"
+        v-model="localItem.name"
         :label="$t('health.components.foodModal.form.name')"
         :rules="rules.name"
         :readonly="readonly"
         name="name"
-        data-qa="views.diet.food.form.name"
+        data-qa="components.foodModal.form.name"
       )
       v-text-field(
-        v-model="form.description"
+        v-model="localItem.description"
         :label="$t('health.components.foodModal.form.description')"
         :readonly="readonly"
         name="description"
-        data-qa="views.diet.food.form.description"
+        data-qa="components.foodModal.form.description"
       )
       .food-modal__serving
         v-text-field(
-          v-model="form.serving.value"
+          v-model="localItem.serving.value"
           :label="$t('health.components.foodModal.form.serving.value')"
           :readonly="readonly"
           name="servingValue"
-          data-qa="views.diet.food.form.serving.value"
+          data-qa="components.foodModal.form.serving.value"
         )
-        .food-modal__serving__unit(data-qa="views.diet.food.form.serving.unit")
+        .food-modal__serving__unit(data-qa="components.foodModal.form.serving.unit")
           v-select(
-            v-model="form.serving.unit"
+            v-model="localItem.serving.unit"
             :items="units"
             :label="$t('health.components.foodModal.form.serving.unit')"
             :readonly="readonly"
             name="servingUnit"
           )
       v-text-field(
-        v-model="form.nutrients.calories"
+        v-model="localItem.nutrients.calories"
         :label="$t('health.components.foodModal.form.calories')"
         :readonly="readonly"
         name="calories"
         type="number"
-        data-qa="views.diet.food.form.calories"
+        data-qa="components.foodModal.form.calories"
       )
       v-text-field(
-        v-model="form.nutrients.carbs"
+        v-model="localItem.nutrients.carbs"
         :label="$t('health.components.foodModal.form.carbs')"
         :readonly="readonly"
         name="carbs"
         type="number"
-        data-qa="views.diet.food.form.carbs"
+        data-qa="components.foodModal.form.carbs"
       )
       v-text-field(
-        v-model="form.nutrients.protein"
+        v-model="localItem.nutrients.protein"
         :label="$t('health.components.foodModal.form.protein')"
         :readonly="readonly"
         name="protein"
         type="number"
-        data-qa="views.diet.food.form.protein"
+        data-qa="components.foodModal.form.protein"
       )
       v-text-field(
-        v-model="form.nutrients.fat"
+        v-model="localItem.nutrients.fat"
         :label="$t('health.components.foodModal.form.fat')"
         :readonly="readonly"
         name="fat"
         type="number"
-        data-qa="views.diet.food.form.fat"
+        data-qa="components.foodModal.form.fat"
       )
       v-btn.d-none(
         v-if="!readonly"
@@ -97,16 +97,16 @@ export default {
     Modal,
   },
   props: {
-    value: Boolean,
-    item: Object,
     loading: Boolean,
-    serverErrorType: String,
     headerColor: String,
     readonly: Boolean,
+    serverErrorType: String,
+
+    value: Boolean,
+    item: Object,
   },
   data () {
     return {
-      form: null,
       units: Food.unitValues.map(value => ({ text: this.$t(`health.common.units.${value}`), value })),
       rules: {
         name: [ v => !!v || this.$t('health.components.foodModal.errors.name.required') ],
@@ -117,26 +117,25 @@ export default {
     title () {
       const prefix = 'health.components.foodModal.';
       if (this.readonly) return this.$t(prefix + 'title.view');
-      if (this.form && this.form.id) return this.$t(prefix + 'title.edit');
+      if (this.localItem && this.localItem.id) return this.$t(prefix + 'title.edit');
       return this.$t(prefix + 'title.new');
     },
+    isOpen: {
+      get () { return this.value; },
+      set (newValue) { this.$emit('input', newValue); },
+    },
+    localItem () { return this.item; },
   },
   methods: {
     cancel () {
       this.$emit('cancel');
     },
     confirm () {
-      if (!this.readonly && this.$refs.form.validate()) this.$emit('confirm', this.form);
+      if (!this.readonly && this.$refs.form.validate()) this.$emit('confirm', this.localItem);
     },
     remove () {
-      if (!this.readonly) this.$emit('remove', this.form);
+      if (!this.readonly) this.$emit('remove', this.localItem);
     },
-    getTitle () {
-
-    },
-  },
-  watch: {
-    item (newValue) { this.form = newValue ? Object.assign({}, newValue) : null; },
   },
 };
 </script>

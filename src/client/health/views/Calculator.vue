@@ -27,20 +27,20 @@
         )
 
     v-row
-      v-col(data-qa="views.calculator.mainTable")
+      v-col(data-qa="views.calculator.table")
         diet-table(
           :search="calculatorSearch"
           :items="calculatorItems"
           :loading="isLoading"
           with-amount
           without-serving
-          @select="onMainTableSelect($event)"
+          @select="onCalculatorTableSelect($event)"
         )
 
     select-modal(
       v-model="isSelectModalOpen"
       :loading="isLoading"
-      :source-items="sourceItems"
+      :items="dietItems"
       :selected-items="selectedItems"
       @cancel="onSelectModalCancel()"
       @confirm="onSelectModalConfirm($event)"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { DietItem } from '../models';
+import { CalculableItem } from '../models';
 import { DietTable, FoodModal, NutrientsChart, SelectModal } from '../components';
 
 export default {
@@ -80,24 +80,18 @@ export default {
   },
   data () {
     return {
+      types: CalculableItem.types,
       isLoading: false,
       isSelectModalOpen: false,
+
       calculatorSearch: '',
-      sourceSearch: '',
       selectedItem: null,
       selectedItems: [],
-      chartOptions: {},
-
-      types: DietItem.types,
     };
   },
   computed: {
-    sourceItems () {
-      const { food, recipes } = this.$store.state.health.diet;
-      return [
-        ...(food.map(item => DietItem.convertFromFood(item))),
-        ...(recipes.map(item => DietItem.convertFromRecipe(item))),
-      ];
+    dietItems () {
+      return this.$store.getters['health/dietItems'];
     },
     calculatorItems () {
       return this.$store.state.health.calculator.items;
@@ -107,10 +101,15 @@ export default {
     },
   },
   methods: {
-    onMainTableSelect (item) {
+    onCalculatorTableSelect (item) {
       this.selectedItem = item;
     },
+
     openSelectModal () {
+      if (!this.dietItems || !this.dietItems.length) {
+        this.fetchDietItems();
+      }
+
       this.selectedItems = [...this.calculatorItems];
       this.isSelectModalOpen = true;
     },
@@ -122,19 +121,11 @@ export default {
       this.isSelectModalOpen = false;
     },
 
-    async fetchSourceItems () {
+    async fetchDietItems () {
       this.isLoading = true;
-      await Promise.all([
-        this.$store.dispatch('health/diet/fetchFood'),
-        this.$store.dispatch('health/diet/fetchRecipes'),
-      ]);
+      await this.$store.dispatch('health/diet/fetchItems');
       this.isLoading = false;
     },
-  },
-  created () {
-    if (!this.sourceItems || !this.sourceItems.length) {
-      this.fetchSourceItems();
-    }
   },
 };
 </script>

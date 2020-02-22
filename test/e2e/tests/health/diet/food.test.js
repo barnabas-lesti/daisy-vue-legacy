@@ -20,19 +20,19 @@ describe('Health / Diet / Food', () => {
     const food = data.generateFood();
     cy.visit('/health/diet');
 
-    cy.get('[data-qa="views.diet.food.create"]').click();
-    cy.get('[data-qa="views.diet.food.form"]').should('be.visible');
-    cy.get('[data-qa="views.diet.food.form"]').submit();
-    cy.get('[data-qa="views.diet.food.form"]').contains(/name.*required/i).should('be.visible');
+    cy.get('[data-qa="components.foodModal.create"]').click();
+    cy.get('[data-qa="components.foodModal.form"]').should('be.visible');
+    cy.get('[data-qa="components.foodModal.form"]').submit();
+    cy.get('[data-qa="components.foodModal.form"]').contains(/name.*required/i).should('be.visible');
 
     fillInForm(food);
     cy.get('[data-qa="modal.desktop.confirm"]').should('be.visible').click();
-    cy.get('[data-qa="views.diet.food.form"]').should('not.be.visible');
+    cy.get('[data-qa="components.foodModal.form"]').should('not.be.visible');
 
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').find('tr').eq(0).click();
     verifyFieldsInForm(food);
     cy.get('[data-qa="modal.desktop.cancel"]').click();
-    cy.get('[data-qa="views.diet.food.form"]').should('not.be.visible');
+    cy.get('[data-qa="components.foodModal.form"]').should('not.be.visible');
   });
 
   it('Should create a food item (Mobile)', () => {
@@ -43,10 +43,10 @@ describe('Health / Diet / Food', () => {
     cy.visit('/health/diet');
 
     cy.get('[data-qa="views.diet.fab"]').click();
-    cy.get('[data-qa="views.diet.fab.createFood"]').should('be.visible').click();
-    cy.get('[data-qa="views.diet.food.form"]').should('be.visible');
-    cy.get('[data-qa="views.diet.food.form"]').submit();
-    cy.get('[data-qa="views.diet.food.form"]').contains(/name.*required/i).should('be.visible');
+    cy.get('[data-qa="views.diet.fab.newFood"]').should('be.visible').click();
+    cy.get('[data-qa="components.foodModal.form"]').should('be.visible');
+    cy.get('[data-qa="components.foodModal.form"]').submit();
+    cy.get('[data-qa="components.foodModal.form"]').contains(/name.*required/i).should('be.visible');
 
     fillInForm(food);
     cy.get('[data-qa="modal.mobile.confirm"]').click();
@@ -68,7 +68,7 @@ describe('Health / Diet / Food', () => {
     verifyFieldsInTableRow(food);
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').contains(food.name).click();
     fillInForm(update);
-    cy.get('[data-qa="views.diet.food.form"]').submit();
+    cy.get('[data-qa="components.foodModal.form"]').submit();
 
     cy.reload();
     cy.get('[data-qa="views.diet.search"]').type(food.name);
@@ -134,26 +134,26 @@ function prepareFood (numberOfItems = 5) {
 }
 
 function fillInForm (food) {
-  cy.get('[data-qa="views.diet.food.form.name"]').clear().type(food.name);
-  cy.get('[data-qa="views.diet.food.form.description"]').clear().type(food.description);
-  cy.get('[data-qa="views.diet.food.form.serving.unit"]').click();
+  cy.get('[data-qa="components.foodModal.form.name"]').clear().type(food.name);
+  cy.get('[data-qa="components.foodModal.form.description"]').clear().type(food.description);
+  cy.get('[data-qa="components.foodModal.form.serving.unit"]').click();
   cy.get('.v-select-list').contains(food.serving.unit).click();
-  cy.get('[data-qa="views.diet.food.form.serving.value"]').clear().type(food.serving.value);
-  cy.get('[data-qa="views.diet.food.form.calories"]').clear().type(food.nutrients.calories);
-  cy.get('[data-qa="views.diet.food.form.carbs"]').clear().type(food.nutrients.carbs);
-  cy.get('[data-qa="views.diet.food.form.protein"]').clear().type(food.nutrients.protein);
-  cy.get('[data-qa="views.diet.food.form.fat"]').clear().type(food.nutrients.fat);
+  cy.get('[data-qa="components.foodModal.form.serving.value"]').clear().type(food.serving.value);
+  cy.get('[data-qa="components.foodModal.form.calories"]').clear().type(food.nutrients.calories);
+  cy.get('[data-qa="components.foodModal.form.carbs"]').clear().type(food.nutrients.carbs);
+  cy.get('[data-qa="components.foodModal.form.protein"]').clear().type(food.nutrients.protein);
+  cy.get('[data-qa="components.foodModal.form.fat"]').clear().type(food.nutrients.fat);
 }
 
 function verifyFieldsInForm (food) {
-  cy.get('[data-qa="views.diet.food.form.name"]').invoke('val').should('eq', food.name);
-  cy.get('[data-qa="views.diet.food.form.description"]').invoke('val').should('eq', food.description);
-  cy.get('[data-qa="views.diet.food.form.serving.unit"]').get('[name="servingUnit"]').invoke('val').should('eq', food.serving.unit);
-  cy.get('[data-qa="views.diet.food.form.serving.value"]').invoke('val').should('eq', `${food.serving.value}`);
-  cy.get('[data-qa="views.diet.food.form.calories"]').invoke('val').should('eq', `${food.nutrients.calories}`);
-  cy.get('[data-qa="views.diet.food.form.carbs"]').invoke('val').should('eq', `${food.nutrients.carbs}`);
-  cy.get('[data-qa="views.diet.food.form.protein"]').invoke('val').should('eq', `${food.nutrients.protein}`);
-  cy.get('[data-qa="views.diet.food.form.fat"]').invoke('val').should('eq', `${food.nutrients.fat}`);
+  cy.get('[data-qa="components.foodModal.form.name"]').invoke('val').should('eq', food.name);
+  cy.get('[data-qa="components.foodModal.form.description"]').invoke('val').should('eq', food.description);
+  cy.get('[data-qa="components.foodModal.form.serving.unit"]').get('[name="servingUnit"]').invoke('val').should('eq', food.serving.unit);
+  cy.get('[data-qa="components.foodModal.form.serving.value"]').invoke('val').should('eq', `${food.serving.value}`);
+  cy.get('[data-qa="components.foodModal.form.calories"]').invoke('val').should('eq', `${food.nutrients.calories}`);
+  cy.get('[data-qa="components.foodModal.form.carbs"]').invoke('val').should('eq', `${food.nutrients.carbs}`);
+  cy.get('[data-qa="components.foodModal.form.protein"]').invoke('val').should('eq', `${food.nutrients.protein}`);
+  cy.get('[data-qa="components.foodModal.form.fat"]').invoke('val').should('eq', `${food.nutrients.fat}`);
 }
 
 function verifyFieldsInTableRow (food) {

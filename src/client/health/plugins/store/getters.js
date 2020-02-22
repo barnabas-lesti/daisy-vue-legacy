@@ -1,19 +1,27 @@
-import DietItem from '../../models/diet-item';
+import { CalculableItem, Food } from '../../models';
 
 export default {
+  dietItems (state) {
+    const { food, recipes } = state.diet;
+    return [
+      ...(food.map(item => CalculableItem.convertFromFood(item))),
+      ...(recipes.map(item => CalculableItem.convertFromRecipe(item))),
+    ];
+  },
+
   calculatorSummary ({ calculator }) {
     if (!calculator.items.length) {
       return null;
     }
 
-    const { nutrients } = calculator.items.reduce((summary, nextItem) => {
+    const nutrients = calculator.items.reduce((summary, nextItem) => {
       const multiplier = nextItem.amount / nextItem.serving.value;
-      summary.nutrients.calories += nextItem.nutrients.calories * multiplier;
-      summary.nutrients.carbs += nextItem.nutrients.carbs * multiplier;
-      summary.nutrients.protein += nextItem.nutrients.protein * multiplier;
-      summary.nutrients.fat += nextItem.nutrients.fat * multiplier;
+      summary.calories += nextItem.getNutrients().calories * multiplier;
+      summary.carbs += nextItem.getNutrients().carbs * multiplier;
+      summary.protein += nextItem.getNutrients().protein * multiplier;
+      summary.fat += nextItem.getNutrients().fat * multiplier;
       return summary;
-    }, new DietItem());
+    }, new Food.Nutrients());
     return nutrients;
   },
 };
