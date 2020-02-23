@@ -2,6 +2,11 @@ const units = {
   G: 'g',
   ML: 'ml',
   PIECES: 'pieces',
+  PLATES: 'plates',
+  SERVING: 'serving',
+  MUG: 'mug',
+  CUP: 'cup',
+  TEASPOON: 'teaspoon',
 };
 const unitValues = Object.keys(units).map(key => units[key]);
 

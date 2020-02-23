@@ -15,24 +15,24 @@
       )
         v-card
           v-card-text
+            .d-flex.justify-space-between.black--text
+              .title {{ $t('health.components.nutrientsChart.table.calories') }}
+              .title.text-right
+                | {{ formatValue(nutrients.calories) }} {{ $t('health.common.units.calories') }}
             v-simple-table.nutrients-chart__table
               tbody
                 tr
-                  td.title {{ $t('health.components.nutrientsChart.table.calories') }}
-                  td
-                  td.title.text-right {{ formatValue(nutrients.calories) }} cal
-                tr
                   td {{ $t('health.components.nutrientsChart.table.carbs') }}
-                  td.text-right {{ formatValue(nutrients.carbs) }} g
-                  td.text-right {{ getPercentage(nutrients.carbs) }} %
+                  td.text-right {{ formatValue(nutrients.carbs) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(nutrients.carbs) }} {{ $t('health.common.units.percent') }}
                 tr
                   td {{ $t('health.components.nutrientsChart.table.protein') }}
-                  td.text-right {{ formatValue(nutrients.protein) }} g
-                  td.text-right {{ getPercentage(nutrients.protein) }} %
+                  td.text-right {{ formatValue(nutrients.protein) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(nutrients.protein) }} {{ $t('health.common.units.percent') }}
                 tr
                   td {{ $t('health.components.nutrientsChart.table.fat') }}
-                  td.text-right {{ formatValue(nutrients.fat) }} g
-                  td.text-right {{ getPercentage(nutrients.fat) }} %
+                  td.text-right {{ formatValue(nutrients.fat) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(nutrients.fat) }} {{ $t('health.common.units.percent') }}
 </template>
 
 <script>

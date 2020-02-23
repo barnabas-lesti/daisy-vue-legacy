@@ -104,7 +104,7 @@ export default {
   },
 
   created () {
-    const authHeader = this.authHeader || this.$storage.getFromLocalStorage('core.authHeader');
+    const authHeader = this.authHeader || this.$storage.getFromLocalStorage('core/authHeader');
     if (authHeader) this.signInWithHeader(authHeader);
 
     const { email } = this.$route.params;

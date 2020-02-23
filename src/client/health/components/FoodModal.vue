@@ -6,6 +6,7 @@
     :headerColor="headerColor"
     :readonly="readonly"
     :with-remove="localItem && !!localItem.id"
+    :edit-route="editRoute"
     @cancel="cancel()"
     @confirm="confirm()"
     @remove="remove()"
@@ -101,13 +102,14 @@ export default {
     headerColor: String,
     readonly: Boolean,
     serverErrorType: String,
+    editRoute: Object,
 
     value: Boolean,
     item: Object,
   },
   data () {
     return {
-      units: Food.unitValues.map(value => ({ text: this.$t(`health.common.units.${value}`), value })),
+      units: Food.unitValues.map(value => ({ text: this.$tc(`health.common.units.${value}`, 2), value })),
       rules: {
         name: [ v => !!v || this.$t('health.components.foodModal.errors.name.required') ],
       },

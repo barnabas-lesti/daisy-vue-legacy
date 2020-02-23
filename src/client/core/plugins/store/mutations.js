@@ -14,7 +14,7 @@ export default {
   setAuthHeader (state, authHeader) {
     state.authHeader = authHeader;
     eventBus.$emit('core/authHeaderSet', authHeader);
-    storage.saveToLocalStorage('core.authHeader', authHeader);
+    storage.saveToLocalStorage('core/authHeader', authHeader);
   },
 
   pushNotification (state, notification) {

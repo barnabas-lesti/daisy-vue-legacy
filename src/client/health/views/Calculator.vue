@@ -29,12 +29,13 @@
     v-row
       v-col(data-qa="views.calculator.table")
         diet-table(
-          :search="calculatorSearch"
+          :search-string="calculatorSearch"
           :items="calculatorItems"
           :loading="isLoading"
           with-amount
           without-serving
           @select="onCalculatorTableSelect($event)"
+          @item:change="onCalculatorItemChange($event)"
         )
 
     select-modal(
@@ -49,9 +50,17 @@
     food-modal(
       v-model="selectedItem && selectedItem.type === types.FOOD"
       :item="selectedItem"
-      :loading="isLoading"
+      :edit-route="getEditRoute(selectedItem)"
       readonly
-      @cancel="selectedItem = null;"
+      @cancel="closeModal()"
+    )
+
+    recipe-modal(
+      v-model="selectedItem && selectedItem.type === types.RECIPE"
+      :item="selectedItem"
+      :edit-route="getEditRoute(selectedItem)"
+      readonly
+      @cancel="closeModal()"
     )
 
     v-btn(
@@ -69,7 +78,7 @@
 
 <script>
 import { CalculableItem } from '../models';
-import { DietTable, FoodModal, NutrientsChart, SelectModal } from '../components';
+import { DietTable, FoodModal, NutrientsChart, SelectModal, RecipeModal } from '../components';
 
 export default {
   components: {
@@ -77,6 +86,7 @@ export default {
     FoodModal,
     NutrientsChart,
     SelectModal,
+    RecipeModal,
   },
   data () {
     return {
@@ -85,31 +95,54 @@ export default {
       isSelectModalOpen: false,
 
       calculatorSearch: '',
-      selectedItem: null,
       selectedItems: [],
     };
   },
   computed: {
     dietItems () {
-      return this.$store.getters['health/dietItems'];
+      return this.$store.getters['health/diet/items'];
     },
     calculatorItems () {
-      return this.$store.state.health.calculator.items;
+      return this.$store.getters['health/calculator/items'];
     },
     summary () {
-      return this.$store.getters['health/calculatorSummary'];
+      return this.$store.getters['health/calculator/summary'];
+    },
+    selectedItem: {
+      get () {
+        if (this.$store.getters['health/diet/areItemsLoaded']) {
+          const selected = this.$route.query['selected'];
+          const item = this.calculatorItems.filter(item => item.id === selected)[0];
+          if (item) return new CalculableItem(item);
+
+          this.$router.clearQuery('selected');
+        }
+
+        return null;
+      },
+      set (newValue) {
+        const { id } = newValue || {};
+        const query = {};
+
+        if (id) query['selected'] = id;
+        else query['selected'] = null;
+
+        this.$router.pushQuery(query);
+      },
     },
   },
   methods: {
     onCalculatorTableSelect (item) {
       this.selectedItem = item;
     },
+    onCalculatorItemChange (item) {
+      this.$store.dispatch('health/calculator/updateItem', item);
+    },
 
+    closeModal () {
+      this.selectedItem = null;
+    },
     openSelectModal () {
-      if (!this.dietItems || !this.dietItems.length) {
-        this.fetchDietItems();
-      }
-
       this.selectedItems = [...this.calculatorItems];
       this.isSelectModalOpen = true;
     },
@@ -121,11 +154,21 @@ export default {
       this.isSelectModalOpen = false;
     },
 
+    getEditRoute (item) {
+      if (!item) return null;
+      return { name: 'health.diet', query: { 'selected': item.id } };
+    },
+
     async fetchDietItems () {
       this.isLoading = true;
       await this.$store.dispatch('health/diet/fetchItems');
       this.isLoading = false;
     },
+  },
+  created () {
+    if (!this.dietItems || !this.dietItems.length) {
+      this.fetchDietItems();
+    }
   },
 };
 </script>

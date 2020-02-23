@@ -9,19 +9,9 @@ import './routes';
 
 Vue.config.productionTip = false;
 
-class Client {
-  constructor () {
-    this._vueApp = null;
-  }
+new Vue({
+  ...plugins,
+  ...theme,
 
-  start () {
-    this._vueApp = new Vue({
-      ...plugins,
-      ...theme,
-
-      render: h => h(App),
-    }).$mount('#app');
-  }
-}
-
-export const client = new Client();
+  render: h => h(App),
+}).$mount('#app');

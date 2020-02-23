@@ -58,30 +58,32 @@
 
       v-row
         v-col
+          template(v-if="!readonly")
+            v-divider
+            v-expansion-panels(
+              flat
+              tile
+              hover
+            )
+              v-expansion-panel
+                v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.food') }}
+                v-expansion-panel-content
+                  v-checkbox.ma-0(
+                    v-model="onlyShowSelected"
+                    :label="$t('health.components.recipeModal.onlyShowSelected')"
+                    hide-details
+                  )
+                  diet-table(
+                    v-model="ingredients"
+                    :items="localFood"
+                    with-amount
+                    without-serving
+                    with-search
+                    selectable
+                  )
           v-divider
           v-expansion-panels(
-            flat
-            tile
-            hover
-          )
-            v-expansion-panel
-              v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.food') }}
-              v-expansion-panel-content
-                v-checkbox.ma-0(
-                  v-model="onlyShowSelected"
-                  :label="$t('health.components.recipeModal.onlyShowSelected')"
-                  hide-details
-                )
-                diet-table(
-                  v-model="ingredients"
-                  :items="localFood"
-                  with-amount
-                  without-serving
-                  with-search
-                  selectable
-                )
-          v-divider
-          v-expansion-panels(
+            :value="readonly ? 0 : undefined"
             flat
             tile
             hover
@@ -91,9 +93,9 @@
               v-expansion-panel-content
                 diet-table(
                   :items="ingredients"
+                  :with-search="ingredients && ingredients.length > 15"
                   with-amount
                   without-serving
-                  with-search
                   readonly
                 )
           v-divider
@@ -142,7 +144,7 @@ export default {
     return {
       onlyShowSelected: false,
       localItem: new CalculableItem({ type: CalculableItem.types.RECIPE }),
-      units: Food.unitValues.map(value => ({ text: this.$t(`health.common.units.${value}`), value })),
+      units: Food.unitValues.map(value => ({ text: this.$tc(`health.common.units.${value}`, 2), value })),
       rules: {
         name: [ v => !!v || this.$t('health.components.recipeModal.errors.name.required') ],
       },

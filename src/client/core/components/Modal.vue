@@ -27,6 +27,14 @@
           )
             v-icon {{ $theme.icons.mdiCheck }}
           v-btn(
+            v-if="editRoute"
+            data-qa="modal.mobile.edit"
+            icon
+            dark
+            @click="edit(editRoute)"
+          )
+            v-icon {{ $theme.icons.mdiFileEditOutline }}
+          v-btn(
             v-if="!readonly && withRemove"
             data-qa="modal.mobile.remove"
             icon
@@ -63,6 +71,14 @@
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
+          v-btn(
+            v-if="editRoute"
+            color="primary lighten-2"
+            data-qa="modal.desktop.edit"
+            dark
+            tile
+            @click="edit(editRoute)"
+          ) {{ $t('core.components.modal.edit') }}
           v-btn(
             v-if="!readonly"
             :loading="loading"
@@ -106,6 +122,7 @@ export default {
     withRemove: Boolean,
     headerColor: String,
     readonly: Boolean,
+    editRoute: Object,
   },
   data () {
     return {
@@ -130,6 +147,11 @@ export default {
     },
     remove () {
       if (!this.readonly && !this.loading) this.confirmRemoveDialog = true;
+    },
+    edit (route) {
+      route.query = route.query || {};
+      route.query['referer'] = this.$route.fullPath;
+      this.$router.push(route);
     },
     confirmRemove () {
       this.confirmRemoveDialog = false;

@@ -2,7 +2,14 @@ common:
   units:
     g: g
     ml: ml
-    pieces: pieces
+    calories: cal
+    percent: '%'
+    pieces: piece | pieces
+    plates: plate | plates
+    serving: serving
+    mug: mug | mugs
+    cup: cup | cups
+    teaspoon: teaspoon | teaspoons
 
 components:
   selectModal:
@@ -74,6 +81,8 @@ components:
     carbs: Carbs (g)
     protein: Protein (g)
     fat: Fat (g)
+    showFood: Show food
+    showRecipes: Show recipes
 
 views:
   health:

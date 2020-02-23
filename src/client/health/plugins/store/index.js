@@ -1,4 +1,4 @@
-import store from '../../../core/plugins/store';
+import { store, storage } from '../../../core/plugins';
 
 import actions from './actions';
 import getters from './getters';
@@ -12,3 +12,6 @@ store.registerModule('health', {
   mutations,
   state,
 });
+
+const calculatorItemSkeletons = storage.getFromLocalStorage('health/calculator/itemSkeletons');
+if (calculatorItemSkeletons) store.commit('health/calculator/setItemSkeletons', calculatorItemSkeletons);

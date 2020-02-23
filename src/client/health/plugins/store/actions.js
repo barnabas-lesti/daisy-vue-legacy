@@ -3,7 +3,7 @@ import http from '../../../core/plugins/http';
 export default {
   async 'diet/fetchFood' (context) {
     const food = await http.get('/api/health/diet/food');
-    context.commit('diet/setFood', food);
+    context.commit('diet/setFood', { food, setLoaded: true });
   },
   async 'diet/saveFood' (context, food) {
     if (food.id) {
@@ -21,7 +21,7 @@ export default {
 
   async 'diet/fetchRecipes' (context) {
     const recipes = await http.get('/api/health/diet/recipes');
-    context.commit('diet/setRecipes', recipes);
+    context.commit('diet/setRecipes', { recipes, setLoaded: true });
   },
   async 'diet/saveRecipe' (context, recipe) {
     if (recipe.id) {
@@ -45,7 +45,14 @@ export default {
   },
 
   'calculator/setItems' (context, items) {
-    context.commit('calculator/setItems', items);
+    context.commit('calculator/setItemSkeletons', items);
+  },
+  'calculator/updateItem' (context, item) {
+    const items = context.getters['calculator/items'];
+    context.dispatch('calculator/setItems', items.map(subject => {
+      if (subject.id === item.id) return item;
+      return subject;
+    }));
   },
 };
 

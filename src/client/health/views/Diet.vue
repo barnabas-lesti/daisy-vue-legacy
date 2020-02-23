@@ -30,21 +30,6 @@
 
     v-row
       v-col
-        v-card
-          v-card-text
-            v-checkbox.ma-0(
-              v-model="showFood"
-              :label="$t('health.views.diet.showFood')"
-              hide-details
-            )
-            v-checkbox.ma-0(
-              v-model="showRecipes"
-              :label="$t('health.views.diet.showRecipes')"
-              hide-details
-            )
-
-    v-row
-      v-col
         diet-table(
           :searchString="searchString"
           :items="items"
@@ -124,8 +109,6 @@ export default {
       types: CalculableItem.types,
       isLoading: false,
       isFabActive: false,
-      showFood: true,
-      showRecipes: true,
       searchString: '',
       serverErrorType: '',
     };
@@ -136,23 +119,21 @@ export default {
       return food.map(item => CalculableItem.convertFromFood(item));
     },
     items () {
-      const { recipes } = this.$store.state.health.diet;
-      return [
-        ...(this.showFood ? this.food : []),
-        ...(this.showRecipes ? recipes.map(item => CalculableItem.convertFromRecipe(item)) : []),
-      ];
+      return this.$store.getters['health/diet/items'];
     },
     selectedItem: {
       get () {
-        const selected = this.$route.query['selected'];
+        if (this.$store.getters['health/diet/areItemsLoaded']) {
+          const selected = this.$route.query['selected'];
 
-        if (selected === 'new-food') return new CalculableItem({ type: CalculableItem.types.FOOD });
-        if (selected === 'new-recipe') return new CalculableItem({ type: CalculableItem.types.RECIPE });
+          if (selected === 'new-food') return new CalculableItem({ type: CalculableItem.types.FOOD });
+          if (selected === 'new-recipe') return new CalculableItem({ type: CalculableItem.types.RECIPE });
+          const item = this.items.filter(item => item.id === selected)[0];
+          if (item) return new CalculableItem(item);
 
-        const item = this.items.filter(item => item.id === selected)[0];
-        if (item) return new CalculableItem(item);
+          this.$router.clearQuery('selected');
+        }
 
-        // this.$router.clearQuery('selected');
         return null;
       },
       set (newValue) {
@@ -182,6 +163,7 @@ export default {
     },
     closeModal () {
       this.selectedItem = null;
+      this.$router.backToReferer();
     },
 
     async onFoodModalConfirm (item) {

@@ -2,6 +2,4 @@
 import './client/health';
 
 // Core import
-import { client } from './client/core';
-
-client.start();
+import './client/core';

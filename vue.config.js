@@ -36,9 +36,10 @@ module.exports = {
     webpackConfig
       .plugin('define')
       .tap(definitions => {
-        const { AUTH_HEADER, EMAIL_REGEX, DEFAULT_LOCALE, env: { BASE_URL, DEV_API_RESPONSE_DELAY } } = config;
+        const { NODE_ENV, AUTH_HEADER, EMAIL_REGEX, DEFAULT_LOCALE, env: { BASE_URL, DEV_API_RESPONSE_DELAY } } = config;
         definitions[0] = Object.assign(definitions[0], {
           'window.__AURORA_CONFIG__': JSON.stringify({
+            NODE_ENV,
             AUTH_HEADER,
             EMAIL_REGEX,
             DEFAULT_LOCALE,

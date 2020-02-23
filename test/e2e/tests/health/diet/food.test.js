@@ -20,7 +20,8 @@ describe('Health / Diet / Food', () => {
     const food = data.generateFood();
     cy.visit('/health/diet');
 
-    cy.get('[data-qa="components.foodModal.create"]').click();
+    cy.get('[data-qa="views.diet.newFoodButton"]').click();
+    cy.url().should('include', 'selected=new-food');
     cy.get('[data-qa="components.foodModal.form"]').should('be.visible');
     cy.get('[data-qa="components.foodModal.form"]').submit();
     cy.get('[data-qa="components.foodModal.form"]').contains(/name.*required/i).should('be.visible');
@@ -28,6 +29,7 @@ describe('Health / Diet / Food', () => {
     fillInForm(food);
     cy.get('[data-qa="modal.desktop.confirm"]').should('be.visible').click();
     cy.get('[data-qa="components.foodModal.form"]').should('not.be.visible');
+    cy.url().should('not.include', 'selected');
 
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').find('tr').eq(0).click();
     verifyFieldsInForm(food);
@@ -44,6 +46,7 @@ describe('Health / Diet / Food', () => {
 
     cy.get('[data-qa="views.diet.fab"]').click();
     cy.get('[data-qa="views.diet.fab.newFood"]').should('be.visible').click();
+    cy.url().should('include', 'selected=new-food');
     cy.get('[data-qa="components.foodModal.form"]').should('be.visible');
     cy.get('[data-qa="components.foodModal.form"]').submit();
     cy.get('[data-qa="components.foodModal.form"]').contains(/name.*required/i).should('be.visible');
@@ -51,6 +54,7 @@ describe('Health / Diet / Food', () => {
     fillInForm(food);
     cy.get('[data-qa="modal.mobile.confirm"]').click();
     cy.get('[data-qa="modal.content"]').should('not.be.visible');
+    cy.url().should('not.include', 'selected');
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').contains(food.name).click();
     verifyFieldsInForm(food);
     cy.get('[data-qa="modal.mobile.cancel"]').click();
@@ -67,10 +71,12 @@ describe('Health / Diet / Food', () => {
 
     verifyFieldsInTableRow(food);
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').contains(food.name).click();
+    cy.url().should('include', 'selected');
     fillInForm(update);
     cy.get('[data-qa="components.foodModal.form"]').submit();
+    cy.url().should('not.include', 'selected');
 
-    cy.reload();
+    cy.visit('/health/diet');
     cy.get('[data-qa="views.diet.search"]').type(food.name);
     cy.get('[data-qa="health.components.dietTable"]').get('tbody').contains(food.name).should('not.exist');
     cy.get('[data-qa="views.diet.search"]').clear().type(update.name);

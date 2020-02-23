@@ -11,6 +11,7 @@ components:
     confirm: Confirm
     cancel: Cancel
     remove: Delete
+    edit: Edit
     removeWarning: Are you sure you want to delete the item?
 
 views:

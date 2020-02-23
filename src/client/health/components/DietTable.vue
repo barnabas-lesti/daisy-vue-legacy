@@ -9,27 +9,46 @@
       single-line
       hide-details
     )
+    v-card.mb-4(v-if="withFilters")
+      v-card-text
+        v-checkbox.ma-0(
+          v-model="showFood"
+          :label="$t('health.components.dietTable.showFood')"
+          hide-details
+        )
+        v-checkbox.ma-0(
+          v-model="showRecipes"
+          :label="$t('health.components.dietTable.showRecipes')"
+          hide-details
+        )
     v-data-table.diet-table__table(
       v-model="localValue"
       :class="{ 'diet-table__table--mobile': $vuetify.breakpoint.xs, 'diet-table__table--selectable': selectable }"
       :loading="loading"
-      :items="items"
+      :items="localItems"
       :search="localSearchString"
       :headers="headers"
-      :item-key="itemKey"
-      :items-per-page="itemsPerPage"
-      :no-data-text="noDataText"
-      :no-results-text="noResultsText"
-      :loading-text="loadingText"
-      :mobile-breakpoint="mobileBreakpoint"
+      :no-data-text="$t('health.components.dietTable.noData')"
+      :no-results-text="$t('health.components.dietTable.noResults')"
+      :loading-text="$t('health.components.dietTable.loading')"
+      :items-per-page="15"
+      :mobile-breakpoint="0"
+      item-key="id"
       :footer-props="footer"
       :show-select="selectable"
+      sort-by="name"
+      must-sort
       ref="table"
       @item-selected="onSelect($event)"
     )
       template(v-slot:header.name="{ header }")
         span.pl-10 {{ header.text }}
       template(v-slot:item.name="{ item }")
+        input(
+          :value="item.id"
+          type="hidden"
+          data-qa="health.components.dietTable.foodId"
+        )
         .d-flex.align-center.py-2
           v-icon(
             :color="getItemColor(item.type)"
@@ -37,7 +56,7 @@
           ) {{ getItemIcon(item.type) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving="{ item }")
-        span {{ item.serving.value }} {{ $t(`health.common.units.${item.serving.unit}`)}}
+        span {{ item.serving.value }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
       template(
         v-slot:item.amount="{ item }"
       )
@@ -50,14 +69,14 @@
               color="grey lighten-2"
               label
               link
-            ) {{ item.amount }} {{ $t(`health.common.units.${item.serving.unit}`)}}
+            ) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
             template(v-slot:input)
               v-text-field(
                 v-model="item.amount"
                 type="number"
                 single-line
               )
-        template(v-else) {{ item.amount }} {{ $t(`health.common.units.${item.serving.unit}`)}}
+        template(v-else) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
       template(v-slot:item.nutrients.calories="{ item }") {{ formatNutrient(item, item.getNutrients().calories) }}
       template(v-slot:item.nutrients.carbs="{ item }") {{ formatNutrient(item, item.getNutrients().carbs) }}
       template(v-slot:item.nutrients.protein="{ item }") {{ formatNutrient(item, item.getNutrients().protein) }}
@@ -73,6 +92,7 @@ export default {
     selectable: Boolean,
     withAmount: Boolean,
     withSearch: Boolean,
+    withFilters: Boolean,
     withoutServing: Boolean,
     readonly: Boolean,
 
@@ -89,19 +109,15 @@ export default {
   data () {
     return {
       localSearchString: this.searchString,
-      itemKey: 'id',
-      itemsPerPage: 15,
-      mobileBreakpoint: 0,
-      noDataText: this.$t('health.components.dietTable.noData'),
-      noResultsText: this.$t('health.components.dietTable.noResults'),
-      loadingText: this.$t('health.components.dietTable.loading'),
+      showFood: true,
+      showRecipes: true,
       headers: [
         { text: this.$t('health.components.dietTable.name'), value: 'name', align: 'left', width: '15rem' },
         ...(this.withAmount
           ? [{ text: this.$t('health.components.dietTable.amount'), value: 'amount', width: '9rem' }] : []
         ),
         ...(!this.withoutServing
-          ? [{ text: this.$t('health.components.dietTable.serving'), value: 'serving', width: '9rem' }] : []
+          ? [{ text: this.$t('health.components.dietTable.serving'), value: 'serving', width: '9rem', sort: this._servingSort() }] : []
         ),
         { text: this.$t('health.components.dietTable.calories'), value: 'nutrients.calories', width: '7rem' },
         { text: this.$t('health.components.dietTable.carbs'), value: 'nutrients.carbs', width: '7rem' },
@@ -118,6 +134,13 @@ export default {
     localValue: {
       get () { return this.value; },
       set (newValue) { this.$emit('input', newValue); },
+    },
+    localItems () {
+      if (!this.withFilters) return this.items;
+      return [
+        ...(this.showFood ? this.items.filter(item => item.type === CalculableItem.types.FOOD) : []),
+        ...(this.showRecipes ? this.items.filter(item => item.type === CalculableItem.types.RECIPE) : []),
+      ];
     },
   },
 
@@ -147,6 +170,7 @@ export default {
     onAmountSave (item) {
       item.amount = parseFloat(item.amount || 0);
       this.localValue = [...this.localValue.filter(subject => subject.id !== item.id), item];
+      this.$emit('item:change', item);
     },
     onAmountCancel (item) {
       item.amount = item.serving.value;
@@ -154,6 +178,14 @@ export default {
 
     onSelect ({ item }) {
       this.$emit('select', item);
+    },
+
+    _servingSort () {
+      return (a, b) => {
+        if (a.value > b.value) return 1;
+        if (a.value < b.value) return -1;
+        return 0;
+      };
     },
   },
   mounted () {

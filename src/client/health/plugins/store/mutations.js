@@ -1,8 +1,10 @@
-import { Food, Recipe, CalculableItem } from '../../models';
+import storage from '../../../core/plugins/storage';
+import { Food, Recipe } from '../../models';
 
 export default {
-  'diet/setFood' (state, food = []) {
+  'diet/setFood' (state, { food = [], setLoaded }) {
     state.diet.food = food.map(item => new Food(item));
+    if (setLoaded) state.diet.areFoodLoaded = true;
   },
   'diet/updateFood' (state, update) {
     const food = state.diet.food.splice(0);
@@ -21,8 +23,9 @@ export default {
     state.diet.food = state.diet.food.splice(0).filter(item => item.id !== food.id);
   },
 
-  'diet/setRecipes' (state, recipes = []) {
+  'diet/setRecipes' (state, { recipes = [], setLoaded } = {}) {
     state.diet.recipes = recipes.map(item => new Recipe(item));
+    if (setLoaded) state.diet.areRecipesLoaded = true;
   },
   'diet/updateRecipe' (state, update) {
     const recipes = state.diet.recipes.splice(0);
@@ -41,7 +44,9 @@ export default {
     state.diet.recipes = state.diet.recipes.splice(0).filter(item => item.id !== recipe.id);
   },
 
-  'calculator/setItems' (state, items) {
-    state.calculator.items = [...items].map(item => new CalculableItem(item));
+  'calculator/setItemSkeletons' (state, items) {
+    state.calculator.itemSkeletons = [...items]
+      .map(item => ({ amount: item.amount, id: item.id, type: item.type }));
+    storage.saveToLocalStorage('health/calculator/itemSkeletons', state.calculator.itemSkeletons);
   },
 };
