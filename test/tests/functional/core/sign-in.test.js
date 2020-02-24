@@ -87,8 +87,8 @@ describe('Functional / Core / Sign in', () => {
       .type(user.email);
     cy.get('input[name="password"]')
       .type(user.password);
-    cy.get('button[type="submit"]')
-      .click();
+    cy.get('.sign-in-form')
+      .submit();
 
     cy.get('.sign-in-form').as('form')
       .contains(/invalid.*credentials/i).should('be.visible');
@@ -100,13 +100,14 @@ describe('Functional / Core / Sign in', () => {
     cy.visit('/sign-in');
 
     cy.server()
-      .route({ method: 'POST', url: '/api/auth/sign-in', status: 200, response: { user, authHeader } });
+      .route({ method: 'POST', url: '/api/auth/sign-in', status: 200, response: { user, authHeader }, delay: 64 });
     cy.get('input[name="email"]')
       .type(user.email);
     cy.get('input[name="password"]')
       .type(user.password);
-    cy.get('.sign-in-form')
-      .submit();
+    cy.get('button[type="submit"]')
+      .click()
+      .should('have.class', 'v-btn--loading');
 
     cy.get('.notifications')
       .contains(new RegExp(`signed.*in.*${user.email}`, 'i')).should('be.visible');

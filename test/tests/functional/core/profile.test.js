@@ -55,13 +55,14 @@ describe('Functional / Core / Profile', () => {
       .visit('/profile');
 
     cy.server()
-      .route({ method: 'PATCH', url: '/api/auth/profile', status: 200, response: updatedUser });
+      .route({ method: 'PATCH', url: '/api/auth/profile', status: 200, response: updatedUser, delay: 64 });
     cy.get('input[name="fullName"]').as('fullName')
       .clear().type(updatedUser.fullName);
     cy.get('input[name="profileImageUrl"]').as('profileImageUrl')
       .clear().type(updatedUser.profileImageUrl);
     cy.get('.profile__general__submit').as('submit')
-      .click();
+      .click()
+      .should('have.class', 'v-btn--loading');
 
     cy.get('.notifications')
       .contains(/profile.*updated/i).should('be.visible');
@@ -154,15 +155,17 @@ describe('Functional / Core / Profile', () => {
       .visit('/profile');
 
     cy.server()
-      .route({ method: 'PATCH', url: '/api/auth/profile/password', status: 200, response: '' });
+      .route({ method: 'PATCH', url: '/api/auth/profile/password', status: 200, response: '', delay: 64 });
     cy.get('input[name="password"]')
       .type(user.password);
     cy.get('input[name="newPassword"]')
       .type(update.password);
     cy.get('input[name="newPasswordConfirm"]')
       .type(update.password);
-    cy.get('.profile__password form')
-      .submit();
+    cy.get('.profile__password__submit')
+      .click()
+      .should('have.class', 'v-btn--loading');
+
     cy.get('.notifications')
       .contains(/password.*updated/i).should('be.visible');
   });

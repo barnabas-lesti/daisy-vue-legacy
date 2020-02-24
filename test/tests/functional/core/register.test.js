@@ -73,7 +73,7 @@ describe('Functional / Core / Register', () => {
     cy.visit('/register');
 
     cy.server()
-      .route({ method: 'PUT', url: '/api/auth/register', status: 200, response: user });
+      .route({ method: 'PUT', url: '/api/auth/register', status: 200, response: user, delay: 64 });
     cy.get('input[name="email"]')
       .type(user.email);
     cy.get('input[name="password"]')
@@ -81,7 +81,8 @@ describe('Functional / Core / Register', () => {
     cy.get('input[name="passwordConfirm"]')
       .type(user.password);
     cy.get('button[type="submit"]')
-      .click();
+      .click()
+      .should('have.class', 'v-btn--loading');
 
     cy.get('.notifications')
       .contains(/registration.*successful/i).should('be.visible');

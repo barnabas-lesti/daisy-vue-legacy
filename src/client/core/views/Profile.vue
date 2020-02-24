@@ -69,7 +69,7 @@
             type="password"
           )
           .d-flex.my-4.justify-end
-            v-btn(
+            v-btn.profile__password__submit(
               :loading="password.isLoading"
               color="primary"
               type="submit"
