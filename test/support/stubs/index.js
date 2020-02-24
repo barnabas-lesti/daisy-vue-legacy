@@ -1,3 +1,5 @@
-module.exports = {
-  'api/auth/register': require('./api/auth/register'),
+import auth from './auth';
+
+export default {
+  ...auth,
 };

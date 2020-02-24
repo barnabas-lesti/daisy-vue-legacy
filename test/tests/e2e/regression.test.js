@@ -1,4 +1,4 @@
 describe('E2E / Regression', () => {
-  it('Should test the flows opp the application', () => {
+  it('Should test the flows of the application', () => {
   });
 });

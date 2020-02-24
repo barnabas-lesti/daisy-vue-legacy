@@ -30,7 +30,7 @@
             name="profileImageUrl"
           )
           .d-flex.my-4.justify-end
-            v-btn(
+            v-btn.profile__general__submit(
               :loading="general.isLoading"
               color="primary"
               type="submit"

@@ -1,25 +1,24 @@
-const Mock = require('../../../support/mock');
-const stubs = require('../../../support/stubs');
+import { mocks, stubs } from '../../../support';
 
 describe('Functional / Core / Register', () => {
   beforeEach(() => {
     cy.viewport('iphone-6');
   });
 
-  it('Register page should be accessible from the Sign in page', () => {
-    cy.visit('/sign-in')
-      .get('.sign-in-form__register-link')
+  it('Sign in page should be accessible from the page', () => {
+    cy.visit('/register');
+    cy.get('.register-form__sign-in-link')
       .click();
     cy.url()
-      .should('include', '/register');
+      .should('include', '/sign-in');
   });
 
   it('Form should be validated before submit', () => {
-    const { email, password } = new Mock.User();
-    const { password: differentPassword } = new Mock.User();
+    const { email, password } = new mocks.User();
+    const { password: differentPassword } = new mocks.User();
+    cy.visit('/register');
 
-    cy.visit('/register')
-      .get('.register-form').as('form')
+    cy.get('.register-form').as('form')
       .submit();
     cy.get('@form')
       .contains(/email.*required/i).should('be.visible');
@@ -51,10 +50,9 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should not allow registering already existing user', () => {
-    const existingUser = new Mock.User();
-    stubs['api/auth/register']['400/alreadyExists']()
-      .visit('/register')
-      .get('.register-form').as('form');
+    const existingUser = new mocks.User();
+    stubs['auth/register']['put/400/alreadyExists']();
+    cy.visit('/register');
 
     cy.get('input[name="email"]')
       .type(existingUser.email);
@@ -62,7 +60,7 @@ describe('Functional / Core / Register', () => {
       .type(existingUser.password);
     cy.get('input[name="passwordConfirm"]')
       .type(existingUser.password);
-    cy.get('@form')
+    cy.get('.register-form').as('form')
       .submit();
 
     cy.get('@form')
@@ -70,9 +68,9 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should register a new user', () => {
-    const user = new Mock.User();
-    stubs['api/auth/register']['200/ok'](user)
-      .visit('/register');
+    const user = new mocks.User();
+    stubs['auth/register']['put/200/ok'](user);
+    cy.visit('/register');
 
     cy.get('input[name="email"]')
       .type(user.email);

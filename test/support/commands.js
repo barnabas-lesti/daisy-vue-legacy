@@ -1,21 +1,16 @@
-// const data = require('../support/data');
+import mocks from '../support/mocks';
+import stubs from '../support/stubs';
 
 // Cypress.Commands.add('auth/registerUser', () => {
 //   const user = data.generateUser();
 //   return cy.request('PUT', '/api/auth/register', user);
 // });
 
-// Cypress.Commands.add('auth/signIn', () => {
-//   cy['auth/registerUser']()
-//     .then(user => {
-//       cy.request('POST', '/api/auth/sign-in', user)
-//         .then(({ body }) => {
-//           const { authHeader } = body;
-//           window.localStorage.setItem('core/authHeader', JSON.stringify(authHeader));
-//           return user;
-//         });
-//     });
-// });
+Cypress.Commands.add('core/signIn', (user) => {
+  user = user || new mocks.User();
+  localStorage.setItem('core/authHeader', JSON.stringify(mocks.generateAuthHeader()));
+  return stubs['auth/profile']['get/200/ok'](user);
+});
 
 // Cypress.Commands.add('auth/signOut', () => {
 //   window.localStorage.removeItem('core/authHeader');
