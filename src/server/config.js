@@ -22,7 +22,5 @@ module.exports = {
 
     DEV_CLIENT_PORT: env().get('DEV_CLIENT_PORT'),
     DEV_API_RESPONSE_DELAY: env().get('DEV_API_RESPONSE_DELAY'),
-
-    TEST_BASE_URL: env().get('TEST_BASE_URL'),
   },
 };

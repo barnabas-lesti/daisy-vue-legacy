@@ -2,7 +2,6 @@
   v-list-item.sidebar-list-item(
     :to="{ name: item.routeName }"
     color="primary"
-    :data-qa="`sidebar.${item.routeName}.link`"
     :exact="item.exact !== undefined ? item.exact : true"
     link
     :dense="dense"

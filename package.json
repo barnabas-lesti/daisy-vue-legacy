@@ -12,8 +12,8 @@
     "start:prod": "cross-env NODE_ENV=production forever start ./src/index.server.js",
     "start:client": "vue-cli-service serve ./src/index.client --mode=development",
     "stop:prod": "forever stop ./src/index.server.js",
-    "test": "cypress open --config-file test/cypress.json",
-    "test:run": "cypress run --config-file test/cypress.json"
+    "test": "cross-env NODE_ENV=test cypress open --config-file test/cypress.json",
+    "test:run": "cross-env NODE_ENV=test cypress run --config-file test/cypress.json"
   },
   "dependencies": {
     "@barnabas-lesti/aurora": "^1.1.1",

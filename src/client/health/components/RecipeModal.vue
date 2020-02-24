@@ -15,7 +15,6 @@
         v-col
           v-form(
             ref="form"
-            data-qa="components.recipeModal.form"
             @submit.prevent="confirm()"
           )
             .red--text.mb-4(v-if="serverErrorType")
@@ -26,14 +25,12 @@
               :rules="rules.name"
               :readonly="readonly"
               name="name"
-              data-qa="components.recipeModal.form.name"
             )
             v-text-field(
               v-model="localItem.description"
               :label="$t('health.components.recipeModal.form.description')"
               :readonly="readonly"
               name="description"
-              data-qa="components.recipeModal.form.description"
             )
             .recipe-modal__serving
               v-text-field(
@@ -41,9 +38,8 @@
                 :label="$t('health.components.recipeModal.form.serving.value')"
                 :readonly="readonly"
                 name="servingValue"
-                data-qa="components.recipeModal.form.serving.value"
               )
-              .recipe-modal__serving__unit(data-qa="components.recipeModal.form.serving.unit")
+              .recipe-modal__serving__unit
                 v-select(
                   v-model="localItem.serving.unit"
                   :items="units"

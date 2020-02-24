@@ -8,13 +8,11 @@
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
         v-btn.mr-4(
           color="primary"
-          data-qa="views.diet.newFoodButton"
           tile
           @click="newFood()"
         ) {{ $t('health.views.diet.newFoodButton') }}
         v-btn(
           color="primary"
-          data-qa="views.diet.newRecipeButton"
           tile
           @click="newRecipe()"
         ) {{ $t('health.views.diet.newRecipeButton') }}
@@ -23,7 +21,6 @@
           v-model="searchString"
           :label="$t('health.views.diet.search')"
           :append-icon="$theme.icons.mdiMagnify"
-          data-qa="views.diet.search"
           single-line
           hide-details
         )
@@ -69,14 +66,12 @@
         v-btn(
           v-model="isFabActive"
           color="primary"
-          data-qa="views.diet.fab"
           fab
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
           v-icon(v-else) {{ $theme.icons.mdiPlus }}
       v-btn(
         color="green lighten-1"
-        data-qa="views.diet.fab.newFood"
         dark
         fab
         small
@@ -85,7 +80,6 @@
         v-icon {{ $theme.icons.mdiFoodApple }}
       v-btn(
         color="brown lighten-1"
-        data-qa="views.diet.fab.newRecipe"
         dark
         fab
         small

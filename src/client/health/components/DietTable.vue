@@ -1,11 +1,10 @@
 <template lang="pug">
-  .diet-table(data-qa="health.components.dietTable")
+  .diet-table
     v-text-field.mb-4(
       v-if="withSearch"
       v-model="localSearchString"
       :label="$t('health.components.dietTable.search')"
       :append-icon="$theme.icons.mdiMagnify"
-      data-qa="health.components.dietTable.search"
       single-line
       hide-details
     )
@@ -47,13 +46,9 @@
         input(
           :value="item.id"
           type="hidden"
-          data-qa="health.components.dietTable.foodId"
         )
         .d-flex.align-center.py-2
-          v-icon(
-            :color="getItemColor(item.type)"
-            :data-qa="`health.components.dietTable.icon.${item.type}`"
-          ) {{ getItemIcon(item.type) }}
+          v-icon(:color="getItemColor(item.type)") {{ getItemIcon(item.type) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving="{ item }")
         span {{ item.serving.value }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}

@@ -1,8 +1,5 @@
 <template lang="pug">
-  .notifications(
-    :class="$vuetify.breakpoint.xs ? '' : 'notifications__non-mobile'"
-    data-qa="notifications"
-  )
+  .notifications(:class="$vuetify.breakpoint.xs ? '' : 'notifications__non-mobile'")
     v-alert(
       v-for="item in items"
       :key="item.id"

@@ -12,7 +12,6 @@
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
         v-btn(
           color="primary"
-          data-qa="views.calculator.changeItems"
           tile
           @click="openSelectModal()"
         ) {{ $t('health.views.calculator.changeItems') }}
@@ -21,13 +20,12 @@
           v-model="calculatorSearch"
           :label="$t('health.views.calculator.search')"
           :append-icon="$theme.icons.mdiMagnify"
-          data-qa="views.calculator.search"
           single-line
           hide-details
         )
 
     v-row
-      v-col(data-qa="views.calculator.table")
+      v-col
         diet-table(
           :search-string="calculatorSearch"
           :items="calculatorItems"
@@ -66,7 +64,6 @@
     v-btn(
       v-if="$vuetify.breakpoint.xs"
       color="primary"
-      data-qa="views.calculator.fab"
       fab
       bottom
       right
