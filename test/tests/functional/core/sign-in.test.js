@@ -1,4 +1,4 @@
-import { mocks, stubs } from '../../../support';
+import { mocks } from '../../../support';
 
 describe('Functional / Core / Sign in', () => {
   beforeEach(() => {
@@ -20,7 +20,8 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Page should display a "session expired" error if auth. tokens are invalid', () => {
-    stubs['auth/profile']['get/401/unauthorized']();
+    cy.server()
+      .route({ method: 'GET', url: '/api/auth/profile', status: 401, response: { error: 'UNAUTHORIZED' } });
     localStorage.setItem('core/authHeader', '"ah"');
     cy.visit('/');
 
@@ -29,8 +30,9 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Page should navigate to the original page if token authentication is successful', () => {
-    stubs['auth/profile']['get/200/ok'](new mocks.User());
-    localStorage.setItem('core/authHeader', JSON.stringify(mocks.generateAuthHeader()));
+    cy.server()
+      .route({ method: 'GET', url: '/api/auth/profile', status: 200, response: mocks.user() });
+    localStorage.setItem('core/authHeader', JSON.stringify(mocks.authHeader()));
     cy.visit('/?test=10');
     cy.url()
       .should('not.include', '/sign-in');
@@ -39,7 +41,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Form should be validated before submit', () => {
-    const { email, password } = new mocks.User();
+    const { email, password } = mocks.user();
     cy.visit('/sign-in');
 
     cy.get('.sign-in-form').as('form')
@@ -60,10 +62,11 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should display "invalid credentials" error if user is not found', () => {
-    const user = new mocks.User();
-    stubs['auth/signIn']['post/404/notFound']();
+    const user = mocks.user();
     cy.visit('/sign-in');
 
+    cy.server()
+      .route({ method: 'POST', url: '/api/auth/sign-in', status: 404, response: { error: 'NOT_FOUND' } });
     cy.get('input[name="email"]')
       .type(user.email);
     cy.get('input[name="password"]')
@@ -75,8 +78,9 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should display "invalid credentials" error if credentials are invalid', () => {
-    const user = new mocks.User();
-    stubs['auth/signIn']['post/401/invalidCredentials']();
+    const user = mocks.user();
+    cy.server()
+      .route({ method: 'POST', url: '/api/auth/sign-in', status: 401, response: { error: 'INVALID_CREDENTIALS' } });
     cy.visit('/sign-in');
 
     cy.get('input[name="email"]')
@@ -91,11 +95,12 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should sign in the user', () => {
-    const user = new mocks.User();
-    const authHeader = mocks.generateAuthHeader();
-    stubs['auth/signIn']['post/200/ok']({ user, authHeader });
+    const user = mocks.user();
+    const authHeader = mocks.authHeader();
     cy.visit('/sign-in');
 
+    cy.server()
+      .route({ method: 'POST', url: '/api/auth/sign-in', status: 200, response: { user, authHeader } });
     cy.get('input[name="email"]')
       .type(user.email);
     cy.get('input[name="password"]')

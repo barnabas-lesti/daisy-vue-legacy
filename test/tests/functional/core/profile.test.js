@@ -1,6 +1,6 @@
-import { mocks, stubs } from '../../../support';
+import { mocks } from '../../../support';
 
-const user = new mocks.User();
+const user = mocks.user();
 
 describe('Functional / Core / Profile', () => {
   beforeEach(() => {
@@ -49,12 +49,13 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should update the users general profile information', () => {
-    const { fullName, profileImageUrl } = new mocks.User();
+    const { fullName, profileImageUrl } = mocks.user();
     const updatedUser = { ...user, profileImageUrl, fullName };
     cy['core/signIn'](user)
       .visit('/profile');
 
-    stubs['auth/profile']['patch/200/ok'](updatedUser);
+    cy.server()
+      .route({ method: 'PATCH', url: '/api/auth/profile', status: 200, response: updatedUser });
     cy.get('input[name="fullName"]').as('fullName')
       .clear().type(updatedUser.fullName);
     cy.get('input[name="profileImageUrl"]').as('profileImageUrl')
@@ -113,7 +114,7 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should validate the users old password and the form before password update', () => {
-    const update = new mocks.User();
+    const update = mocks.user();
     cy['core/signIn'](user)
       .visit('/profile');
 
@@ -137,7 +138,8 @@ describe('Functional / Core / Profile', () => {
     cy.get('@passwordForm')
       .contains(/password.*must.*match/i).should('be.visible');
 
-    stubs['auth/profile/password']['patch/401/invalidCredentials']();
+    cy.server()
+      .route({ method: 'PATCH', url: '/api/auth/profile/password', status: 401, response: { error: 'INVALID_CREDENTIALS' } });
     cy.get('input[name="newPasswordConfirm"]').as('newPasswordConfirm')
       .clear().type(update.password);
     cy.get('@passwordForm')
@@ -147,11 +149,12 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should update the users password', () => {
-    const update = new mocks.User();
+    const update = mocks.user();
     cy['core/signIn'](user)
       .visit('/profile');
 
-    stubs['auth/profile/password']['patch/200/ok']();
+    cy.server()
+      .route({ method: 'PATCH', url: '/api/auth/profile/password', status: 200, response: '' });
     cy.get('input[name="password"]')
       .type(user.password);
     cy.get('input[name="newPassword"]')

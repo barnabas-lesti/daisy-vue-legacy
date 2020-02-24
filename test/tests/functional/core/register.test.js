@@ -1,4 +1,4 @@
-import { mocks, stubs } from '../../../support';
+import { mocks } from '../../../support';
 
 describe('Functional / Core / Register', () => {
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Form should be validated before submit', () => {
-    const { email, password } = new mocks.User();
-    const { password: differentPassword } = new mocks.User();
+    const { email, password } = mocks.user();
+    const { password: differentPassword } = mocks.user();
     cy.visit('/register');
 
     cy.get('.register-form').as('form')
@@ -50,10 +50,11 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should not allow registering already existing user', () => {
-    const existingUser = new mocks.User();
-    stubs['auth/register']['put/400/alreadyExists']();
+    const existingUser = mocks.user();
     cy.visit('/register');
 
+    cy.server()
+      .route({ method: 'PUT', url: '/api/auth/register', status: 400, response: { error: 'ALREADY_EXISTS' } });
     cy.get('input[name="email"]')
       .type(existingUser.email);
     cy.get('input[name="password"]')
@@ -68,10 +69,11 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should register a new user', () => {
-    const user = new mocks.User();
-    stubs['auth/register']['put/200/ok'](user);
+    const user = mocks.user();
     cy.visit('/register');
 
+    cy.server()
+      .route({ method: 'PUT', url: '/api/auth/register', status: 200, response: user });
     cy.get('input[name="email"]')
       .type(user.email);
     cy.get('input[name="password"]')
