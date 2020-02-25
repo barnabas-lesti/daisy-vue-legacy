@@ -11,7 +11,7 @@
     @confirm="confirm()"
     @remove="remove()"
   )
-    v-form(
+    v-form.food-modal__form(
       v-if="localItem"
       ref="form"
       @submit.prevent="confirm()"

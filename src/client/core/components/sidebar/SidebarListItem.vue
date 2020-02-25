@@ -1,7 +1,7 @@
 <template lang="pug">
   v-list-item.sidebar-list-item(
     :to="{ name: item.routeName }"
-    :class="`sidebar-list-item--${item.routeName}`"
+    :class="`sidebar-list-item--${item.routeName.replace(/\\./i, '-')}`"
     color="primary"
     :exact="item.exact !== undefined ? item.exact : true"
     link

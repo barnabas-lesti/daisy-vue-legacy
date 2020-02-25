@@ -16,7 +16,7 @@
         v-toolbar-title {{ title }}
         v-spacer
         v-toolbar-items
-          v-btn(
+          v-btn.modal__toolbar__confirm(
             v-if="!readonly"
             :loading="loading"
             icon
@@ -24,21 +24,21 @@
             @click="confirm()"
           )
             v-icon {{ $theme.icons.mdiCheck }}
-          v-btn(
+          v-btn.modal__toolbar__edit(
             v-if="editRoute"
             icon
             dark
             @click="edit(editRoute)"
           )
             v-icon {{ $theme.icons.mdiFileEditOutline }}
-          v-btn(
+          v-btn.modal__toolbar__remove(
             v-if="!readonly && withRemove"
             icon
             dark
             @click="remove()"
           )
             v-icon {{ $theme.icons.mdiDelete }}
-          v-btn(
+          v-btn.modal__toolbar__cancel(
             icon
             dark
             @click="cancel()"
@@ -52,26 +52,26 @@
         v-divider
         v-card-actions.pa-4
           v-spacer
-          v-btn(
+          v-btn.modal__cancel(
             text
             tile
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn(
+          v-btn.modal__remove(
             v-if="!readonly && withRemove"
             color="red lighten-2"
             dark
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
-          v-btn(
+          v-btn.modal__edit(
             v-if="editRoute"
             color="primary lighten-2"
             dark
             tile
             @click="edit(editRoute)"
           ) {{ $t('core.components.modal.edit') }}
-          v-btn(
+          v-btn.modal__confirm(
             v-if="!readonly"
             :loading="loading"
             color="primary"

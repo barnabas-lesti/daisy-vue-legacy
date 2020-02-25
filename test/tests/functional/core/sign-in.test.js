@@ -1,4 +1,4 @@
-import { mocks } from '../../../support';
+import mocks from '../../../support/mocks';
 
 describe('Functional / Core / Sign in', () => {
   beforeEach(() => {
