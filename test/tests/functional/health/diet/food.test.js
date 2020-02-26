@@ -3,9 +3,9 @@ import mocks from '../../../../support/mocks';
 const user = mocks.user();
 
 describe('Functional / Health / Diet / Food', () => {
-  beforeEach(() => {
-    cy.viewport('iphone-6');
-  });
+  // beforeEach(() => {
+  //   cy.viewport('iphone-6');
+  // });
 
   // it('Page is accessible from the sidebar', () => {
   //   cy['core/signIn'](user)
@@ -87,20 +87,20 @@ describe('Functional / Health / Diet / Food', () => {
   //   verifyInTable(food);
   // });
 
-  it('Should allow the modification of existing food', () => {
-    const food = mocks.oneFood(user.id);
-    cy['core/signIn'](user);
-    cy.server()
-      .route({ method: 'GET', url: '/api/health/diet/food', status: 200, response: [ food ] })
-      .route({ method: 'GET', url: '/api/health/diet/recipes', status: 200, response: [] })
-      .visit('/health/diet');
+  // it('Should allow the modification of existing food', () => {
+  //   const food = mocks.oneFood(user.id);
+  //   cy['core/signIn'](user);
+  //   cy.server()
+  //     .route({ method: 'GET', url: '/api/health/diet/food', status: 200, response: [ food ] })
+  //     .route({ method: 'GET', url: '/api/health/diet/recipes', status: 200, response: [] })
+  //     .visit('/health/diet');
 
-    cy.get('.diet .diet-table tbody').contains(food.name)
-      .click();
-    cy.url()
-      .should('include', `selected=${food.id}`);
-    verifyInForm(food);
-  });
+  //   cy.get('.diet .diet-table tbody').contains(food.name)
+  //     .click();
+  //   cy.url()
+  //     .should('include', `selected=${food.id}`);
+  //   verifyInForm(food);
+  // });
 
   // it('Should allow the removal of existing food', () => {});
 
