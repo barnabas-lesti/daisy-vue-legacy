@@ -97,7 +97,11 @@ views:
     showRecipes: Show recipes
     notifications:
       food:
-        success: Food successfully saved
+        saved: Food successfully saved
+        removed: Food successfully deleted
+      recipe:
+        saved: Recipe successfully saved
+        removed: Recipe successfully deleted
 
   exercise:
     title: Exercise

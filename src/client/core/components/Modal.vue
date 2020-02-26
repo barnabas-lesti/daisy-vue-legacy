@@ -84,17 +84,17 @@
       v-model="confirmRemoveDialog"
       max-width="16rem"
     )
-      v-card(tile)
+      v-card.modal__confirm-remove(tile)
         v-card-text.pt-4 {{ $t('core.components.modal.removeWarning') }}
         v-card-actions
           v-spacer
-          v-btn(
+          v-btn.modal__confirm-remove__cancel(
             tile
             text
             autofocus
             @click="confirmRemoveDialog = false;"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn(
+          v-btn.modal__confirm-remove__confirm(
             color="primary"
             tile
             text

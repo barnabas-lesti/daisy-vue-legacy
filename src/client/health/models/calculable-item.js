@@ -28,20 +28,9 @@ export default class CalculableItem {
   getNutrients () {
     switch (this.type) {
       case types.FOOD: return this.nutrients;
-      case types.RECIPE: return this._getRecipeNutrients();
+      case types.RECIPE: return Recipe.getNutrients(this.ingredients);
       default: return {};
     }
-  }
-
-  _getRecipeNutrients () {
-    return this.ingredients.reduce((summary, nextItem) => {
-      const multiplier = nextItem.amount / nextItem.food.serving.value;
-      summary.calories += nextItem.food.nutrients.calories * multiplier;
-      summary.carbs += nextItem.food.nutrients.carbs * multiplier;
-      summary.protein += nextItem.food.nutrients.protein * multiplier;
-      summary.fat += nextItem.food.nutrients.fat * multiplier;
-      return summary;
-    }, new Food.Nutrients());
   }
 
   /**

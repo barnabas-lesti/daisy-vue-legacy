@@ -31,14 +31,14 @@
         :readonly="readonly"
         name="description"
       )
-      .food-modal__serving
+      .food-modal__form__serving
         v-text-field(
           v-model="localItem.serving.value"
           :label="$t('health.components.foodModal.form.serving.value')"
           :readonly="readonly"
           name="servingValue"
         )
-        .food-modal__serving__unit
+        .food-modal__form__serving__unit
           v-select(
             v-model="localItem.serving.unit"
             :items="units"
@@ -136,11 +136,12 @@ export default {
 
 <style lang="sass">
 .food-modal
-  &__serving
-    display: flex
+  &__form
+    &__serving
+      display: flex
 
-    &__unit
-      max-width: 7rem
-      margin-left: 1rem
+      &__unit
+        max-width: 7rem
+        margin-left: 1rem
 
 </style>

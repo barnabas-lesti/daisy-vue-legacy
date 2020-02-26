@@ -164,7 +164,7 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/saveFood', item);
-        this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.food.success'));
+        this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.food.saved'));
         this.closeModal();
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
@@ -175,6 +175,7 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/removeFood', item);
+        this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.food.removed'));
         this.closeModal();
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
@@ -186,6 +187,7 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/saveRecipe', item);
+        this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.recipe.saved'));
         this.closeModal();
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
@@ -196,6 +198,7 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/removeRecipe', item);
+        this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.recipe.removed'));
         this.closeModal();
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
