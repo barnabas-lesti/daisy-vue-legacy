@@ -1,7 +1,7 @@
 export default {
   diet: {
-    food: [],
-    areFoodLoaded: false,
+    foods: [],
+    areFoodsLoaded: false,
     recipes: [],
     areRecipesLoaded: false,
   },

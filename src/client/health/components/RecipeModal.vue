@@ -13,9 +13,8 @@
     template(v-if="localItem")
       v-row
         v-col
-          v-form(
+          v-form.recipe-modal__form(
             ref="form"
-            data-qa="components.recipeModal.form"
             @submit.prevent="confirm()"
           )
             .red--text.mb-4(v-if="serverErrorType")
@@ -26,24 +25,21 @@
               :rules="rules.name"
               :readonly="readonly"
               name="name"
-              data-qa="components.recipeModal.form.name"
             )
             v-text-field(
               v-model="localItem.description"
               :label="$t('health.components.recipeModal.form.description')"
               :readonly="readonly"
               name="description"
-              data-qa="components.recipeModal.form.description"
             )
-            .recipe-modal__serving
+            .recipe-modal__form__serving
               v-text-field(
                 v-model="localItem.serving.value"
                 :label="$t('health.components.recipeModal.form.serving.value')"
                 :readonly="readonly"
                 name="servingValue"
-                data-qa="components.recipeModal.form.serving.value"
               )
-              .recipe-modal__serving__unit(data-qa="components.recipeModal.form.serving.unit")
+              .recipe-modal__form__serving__unit
                 v-select(
                   v-model="localItem.serving.unit"
                   :items="units"
@@ -65,8 +61,8 @@
               tile
               hover
             )
-              v-expansion-panel
-                v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.food') }}
+              v-expansion-panel.recipe-modal__ingredient-selector
+                v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.ingredientSelector') }}
                 v-expansion-panel-content
                   v-checkbox.ma-0(
                     v-model="onlyShowSelected"
@@ -75,10 +71,9 @@
                   )
                   diet-table(
                     v-model="ingredients"
-                    :items="localFood"
-                    with-amount
-                    without-serving
-                    with-search
+                    :items="localFoods"
+                    :per-page="5"
+                    :with-search="localFoods && localFoods.length > 5"
                     selectable
                   )
           v-divider
@@ -88,15 +83,16 @@
             tile
             hover
           )
-            v-expansion-panel
+            v-expansion-panel.recipe-modal__ingredients
               v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.ingredients') }}
               v-expansion-panel-content
                 diet-table(
                   :items="ingredients"
-                  :with-search="ingredients && ingredients.length > 15"
+                  :with-search="ingredients && ingredients.length > 5"
+                  :per-page="5"
                   with-amount
                   without-serving
-                  readonly
+                  @item:change="onIngredientAmountChange($event)"
                 )
           v-divider
           v-expansion-panels(
@@ -105,8 +101,8 @@
             tile
             hover
           )
-            v-expansion-panel
-              v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.nutrients') }}
+            v-expansion-panel.recipe-modal__summary
+              v-expansion-panel-header.px-2 {{ $t('health.components.recipeModal.summary') }}
               v-expansion-panel-content
                 nutrients-chart(
                   v-if="localItem.ingredients.length"
@@ -135,7 +131,7 @@ export default {
 
     value: Boolean,
     item: Object,
-    food: {
+    foods: {
       type: Array,
       default: () => [],
     },
@@ -161,12 +157,12 @@ export default {
       get () { return this.value; },
       set (newValue) { this.$emit('input', newValue); },
     },
-    localFood () {
+    localFoods () {
       if (this.onlyShowSelected) {
         const selectedIds = this.ingredients.map(item => item.id);
-        return [...this.food.filter(item => selectedIds.indexOf(item.id) !== -1)];
+        return [...this.foods.filter(item => selectedIds.indexOf(item.id) !== -1)];
       } else {
-        return [...this.food];
+        return [...this.foods];
       }
     },
     ingredients: {
@@ -191,6 +187,12 @@ export default {
     remove () {
       if (!this.readonly) this.$emit('remove', this.localItem);
     },
+    onIngredientAmountChange (item) {
+      this.ingredients = [
+        ...this.ingredients.filter(subject => subject.id !== item.id),
+        item,
+      ];
+    },
   },
   watch: {
     item (newValue) { this.localItem = newValue ? CalculableItem.convertFromRecipe(Object.assign({}, newValue)) : null; },
@@ -200,12 +202,13 @@ export default {
 
 <style lang="sass">
 .recipe-modal
-  &__serving
-    display: flex
+  &__form
+    &__serving
+      display: flex
 
-    &__unit
-      max-width: 7rem
-      margin-left: 1rem
+      &__unit
+        max-width: 7rem
+        margin-left: 1rem
 
 .v-expansion-panel-content__wrap
   padding-right: 8px

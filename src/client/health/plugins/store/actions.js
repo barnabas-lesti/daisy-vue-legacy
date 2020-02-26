@@ -1,21 +1,21 @@
 import http from '../../../core/plugins/http';
 
 export default {
-  async 'diet/fetchFood' (context) {
-    const food = await http.get('/api/health/diet/food');
-    context.commit('diet/setFood', { food, setLoaded: true });
+  async 'diet/fetchFoods' (context) {
+    const foods = await http.get('/api/health/diet/foods');
+    context.commit('diet/setFoods', { foods, setLoaded: true });
   },
   async 'diet/saveFood' (context, food) {
     if (food.id) {
-      const updatedFood = await http.patch(`/api/health/diet/food/${food.id}`, food);
+      const updatedFood = await http.patch(`/api/health/diet/foods/${food.id}`, food);
       context.commit('diet/updateFood', updatedFood);
     } else {
-      const createdFood = await http.put('/api/health/diet/food', food);
+      const createdFood = await http.put('/api/health/diet/foods', food);
       context.commit('diet/addFood', createdFood);
     }
   },
   async 'diet/removeFood' (context, food) {
-    await http.delete(`/api/health/diet/food/${food.id}`);
+    await http.delete(`/api/health/diet/foods/${food.id}`);
     context.commit('diet/removeFood', food);
   },
 
@@ -39,7 +39,7 @@ export default {
 
   async 'diet/fetchItems' (context) {
     await Promise.all([
-      context.dispatch('diet/fetchFood'),
+      context.dispatch('diet/fetchFoods'),
       context.dispatch('diet/fetchRecipes'),
     ]);
   },

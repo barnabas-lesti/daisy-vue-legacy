@@ -11,10 +11,9 @@
     @confirm="confirm()"
     @remove="remove()"
   )
-    v-form(
+    v-form.food-modal__form(
       v-if="localItem"
       ref="form"
-      data-qa="components.foodModal.form"
       @submit.prevent="confirm()"
     )
       .red--text.mb-4(v-if="serverErrorType")
@@ -25,14 +24,12 @@
         :rules="rules.name"
         :readonly="readonly"
         name="name"
-        data-qa="components.foodModal.form.name"
       )
       v-text-field(
         v-model="localItem.description"
         :label="$t('health.components.foodModal.form.description')"
         :readonly="readonly"
         name="description"
-        data-qa="components.foodModal.form.description"
       )
       .food-modal__serving
         v-text-field(
@@ -40,9 +37,8 @@
           :label="$t('health.components.foodModal.form.serving.value')"
           :readonly="readonly"
           name="servingValue"
-          data-qa="components.foodModal.form.serving.value"
         )
-        .food-modal__serving__unit(data-qa="components.foodModal.form.serving.unit")
+        .food-modal__serving__unit
           v-select(
             v-model="localItem.serving.unit"
             :items="units"
@@ -56,7 +52,6 @@
         :readonly="readonly"
         name="calories"
         type="number"
-        data-qa="components.foodModal.form.calories"
       )
       v-text-field(
         v-model="localItem.nutrients.carbs"
@@ -64,7 +59,6 @@
         :readonly="readonly"
         name="carbs"
         type="number"
-        data-qa="components.foodModal.form.carbs"
       )
       v-text-field(
         v-model="localItem.nutrients.protein"
@@ -72,7 +66,6 @@
         :readonly="readonly"
         name="protein"
         type="number"
-        data-qa="components.foodModal.form.protein"
       )
       v-text-field(
         v-model="localItem.nutrients.fat"
@@ -80,7 +73,6 @@
         :readonly="readonly"
         name="fat"
         type="number"
-        data-qa="components.foodModal.form.fat"
       )
       v-btn.d-none(
         v-if="!readonly"

@@ -6,10 +6,9 @@
     :transition="$vuetify.breakpoint.xs ? 'dialog-bottom-transition' : ''"
     :scrollable="!$vuetify.breakpoint.xs"
     max-width="40rem"
-    data-qa="modal"
   )
-    v-card(tile)
-      v-toolbar.modal__toolbar(
+    v-card.modal__content(tile)
+      v-toolbar(
         v-if="$vuetify.breakpoint.xs"
         :color="headerColor || 'primary'"
         dark
@@ -17,33 +16,29 @@
         v-toolbar-title {{ title }}
         v-spacer
         v-toolbar-items
-          v-btn(
+          v-btn.modal__toolbar__confirm(
             v-if="!readonly"
             :loading="loading"
-            data-qa="modal.mobile.confirm"
             icon
             dark
             @click="confirm()"
           )
             v-icon {{ $theme.icons.mdiCheck }}
-          v-btn(
+          v-btn.modal__toolbar__edit(
             v-if="editRoute"
-            data-qa="modal.mobile.edit"
             icon
             dark
             @click="edit(editRoute)"
           )
             v-icon {{ $theme.icons.mdiFileEditOutline }}
-          v-btn(
+          v-btn.modal__toolbar__remove(
             v-if="!readonly && withRemove"
-            data-qa="modal.mobile.remove"
             icon
             dark
             @click="remove()"
           )
             v-icon {{ $theme.icons.mdiDelete }}
-          v-btn(
-            data-qa="modal.mobile.cancel"
+          v-btn.modal__toolbar__cancel(
             icon
             dark
             @click="cancel()"
@@ -51,39 +46,35 @@
             v-icon {{ $theme.icons.mdiClose }}
       v-card-title.pa-4(v-if="!$vuetify.breakpoint.xs") {{ title }}
       v-divider
-      v-card-text.pa-4(data-qa="modal.content")
+      v-card-text.modal__toolbar.pa-4
         slot
       template(v-if="!$vuetify.breakpoint.xs")
         v-divider
         v-card-actions.pa-4
           v-spacer
-          v-btn(
-            data-qa="modal.desktop.cancel"
+          v-btn.modal__cancel(
             text
             tile
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn(
+          v-btn.modal__remove(
             v-if="!readonly && withRemove"
             color="red lighten-2"
-            data-qa="modal.desktop.remove"
             dark
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
-          v-btn(
+          v-btn.modal__edit(
             v-if="editRoute"
             color="primary lighten-2"
-            data-qa="modal.desktop.edit"
             dark
             tile
             @click="edit(editRoute)"
           ) {{ $t('core.components.modal.edit') }}
-          v-btn(
+          v-btn.modal__confirm(
             v-if="!readonly"
             :loading="loading"
             color="primary"
-            data-qa="modal.desktop.confirm"
             tile
             @click="confirm()"
           ) {{ $t('core.components.modal.confirm') }}
@@ -98,7 +89,6 @@
         v-card-actions
           v-spacer
           v-btn(
-            data-qa="modal.remove.cancel"
             tile
             text
             autofocus
@@ -106,7 +96,6 @@
           ) {{ $t('core.components.modal.cancel') }}
           v-btn(
             color="primary"
-            data-qa="modal.remove.confirm"
             tile
             text
             @click="confirmRemove()"

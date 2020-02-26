@@ -4,10 +4,7 @@
     dense
     clipped-left
   )
-    v-app-bar-nav-icon(
-      data-qa="navbar.sidebarToggle"
-      @click="$emit('toggle-sidebar')"
-    )
+    v-app-bar-nav-icon.navbar__toggle(@click="$emit('toggle-sidebar')")
     v-toolbar-title {{ $t('core.appTitle') }}
     v-spacer
 

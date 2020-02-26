@@ -56,10 +56,10 @@ components:
         unit: Serving unit
         value: Serving value
     onlyShowSelected: Only show selected
-    food: Select ingredients
+    ingredientSelector: Add/remove ingredients
     ingredients: Ingredients
     noIngredients: Add ingredients to see the nutrient breakdown
-    nutrients: Nutrients
+    summary: Nutrients
     errors:
       name:
         required: Name is required
