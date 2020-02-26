@@ -17,7 +17,7 @@
           @click="newRecipe()"
         ) {{ $t('health.views.diet.newRecipeButton') }}
       v-col
-        v-text-field(
+        v-text-field.diet__search(
           v-model="searchString"
           :label="$t('health.views.diet.search')"
           :append-icon="$theme.icons.mdiMagnify"

@@ -43,12 +43,11 @@
       template(v-slot:header.name="{ header }")
         span.pl-10 {{ header.text }}
       template(v-slot:item.name="{ item }")
-        input(
-          :value="item.id"
-          type="hidden"
-        )
         .d-flex.align-center.py-2
-          v-icon(:color="getItemColor(item.type)") {{ getItemIcon(item.type) }}
+          v-icon(
+            :color="getItemColor(item.type)"
+            :data-type="item.type"
+          ) {{ getItemIcon(item.type) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving="{ item }")
         span {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}

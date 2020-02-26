@@ -2,6 +2,7 @@
   v-list-group.sidebar-list-group(
     :value="isActive"
     :prepend-icon="group.icon"
+    :class="`sidebar-list-group--${group.routeName.replace(/\\./i, '-')}`"
   )
     template(v-slot:activator)
       v-list-item-title {{ group.label || $t(group.labelKey) }}
