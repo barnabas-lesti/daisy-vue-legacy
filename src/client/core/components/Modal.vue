@@ -8,7 +8,7 @@
     max-width="40rem"
   )
     v-card.modal__content(tile)
-      v-toolbar(
+      v-toolbar.modal__toolbar(
         v-if="$vuetify.breakpoint.xs"
         :color="headerColor || 'primary'"
         dark
@@ -32,7 +32,7 @@
           )
             v-icon {{ $theme.icons.mdiFileEditOutline }}
           v-btn.modal__toolbar__remove(
-            v-if="!readonly && withRemove"
+            v-if="withRemove"
             icon
             dark
             @click="remove()"
@@ -58,7 +58,7 @@
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
           v-btn.modal__remove(
-            v-if="!readonly && withRemove"
+            v-if="withRemove"
             color="red lighten-2"
             dark
             tile
@@ -80,7 +80,6 @@
           ) {{ $t('core.components.modal.confirm') }}
 
     v-dialog(
-      v-if="!readonly"
       v-model="confirmRemoveDialog"
       max-width="16rem"
     )
@@ -132,10 +131,10 @@ export default {
       if (!this.loading) this.$emit('cancel');
     },
     confirm () {
-      if (!this.readonly && !this.loading) this.$emit('confirm');
+      if (!this.loading) this.$emit('confirm');
     },
     remove () {
-      if (!this.readonly && !this.loading) this.confirmRemoveDialog = true;
+      if (!this.loading) this.confirmRemoveDialog = true;
     },
     edit (route) {
       route.query = route.query || {};

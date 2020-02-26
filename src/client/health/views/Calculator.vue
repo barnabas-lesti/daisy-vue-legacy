@@ -6,11 +6,11 @@
 
     v-row(v-if="summary")
       v-col
-        nutrients-chart(:nutrients="summary")
+        nutrients-chart.calculator__summary(:nutrients="summary")
 
     v-row
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
-        v-btn(
+        v-btn.calculator__change-items(
           color="primary"
           tile
           @click="openSelectModal()"
@@ -26,7 +26,7 @@
 
     v-row
       v-col
-        diet-table(
+        diet-table.calculator__table(
           :search-string="calculatorSearch"
           :items="calculatorItems"
           :loading="isLoading"
@@ -51,6 +51,7 @@
       :edit-route="getEditRoute(selectedItem)"
       readonly
       @cancel="closeModal()"
+      @remove="onCalculatorItemRemove($event)"
     )
 
     recipe-modal(
@@ -59,9 +60,10 @@
       :edit-route="getEditRoute(selectedItem)"
       readonly
       @cancel="closeModal()"
+      @remove="onCalculatorItemRemove($event)"
     )
 
-    v-btn(
+    v-btn.calculator__fab(
       v-if="$vuetify.breakpoint.xs"
       color="primary"
       fab
@@ -134,6 +136,9 @@ export default {
     },
     onCalculatorItemChange (item) {
       this.$store.dispatch('health/calculator/updateItem', item);
+    },
+    onCalculatorItemRemove (item) {
+      this.$store.dispatch('health/calculator/removeItem', item);
     },
 
     closeModal () {

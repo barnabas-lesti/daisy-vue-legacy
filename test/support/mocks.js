@@ -1,7 +1,9 @@
 import faker from 'faker';
 
-import { User } from '../../src/client/core/models';
-import { Food, Recipe } from '../../src/client/health/models';
+import User from '../../src/client/core/models/user';
+import Food from '../../src/client/health/models/food';
+import Recipe from '../../src/client/health/models/recipe';
+import CalculableItem from '../../src/client/health/models/calculable-item';
 
 const authHeader = () => '<authHeaderValue>';
 const randomFloat = (max) => parseFloat((Math.random() * max).toFixed(2)); // Faker random.float() is/was bugged...
@@ -64,8 +66,14 @@ const recipe = (userId, foods, numberOfIngredients = 2) => {
 
 const recipes = (userId, foods, numberOfItems = 2) => [...Array(numberOfItems)].map(() => recipe(userId, foods));
 
+const convertToCalculableItem = (item) => {
+  if (item.ingredients) return CalculableItem.convertFromRecipe(item);
+  else return CalculableItem.convertFromFood(item);
+};
+
 export default {
   faker,
+  randomFloat,
 
   authHeader,
   user,
@@ -74,4 +82,5 @@ export default {
   foods,
   recipe,
   recipes,
+  convertToCalculableItem,
 };

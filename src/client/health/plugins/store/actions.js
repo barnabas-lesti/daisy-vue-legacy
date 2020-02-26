@@ -54,6 +54,10 @@ export default {
       return subject;
     }));
   },
+  'calculator/removeItem' (context, item) {
+    const items = context.getters['calculator/items'];
+    context.dispatch('calculator/setItems', items.filter(subject => subject.id !== item.id));
+  },
 };
 
 function convertRecipeToPayload (recipe) {

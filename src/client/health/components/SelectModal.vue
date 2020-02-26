@@ -6,13 +6,14 @@
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', localSelectedItems)"
   )
-    diet-table(
+    diet-table.select-modal__table(
       v-model="localSelectedItems"
       :items="items"
       :loading="loading"
       selectable
       with-search
       with-amount
+      with-filters
     )
 </template>
 

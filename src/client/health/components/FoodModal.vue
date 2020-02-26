@@ -128,7 +128,7 @@ export default {
       if (!this.readonly && this.$refs.form.validate()) this.$emit('confirm', this.localItem);
     },
     remove () {
-      if (!this.readonly) this.$emit('remove', this.localItem);
+      this.$emit('remove', this.localItem);
     },
   },
 };

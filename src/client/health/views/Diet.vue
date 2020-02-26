@@ -124,7 +124,7 @@ export default {
           if (selected === 'new-food') return new CalculableItem({ type: CalculableItem.types.FOOD });
           if (selected === 'new-recipe') return new CalculableItem({ type: CalculableItem.types.RECIPE });
           const item = this.items.filter(item => item.id === selected)[0];
-          if (item) return new CalculableItem(item);
+          if (item) return item;
 
           this.$router.clearQuery('selected');
         }

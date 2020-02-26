@@ -6,6 +6,7 @@
     :headerColor="headerColor"
     :readonly="readonly"
     :with-remove="localItem && !!localItem.id"
+    :edit-route="editRoute"
     @cancel="cancel()"
     @confirm="confirm()"
     @remove="remove()"
@@ -128,6 +129,7 @@ export default {
     serverErrorType: String,
     headerColor: String,
     readonly: Boolean,
+    editRoute: Object,
 
     value: Boolean,
     item: Object,
@@ -139,7 +141,7 @@ export default {
   data () {
     return {
       onlyShowSelected: false,
-      localItem: new CalculableItem({ type: CalculableItem.types.RECIPE }),
+      localItem: new CalculableItem({ ...this.item, type: CalculableItem.types.RECIPE }),
       units: Food.unitValues.map(value => ({ text: this.$tc(`health.common.units.${value}`, 2), value })),
       rules: {
         name: [ v => !!v || this.$t('health.components.recipeModal.errors.name.required') ],
@@ -185,7 +187,7 @@ export default {
       if (!this.readonly && this.$refs.form.validate()) this.$emit('confirm', this.localItem);
     },
     remove () {
-      if (!this.readonly) this.$emit('remove', this.localItem);
+      this.$emit('remove', this.localItem);
     },
     onIngredientAmountChange (item) {
       this.ingredients = [

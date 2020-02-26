@@ -1,18 +1,12 @@
 <template lang="pug">
   .nutrients-chart
     v-row
-      v-col(
-        sm="6"
-        md="4"
-      )
+      v-col(sm="6")
         doughnut-chart(
           :chart-data="chartData"
           :chart-options="chartOptions"
         )
-      v-col(
-        sm="6"
-        md="4"
-      )
+      v-col(sm="6")
         v-card
           v-card-text
             .d-flex.justify-space-between.black--text
