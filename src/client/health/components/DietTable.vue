@@ -8,18 +8,29 @@
       single-line
       hide-details
     )
-    v-card.mb-4(v-if="withFilters")
-      v-card-text
-        v-checkbox.ma-0(
-          v-model="showFoods"
-          :label="$t('health.components.dietTable.showFoods')"
-          hide-details
-        )
-        v-checkbox.ma-0(
-          v-model="showRecipes"
-          :label="$t('health.components.dietTable.showRecipes')"
-          hide-details
-        )
+
+    template(v-if="withFilters")
+      v-divider
+      v-expansion-panels(
+        flat
+        tile
+        hover
+      )
+        v-expansion-panel.diet-table__filters
+          v-expansion-panel-header.px-2 {{ $t('health.components.dietTable.filters.title') }}
+          v-expansion-panel-content
+            v-checkbox.ma-0.diet-table__filters__show-foods(
+              v-model="showFoods"
+              :label="$t('health.components.dietTable.filters.showFoods')"
+              hide-details
+            )
+            v-checkbox.ma-0.diet-table__filters__show-recipes(
+              v-model="showRecipes"
+              :label="$t('health.components.dietTable.filters.showRecipes')"
+              hide-details
+            )
+      v-divider
+
     v-data-table.diet-table__table(
       v-model="localValue"
       :class="{ 'diet-table__table--mobile': $vuetify.breakpoint.xs, 'diet-table__table--selectable': selectable }"

@@ -9,7 +9,8 @@ describe('Functional / Health / Diet', () => {
   });
 
   it('Page is accessible from the sidebar', () => {
-    cy['core/signIn'](user)
+    cy['core/signIn'](user);
+    stubs['health/dietItems'](user)
       .visit('/');
 
     cy['core/signIn'](user)
@@ -38,5 +39,29 @@ describe('Functional / Health / Diet', () => {
       .contains(foods[0].name).should('be.visible');
     cy.get('@table')
       .contains(foods[1].name).should('not.be.visible');
+  });
+
+  it('User should be able to filter the item result', () => {
+    const foods = mocks.foods(user.id);
+    const recipes = mocks.recipes(user.id, foods);
+    cy['core/signIn'](user);
+    stubs['health/dietItems'](user, { foods, recipes })
+      .visit('/health/diet');
+    cy.get('.diet-table__filters')
+      .click();
+
+    cy.get('.diet .diet-table').find('.v-icon[data-type="food"]').as('foodIcons')
+      .should('have.length', foods.length);
+    cy.get('.diet .diet-table').find('.v-icon[data-type="recipe"]').as('recipeIcons')
+      .should('have.length', recipes.length);
+
+    cy.get('.diet-table__filters__show-foods')
+      .click();
+    cy.get('@foodIcons')
+      .should('have.length', 0);
+    cy.get('.diet-table__filters__show-recipes')
+      .click();
+    cy.get('@recipeIcons')
+      .should('have.length', 0);
   });
 });

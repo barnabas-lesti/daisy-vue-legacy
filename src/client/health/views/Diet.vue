@@ -31,6 +31,7 @@
           :searchString="searchString"
           :items="items"
           :loading="isLoading"
+          with-filters
           @select="openModal($event)"
         )
 

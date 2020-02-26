@@ -81,8 +81,10 @@ components:
     carbs: Carbs (g)
     protein: Protein (g)
     fat: Fat (g)
-    showFood: Show food
-    showRecipes: Show recipes
+    filters:
+      title: Filters
+      showFoods: Show food
+      showRecipes: Show recipes
 
 views:
   health:
@@ -93,7 +95,7 @@ views:
     search: Search
     newFoodButton: Create food
     newRecipeButton: Create recipe
-    showFood: Show food
+    showFoods: Show food
     showRecipes: Show recipes
     notifications:
       food:
