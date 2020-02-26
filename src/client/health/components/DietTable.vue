@@ -11,8 +11,8 @@
     v-card.mb-4(v-if="withFilters")
       v-card-text
         v-checkbox.ma-0(
-          v-model="showFood"
-          :label="$t('health.components.dietTable.showFood')"
+          v-model="showFoods"
+          :label="$t('health.components.dietTable.showFoods')"
           hide-details
         )
         v-checkbox.ma-0(
@@ -30,7 +30,7 @@
       :no-data-text="$t('health.components.dietTable.noData')"
       :no-results-text="$t('health.components.dietTable.noResults')"
       :loading-text="$t('health.components.dietTable.loading')"
-      :items-per-page="15"
+      :items-per-page="perPage"
       :mobile-breakpoint="0"
       item-key="id"
       :footer-props="footer"
@@ -51,7 +51,7 @@
           v-icon(:color="getItemColor(item.type)") {{ getItemIcon(item.type) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving="{ item }")
-        span {{ item.serving.value }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
+        span {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
       template(
         v-slot:item.amount="{ item }"
       )
@@ -60,7 +60,7 @@
             @save="onAmountSave(item)"
             @cancel="onAmountCancel(item)"
           )
-            v-chip(
+            v-chip.diet-table__table__amount-display(
               color="grey lighten-2"
               label
               link
@@ -68,8 +68,11 @@
             template(v-slot:input)
               v-text-field(
                 v-model="item.amount"
+                :data-id="item.id"
                 type="number"
+                name="amount"
                 single-line
+                autofocus
               )
         template(v-else) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
       template(v-slot:item.nutrients.calories="{ item }") {{ formatNutrient(item, item.getNutrients().calories) }}
@@ -90,6 +93,10 @@ export default {
     withFilters: Boolean,
     withoutServing: Boolean,
     readonly: Boolean,
+    perPage: {
+      type: Number,
+      default: 15,
+    },
 
     searchString: String,
     value: {
@@ -104,7 +111,7 @@ export default {
   data () {
     return {
       localSearchString: this.searchString,
-      showFood: true,
+      showFoods: true,
       showRecipes: true,
       headers: [
         { text: this.$t('health.components.dietTable.name'), value: 'name', align: 'left', width: '15rem' },
@@ -133,7 +140,7 @@ export default {
     localItems () {
       if (!this.withFilters) return this.items;
       return [
-        ...(this.showFood ? this.items.filter(item => item.type === CalculableItem.types.FOOD) : []),
+        ...(this.showFoods ? this.items.filter(item => item.type === CalculableItem.types.FOOD) : []),
         ...(this.showRecipes ? this.items.filter(item => item.type === CalculableItem.types.RECIPE) : []),
       ];
     },
@@ -146,7 +153,10 @@ export default {
     },
     formatNutrient (item, nutrient) {
       nutrient = this.withAmount ? this.applyAmount(item, nutrient) : nutrient;
-      return parseFloat(nutrient).toFixed(2);
+      return this.formatValue(nutrient);
+    },
+    formatValue (value) {
+      return parseFloat(value).toFixed(2);
     },
 
     getItemColor (type) {

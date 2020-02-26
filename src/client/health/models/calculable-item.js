@@ -34,7 +34,7 @@ export default class CalculableItem {
   }
 
   _getRecipeNutrients () {
-    const nutrients = this.ingredients.reduce((summary, nextItem) => {
+    return this.ingredients.reduce((summary, nextItem) => {
       const multiplier = nextItem.amount / nextItem.food.serving.value;
       summary.calories += nextItem.food.nutrients.calories * multiplier;
       summary.carbs += nextItem.food.nutrients.carbs * multiplier;
@@ -42,7 +42,6 @@ export default class CalculableItem {
       summary.fat += nextItem.food.nutrients.fat * multiplier;
       return summary;
     }, new Food.Nutrients());
-    return nutrients;
   }
 
   /**

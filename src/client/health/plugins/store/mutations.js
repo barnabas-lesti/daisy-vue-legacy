@@ -2,25 +2,25 @@ import storage from '../../../core/plugins/storage';
 import { Food, Recipe } from '../../models';
 
 export default {
-  'diet/setFood' (state, { food = [], setLoaded }) {
-    state.diet.food = food.map(item => new Food(item));
-    if (setLoaded) state.diet.areFoodLoaded = true;
+  'diet/setFoods' (state, { foods = [], setLoaded }) {
+    state.diet.foods = foods.map(item => new Food(item));
+    if (setLoaded) state.diet.areFoodsLoaded = true;
   },
   'diet/updateFood' (state, update) {
-    const food = state.diet.food.splice(0);
-    for (let i = 0; i < food.length; i++) {
-      if (food[i].id === update.id) {
-        food[i] = new Food(update);
+    const foods = state.diet.foods.splice(0);
+    for (let i = 0; i < foods.length; i++) {
+      if (foods[i].id === update.id) {
+        foods[i] = new Food(update);
         break;
       }
     }
-    state.diet.food = food;
+    state.diet.foods = foods;
   },
   'diet/addFood' (state, food) {
-    state.diet.food.push(new Food(food));
+    state.diet.foods.push(new Food(food));
   },
   'diet/removeFood' (state, food) {
-    state.diet.food = state.diet.food.splice(0).filter(item => item.id !== food.id);
+    state.diet.foods = state.diet.foods.splice(0).filter(item => item.id !== food.id);
   },
 
   'diet/setRecipes' (state, { recipes = [], setLoaded } = {}) {

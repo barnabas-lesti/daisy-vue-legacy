@@ -2,15 +2,15 @@ import { CalculableItem, Food } from '../../models';
 
 export default {
   'diet/items' (state) {
-    const { food, recipes } = state.diet;
+    const { foods, recipes } = state.diet;
     return [
-      ...(food.map(item => CalculableItem.convertFromFood(item))),
+      ...(foods.map(item => CalculableItem.convertFromFood(item))),
       ...(recipes.map(item => CalculableItem.convertFromRecipe(item))),
     ];
   },
   'diet/areItemsLoaded' (state) {
-    const { areFoodLoaded, areRecipesLoaded } = state.diet;
-    return areFoodLoaded && areRecipesLoaded;
+    const { areFoodsLoaded, areRecipesLoaded } = state.diet;
+    return areFoodsLoaded && areRecipesLoaded;
   },
 
   'calculator/items' (state, getters) {

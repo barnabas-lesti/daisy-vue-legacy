@@ -7,8 +7,8 @@
     :scrollable="!$vuetify.breakpoint.xs"
     max-width="40rem"
   )
-    v-card(tile)
-      v-toolbar.modal__toolbar(
+    v-card.modal__content(tile)
+      v-toolbar(
         v-if="$vuetify.breakpoint.xs"
         :color="headerColor || 'primary'"
         dark
@@ -16,7 +16,7 @@
         v-toolbar-title {{ title }}
         v-spacer
         v-toolbar-items
-          v-btn(
+          v-btn.modal__toolbar__confirm(
             v-if="!readonly"
             :loading="loading"
             icon
@@ -24,21 +24,21 @@
             @click="confirm()"
           )
             v-icon {{ $theme.icons.mdiCheck }}
-          v-btn(
+          v-btn.modal__toolbar__edit(
             v-if="editRoute"
             icon
             dark
             @click="edit(editRoute)"
           )
             v-icon {{ $theme.icons.mdiFileEditOutline }}
-          v-btn(
+          v-btn.modal__toolbar__remove(
             v-if="!readonly && withRemove"
             icon
             dark
             @click="remove()"
           )
             v-icon {{ $theme.icons.mdiDelete }}
-          v-btn(
+          v-btn.modal__toolbar__cancel(
             icon
             dark
             @click="cancel()"
@@ -46,32 +46,32 @@
             v-icon {{ $theme.icons.mdiClose }}
       v-card-title.pa-4(v-if="!$vuetify.breakpoint.xs") {{ title }}
       v-divider
-      v-card-text.pa-4
+      v-card-text.modal__toolbar.pa-4
         slot
       template(v-if="!$vuetify.breakpoint.xs")
         v-divider
         v-card-actions.pa-4
           v-spacer
-          v-btn(
+          v-btn.modal__cancel(
             text
             tile
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn(
+          v-btn.modal__remove(
             v-if="!readonly && withRemove"
             color="red lighten-2"
             dark
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
-          v-btn(
+          v-btn.modal__edit(
             v-if="editRoute"
             color="primary lighten-2"
             dark
             tile
             @click="edit(editRoute)"
           ) {{ $t('core.components.modal.edit') }}
-          v-btn(
+          v-btn.modal__confirm(
             v-if="!readonly"
             :loading="loading"
             color="primary"

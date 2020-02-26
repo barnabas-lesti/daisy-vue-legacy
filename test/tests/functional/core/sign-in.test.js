@@ -1,4 +1,5 @@
-import { mocks } from '../../../support';
+import mocks from '../../../support/mocks';
+import stubs from '../../../support/stubs';
 
 describe('Functional / Core / Sign in', () => {
   beforeEach(() => {
@@ -30,8 +31,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Page should navigate to the original page if token authentication is successful', () => {
-    cy.server()
-      .route({ method: 'GET', url: '/api/auth/profile', status: 200, response: mocks.user() });
+    stubs['core/user']();
     localStorage.setItem('core/authHeader', JSON.stringify(mocks.authHeader()));
     cy.visit('/?test=10');
     cy.url()

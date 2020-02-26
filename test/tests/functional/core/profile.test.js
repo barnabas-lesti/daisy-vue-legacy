@@ -1,4 +1,4 @@
-import { mocks } from '../../../support';
+import mocks from '../../../support/mocks';
 
 const user = mocks.user();
 

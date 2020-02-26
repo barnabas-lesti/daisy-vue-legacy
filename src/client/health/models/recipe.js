@@ -2,13 +2,14 @@ import Food from './food';
 
 class Ingredient {
   constructor ({ amount, food }) {
-    this.amount = amount || 0;
     this.food = new Food(food);
+    this.amount = amount || 0;
   }
 }
 
 export default class Recipe {
   static Ingredient = Ingredient;
+  static Serving = Food.Serving;
 
   /**
    * @param {Recipe} args
