@@ -68,6 +68,7 @@
           v-model="isFabActive"
           color="primary"
           fab
+          large
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
           v-icon(v-else) {{ $theme.icons.mdiPlus }}
@@ -75,7 +76,6 @@
         color="green lighten-1"
         dark
         fab
-        small
         @click="newFood()"
       )
         v-icon {{ $theme.icons.mdiFoodApple }}
@@ -83,7 +83,6 @@
         color="brown lighten-1"
         dark
         fab
-        small
         @click="newRecipe()"
       )
         v-icon {{ $theme.icons.mdiFoodVariant }}

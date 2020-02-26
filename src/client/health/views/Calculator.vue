@@ -70,6 +70,7 @@
       bottom
       right
       fixed
+      large
       @click="openSelectModal()"
     )
       v-icon {{ $theme.icons.mdiPlus }}
