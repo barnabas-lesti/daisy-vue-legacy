@@ -84,6 +84,7 @@ export default {
     getPercentage (nutrient) {
       const { carbs, protein, fat } = this.nutrients;
       const total = carbs + protein + fat;
+      if (!nutrient || !total) return 0;
       return this.formatValue(nutrient / total * 100);
     },
     formatValue (value) {

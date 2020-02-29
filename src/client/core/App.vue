@@ -7,6 +7,7 @@
       )
       navbar(
         :user="user"
+        :loading="loading"
         @toggle-sidebar="sidebar.isOpen = !sidebar.isOpen"
       )
 
@@ -42,8 +43,14 @@ export default {
   }),
 
   computed: {
-    ...mapState('core', [ 'user', 'breadcrumbs', 'notifications' ]),
+    ...mapState('core', [ 'loading', 'user', 'breadcrumbs', 'notifications' ]),
     ...mapGetters('core', [ 'sortedSidebarItems' ]),
   },
 };
 </script>
+
+<style lang="sass">
+// Application wide theme overrides
+.v-small-dialog__menu-content
+  min-width: auto !important
+</style>

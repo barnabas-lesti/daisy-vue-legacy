@@ -24,13 +24,6 @@
             @click="confirm()"
           )
             v-icon {{ $theme.icons.mdiCheck }}
-          v-btn.modal__toolbar__edit(
-            v-if="editRoute"
-            icon
-            dark
-            @click="edit(editRoute)"
-          )
-            v-icon {{ $theme.icons.mdiFileEditOutline }}
           v-btn.modal__toolbar__remove(
             v-if="withRemove"
             icon
@@ -52,26 +45,18 @@
         v-divider
         v-card-actions.pa-4
           v-spacer
-          v-btn.modal__cancel(
-            text
+          v-btn.modal__cancel.ma-0.mr-4(
             tile
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn.modal__remove(
+          v-btn.modal__remove.ma-0.mr-4(
             v-if="withRemove"
             color="red lighten-2"
             dark
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
-          v-btn.modal__edit(
-            v-if="editRoute"
-            color="primary lighten-2"
-            dark
-            tile
-            @click="edit(editRoute)"
-          ) {{ $t('core.components.modal.edit') }}
-          v-btn.modal__confirm(
+          v-btn.modal__confirm.ma-0(
             v-if="!readonly"
             :loading="loading"
             color="primary"
@@ -110,7 +95,6 @@ export default {
     withRemove: Boolean,
     headerColor: String,
     readonly: Boolean,
-    editRoute: Object,
   },
   data () {
     return {
@@ -128,7 +112,7 @@ export default {
   },
   methods: {
     cancel () {
-      if (!this.loading) this.$emit('cancel');
+      if (this.isOpen && !this.loading) this.$emit('cancel');
     },
     confirm () {
       if (!this.loading) this.$emit('confirm');

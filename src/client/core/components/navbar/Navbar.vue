@@ -6,21 +6,29 @@
   )
     v-app-bar-nav-icon.navbar__toggle(@click="$emit('toggle-sidebar')")
     v-toolbar-title {{ $t('core.appTitle') }}
-    v-spacer
 
-    navbar-profile-menu(:user="user")
+    v-spacer
+    v-btn(
+      v-if="loading"
+      color="primary"
+      loading
+      small
+      icon
+    )
+    profile-menu(:user="user")
 
 </template>
 
 <script>
-import NavbarProfileMenu from './NavbarProfileMenu.vue';
+import ProfileMenu from './ProfileMenu.vue';
 
 export default {
   components: {
-    NavbarProfileMenu,
+    ProfileMenu,
   },
   props: {
     user: Object,
+    loading: Boolean,
   },
 };
 </script>

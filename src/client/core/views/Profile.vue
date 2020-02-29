@@ -31,7 +31,7 @@
           )
           .d-flex.my-4.justify-end
             v-btn.profile__general__submit(
-              :loading="general.isLoading"
+              :disabled="loading"
               color="primary"
               type="submit"
               large
@@ -70,7 +70,7 @@
           )
           .d-flex.my-4.justify-end
             v-btn.profile__password__submit(
-              :loading="password.isLoading"
+              :disabled="loading"
               color="primary"
               type="submit"
               large
@@ -79,18 +79,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data () {
     const user = this.$store.state.core.user;
     return {
       user,
       general: {
-        isLoading: false,
         serverError: '',
         form: user,
       },
       password: {
-        isLoading: false,
         serverError: '',
         form: {
           password: '',
@@ -112,12 +112,13 @@ export default {
       },
     };
   },
-
+  computed: {
+    ...mapState('core', [ 'loading' ]),
+  },
   methods: {
     async updateProfile () {
       this.general.serverError = '';
-      if (!this.general.isLoading && this.$refs.generalForm.validate()) {
-        this.general.isLoading = true;
+      if (!this.loading && this.$refs.generalForm.validate()) {
         try {
           await this.$store.dispatch('core/updateProfile', this.general.form);
           this.$store.dispatch('core/notify/success', this.$t('core.views.profile.general.notifications.updated'));
@@ -125,13 +126,11 @@ export default {
           const typeKey = 'unknown';
           this.serverError = this.$t(`core.views.profile.general.errors.server.${typeKey}`);
         }
-        this.general.isLoading = false;
       }
     },
     async updatePassword () {
       this.password.serverError = '';
-      if (!this.password.isLoading && this.$refs.passwordForm.validate()) {
-        this.password.isLoading = true;
+      if (!this.loading && this.$refs.passwordForm.validate()) {
         try {
           await this.$store.dispatch('core/updatePassword', this.password.form);
           this.$store.dispatch('core/notify/success', this.$t('core.views.profile.password.notifications.updated'));
@@ -143,7 +142,6 @@ export default {
           }
           this.password.serverError = this.$t(`core.views.profile.password.errors.server.${typeKey}`);
         }
-        this.password.isLoading = false;
       }
     },
   },

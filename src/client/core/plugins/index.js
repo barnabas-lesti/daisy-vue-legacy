@@ -15,10 +15,3 @@ export default {
   storage,
   store,
 };
-
-export {
-  router,
-  store,
-  storage,
-  http,
-};

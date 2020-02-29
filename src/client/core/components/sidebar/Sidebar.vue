@@ -6,7 +6,7 @@
       app
       clipped
     )
-      sidebar-list(:items="items")
+      list(:items="items")
     v-navigation-drawer(
       v-else
       :mini-variant="!model"
@@ -14,16 +14,16 @@
       app
       clipped
     )
-      sidebar-list(:items="items")
+      list(:items="items")
 
 </template>
 
 <script>
-import SidebarList from './SidebarList.vue';
+import List from './List.vue';
 
 export default {
   components: {
-    SidebarList,
+    List,
   },
   props: {
     value: Boolean,

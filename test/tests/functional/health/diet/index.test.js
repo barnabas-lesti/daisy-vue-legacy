@@ -17,10 +17,10 @@ describe('Functional / Health / Diet', () => {
       .visit('/');
     cy.get('.navbar__toggle')
       .click();
-    cy.get('.sidebar-list-group--health')
+    cy.get('.list-group--health')
       .click()
       .should('have.class', 'v-list-group--active');
-    cy.get('.sidebar-list-item--health-diet')
+    cy.get('.list-item--health-diet')
       .click()
       .should('have.class', 'v-list-item--active');
     cy.url()
@@ -50,9 +50,9 @@ describe('Functional / Health / Diet', () => {
     cy.get('.diet-table__filters')
       .click();
 
-    cy.get('.diet .diet-table').find('.v-icon[data-type="food"]').as('foodIcons')
+    cy.get('.diet .diet-table').find('.v-icon[data-item-type="Food"]').as('foodIcons')
       .should('have.length', foods.length);
-    cy.get('.diet .diet-table').find('.v-icon[data-type="recipe"]').as('recipeIcons')
+    cy.get('.diet .diet-table').find('.v-icon[data-item-type="Recipe"]').as('recipeIcons')
       .should('have.length', recipes.length);
 
     cy.get('.diet-table__filters__show-foods')

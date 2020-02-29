@@ -243,7 +243,7 @@ function verifySummary (summary) {
 function verifyInTable (recipe) {
   const nutrients = getNutrientSummary(recipe);
   cy.get('.diet .diet-table tbody').contains(recipe.name).parents('tr').as('row')
-    .find('.v-icon[data-type="recipe"]').should('be.visible');
+    .find('.v-icon[data-item-type="Recipe"]').should('be.visible');
   cy.get('@row')
     .contains(recipe.serving.value).should('be.visible');
   cy.get('@row')

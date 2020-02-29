@@ -1,12 +1,12 @@
 <template lang="pug">
-  v-list-group.sidebar-list-group(
+  v-list-group.list-group(
     :value="isActive"
     :prepend-icon="group.icon"
-    :class="`sidebar-list-group--${group.routeName.replace(/\\./i, '-')}`"
+    :class="`list-group--${group.routeName.replace(/\\./i, '-')}`"
   )
     template(v-slot:activator)
       v-list-item-title {{ group.label || $t(group.labelKey) }}
-    sidebar-list-item(
+    list-item(
       v-for="item in group.items"
       :key="item.label || item.labelKey"
       :item="item"
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import SidebarListItem from './SidebarListItem.vue';
+import ListItem from './ListItem.vue';
 
 export default {
   components: {
-    SidebarListItem,
+    ListItem,
   },
   props: {
     group: Object,

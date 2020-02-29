@@ -170,7 +170,7 @@ function fillForm (food, { clear = false } = {}) {
 
 function verifyInTable (food) {
   cy.get('.diet .diet-table tbody').contains(food.name).parents('tr').as('row')
-    .find('.v-icon[data-type="food"]').should('be.visible');
+    .find('.v-icon[data-item-type="Food"]').should('be.visible');
   cy.get('@row')
     .contains(food.serving.value).should('be.visible');
   cy.get('@row')

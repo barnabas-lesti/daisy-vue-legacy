@@ -1,17 +1,15 @@
 import Food from './food';
 
-class Ingredient {
-  constructor ({ amount, food }) {
-    this.food = new Food(food);
-    this.amount = amount || 0;
+class Ingredient extends Food {
+  constructor (args = {}) {
+    super(args);
+    this.amount = args.amount || 0;
   }
 }
 
 export default class Recipe {
   static Ingredient = Ingredient;
-  static Serving = Food.Serving;
-
-  static getNutrients = getNutrients;
+  static getNutrients = Food.getNutrients;
 
   /**
    * @param {Recipe} args
@@ -27,17 +25,6 @@ export default class Recipe {
   }
 
   getNutrients () {
-    return getNutrients(this.ingredients);
+    return Food.getNutrients(this.ingredients);
   }
-}
-
-function getNutrients (ingredients) {
-  return ingredients.reduce((summary, nextItem) => {
-    const multiplier = nextItem.amount / nextItem.food.serving.value;
-    summary.calories += nextItem.food.nutrients.calories * multiplier;
-    summary.carbs += nextItem.food.nutrients.carbs * multiplier;
-    summary.protein += nextItem.food.nutrients.protein * multiplier;
-    summary.fat += nextItem.food.nutrients.fat * multiplier;
-    return summary;
-  }, new Food.Nutrients());
 }

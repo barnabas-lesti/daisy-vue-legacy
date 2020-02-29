@@ -1,14 +1,11 @@
 import config from '../config';
 
 export default {
-  config: {
-    ...config,
-  },
-
+  config,
+  loading: false,
+  user: null,
+  authHeader: null,
   notifications: [],
   sidebarItems: [],
   breadcrumbs: [],
-
-  user: null,
-  authHeader: null,
 };

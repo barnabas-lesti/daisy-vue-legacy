@@ -7,9 +7,9 @@ describe('Functional / Core / Sign out', () => {
     cy['core/signIn']()
       .visit('/');
 
-    cy.get('.navbar-profile-menu__activator')
+    cy.get('.profile-menu__activator')
       .click();
-    cy.get('.navbar-profile-menu__item--sign-out')
+    cy.get('.profile-menu__item--sign-out')
       .click();
 
     cy.url()

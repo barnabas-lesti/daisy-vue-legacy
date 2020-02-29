@@ -24,47 +24,6 @@ components:
       carbs: Carbs (g)
       protein: Protein (g)
       fat: Fat (g)
-  foodModal:
-    title:
-      new: New food
-      edit: Edit food
-      view: View food
-    form:
-      name: Name
-      description: Description
-      calories: Calories
-      carbs: Carbs (g)
-      protein: Protein (g)
-      fat: Fat (g)
-      serving:
-        unit: Serving unit
-        value: Serving value
-    errors:
-      name:
-        required: Name is required
-      server:
-        unknown: Unknown error occurred
-  recipeModal:
-    title:
-      new: New recipe
-      edit: Edit recipe
-      view: View recipe
-    form:
-      name: Name
-      description: Description
-      serving:
-        unit: Serving unit
-        value: Serving value
-    onlyShowSelected: Only show selected
-    ingredientSelector: Add/remove ingredients
-    ingredients: Ingredients
-    noIngredients: Add ingredients to see the nutrient breakdown
-    summary: Nutrients
-    errors:
-      name:
-        required: Name is required
-      server:
-        unknown: Unknown error occurred
 
   dietTable:
     search: Search
@@ -76,7 +35,7 @@ components:
     name: Name
     amount: Amount
     serving: Serving
-    type: Type
+    itemType: Type
     calories: Calories
     carbs: Carbs (g)
     protein: Protein (g)
@@ -85,6 +44,9 @@ components:
       title: Filters
       showFoods: Show food
       showRecipes: Show recipes
+
+  dietTableFilters:
+    search: Search
 
 views:
   health:
@@ -97,6 +59,48 @@ views:
     newRecipeButton: Create recipe
     showFoods: Show food
     showRecipes: Show recipes
+    foodModal:
+      title:
+        new: New food
+        edit: Edit food
+        view: View food
+      form:
+        name: Name
+        description: Description
+        calories: Calories
+        carbs: Carbs (g)
+        protein: Protein (g)
+        fat: Fat (g)
+        serving:
+          unit: Serving unit
+          value: Serving value
+      errors:
+        name:
+          required: Name is required
+        server:
+          unknown: Unknown error occurred
+    recipeModal:
+      title:
+        new: New recipe
+        edit: Edit recipe
+        view: View recipe
+      form:
+        name: Name
+        description: Description
+        serving:
+          unit: Serving unit
+          value: Serving value
+      onlyShowSelected: Only show selected
+      ingredientSelector: Select ingredients
+      general: General
+      ingredients: Ingredients
+      summary: Nutrients
+      noIngredients: Add ingredients to see the nutrient breakdown
+      errors:
+        name:
+          required: Name is required
+        server:
+          unknown: Unknown error occurred
     notifications:
       food:
         saved: Food successfully saved
@@ -114,3 +118,13 @@ views:
     changeItems: Add/remove items
     selectModal:
       title: Add/remove items
+
+  diary:
+    title: Diary
+    datePicker: Date
+    summary: Summary
+    consumption: Consumption
+    nutrientSummary: Nutrient summary
+    notifications:
+      saved: Diary item successfully saved
+      unknownError: Unknown error occurred

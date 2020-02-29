@@ -12,6 +12,9 @@ import {
   mdiPlus,
   mdiDelete,
   mdiFileEditOutline,
+  mdiCalendar,
+  mdiDotsVertical,
+  mdiPlaylistRemove,
 } from '@mdi/js';
 
 const usedIcons = {
@@ -28,6 +31,9 @@ const usedIcons = {
   mdiPlus,
   mdiDelete,
   mdiFileEditOutline,
+  mdiCalendar,
+  mdiDotsVertical,
+  mdiPlaylistRemove,
 };
 
 export default usedIcons;

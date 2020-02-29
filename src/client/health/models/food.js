@@ -31,6 +31,7 @@ export default class Food {
   static unitValues = unitValues;
   static Nutrients = Nutrients;
   static Serving = Serving;
+  static getNutrients = getNutrients;
 
   /**
    * @param {Food} args
@@ -44,4 +45,25 @@ export default class Food {
     this.nutrients = new Nutrients(nutrients);
     this.serving = new Serving(serving);
   }
+
+  getNutrients () {
+    return this.nutrients;
+  }
+}
+
+function getNutrients (items) {
+  if (!items || !items.length) return null;
+
+  const summary = items.reduce((summary, nextItem) => {
+    const multiplier = nextItem.amount / nextItem.serving.value;
+    const nutrients = typeof nextItem.getNutrients === 'function' ? nextItem.getNutrients() : nextItem.nutrients;
+    const { calories, carbs, protein, fat } = nutrients;
+    summary.calories += calories * multiplier;
+    summary.carbs += carbs * multiplier;
+    summary.protein += protein * multiplier;
+    summary.fat += fat * multiplier;
+    return summary;
+  }, new Nutrients());
+
+  return summary;
 }

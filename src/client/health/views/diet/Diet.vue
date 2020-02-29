@@ -6,23 +6,25 @@
 
     v-row
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
-        v-btn.mr-4.diet__new-food(
-          color="primary"
-          tile
+        v-btn.diet__new-food.mr-4(
+          color="green lighten-1"
+          small
+          dark
+          fab
           @click="newFood()"
-        ) {{ $t('health.views.diet.newFoodButton') }}
+        )
+          v-icon {{ $theme.icons.mdiFoodApple }}
         v-btn.diet__new-recipe(
-          color="primary"
-          tile
+          color="brown lighten-1"
+          small
+          dark
+          fab
           @click="newRecipe()"
-        ) {{ $t('health.views.diet.newRecipeButton') }}
+        )
+          v-icon {{ $theme.icons.mdiFoodVariant }}
       v-col
-        v-text-field.diet__search(
+        diet-table-filters(
           v-model="searchString"
-          :label="$t('health.views.diet.search')"
-          :append-icon="$theme.icons.mdiMagnify"
-          single-line
-          hide-details
         )
 
     v-row
@@ -30,15 +32,14 @@
         diet-table(
           :searchString="searchString"
           :items="items"
-          :loading="isLoading"
-          with-filters
+          single-select
           @select="openModal($event)"
         )
 
     food-modal(
-      v-model="selectedItem && selectedItem.type === types.FOOD"
+      v-model="selectedItem && selectedItem.itemType === itemTypes.FOOD"
       :item="selectedItem"
-      :loading="isLoading"
+      :loading="loading"
       :server-error-type="serverErrorType"
       @cancel="closeModal()"
       @confirm="onFoodModalConfirm($event)"
@@ -46,10 +47,10 @@
     )
 
     recipe-modal(
-      v-model="selectedItem && selectedItem.type === types.RECIPE"
+      v-model="selectedItem && selectedItem.itemType === itemTypes.RECIPE"
       :item="selectedItem"
       :foods="foods"
-      :loading="isLoading"
+      :loading="loading"
       :server-error-type="serverErrorType"
       @cancel="closeModal()"
       @confirm="onRecipeModalConfirm($event)"
@@ -70,8 +71,8 @@
           fab
           large
         )
-          v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
-          v-icon(v-else) {{ $theme.icons.mdiPlus }}
+          v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose }}
+          v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
       v-btn.diet__fab__new-food(
         color="green lighten-1"
         dark
@@ -89,67 +90,76 @@
 </template>
 
 <script>
-import { CalculableItem } from '../models';
-import { DietTable, FoodModal, RecipeModal } from '../components';
+import { mapState, mapGetters } from 'vuex';
+
+import DietItem from '../../models/diet-item';
+import DietTable from '../../components/DietTable';
+import DietTableFilters from '../../components/DietTableFilters';
+import FoodModal from './FoodModal';
+import RecipeModal from './RecipeModal';
+
+const modalModes = {
+  NEW_FOOD: 'new-food',
+  NEW_RECIPE: 'new-recipe',
+};
 
 export default {
   components: {
     DietTable,
     FoodModal,
     RecipeModal,
+    DietTableFilters,
   },
   data () {
     return {
-      types: CalculableItem.types,
-      isLoading: false,
+      itemTypes: DietItem.itemTypes,
       isFabActive: false,
       searchString: '',
       serverErrorType: '',
     };
   },
   computed: {
-    foods () {
-      const { foods } = this.$store.state.health.diet;
-      return foods.map(item => CalculableItem.convertFromFood(item));
-    },
-    items () {
-      return this.$store.getters['health/diet/items'];
-    },
+    ...mapState('core', [ 'loading' ]),
+    ...mapState('health', {
+      foods: state => state.diet.foods.map(food => DietItem.convertFromFood(food)),
+    }),
+    ...mapGetters('health', {
+      items: 'diet/items',
+    }),
+
     selectedItem: {
       get () {
-        if (this.$store.getters['health/diet/areItemsLoaded']) {
-          const selected = this.$route.query['selected'];
-
-          if (selected === 'new-food') return new CalculableItem({ type: CalculableItem.types.FOOD });
-          if (selected === 'new-recipe') return new CalculableItem({ type: CalculableItem.types.RECIPE });
-          const item = this.items.filter(item => item.id === selected)[0];
-          if (item) return item;
-
-          this.$router.clearQuery('selected');
+        const selected = this.$route.query['selected'];
+        switch (selected) {
+          case modalModes.NEW_FOOD: return new DietItem({ itemType: DietItem.itemTypes.FOOD });
+          case modalModes.NEW_RECIPE: return new DietItem({ itemType: DietItem.itemTypes.RECIPE });
+          default:
+            const item = this.items.filter(item => item.id === selected)[0];
+            if (item) {
+              return item;
+            } else {
+              this.$router.clearQuery('selected');
+              return null;
+            }
         }
-
-        return null;
       },
       set (newValue) {
-        const { id, type } = newValue || {};
-        const query = {};
-
-        if (id) query['selected'] = id;
-        else if (type === CalculableItem.types.FOOD) query['selected'] = 'new-food';
-        else if (type === CalculableItem.types.RECIPE) query['selected'] = 'new-recipe';
-        else query['selected'] = null;
-
-        this.$router.pushQuery(query);
+        let selected = null;
+        const { id, itemType } = newValue || {};
+        if (id) selected = id;
+        else if (itemType === DietItem.itemTypes.FOOD) selected = modalModes.NEW_FOOD;
+        else if (itemType === DietItem.itemTypes.RECIPE) selected = modalModes.NEW_RECIPE;
+        this.$router.pushQuery({ 'selected': selected });
       },
     },
   },
 
   methods: {
     newFood () {
-      this.openModal({ type: CalculableItem.types.FOOD });
+      this.openModal({ itemType: DietItem.itemTypes.FOOD });
     },
     newRecipe () {
-      this.openModal({ type: CalculableItem.types.RECIPE });
+      this.openModal({ itemType: DietItem.itemTypes.RECIPE });
     },
 
     openModal (item) {
@@ -157,11 +167,9 @@ export default {
     },
     closeModal () {
       this.selectedItem = null;
-      this.$router.backToReferer();
     },
 
     async onFoodModalConfirm (item) {
-      this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/saveFood', item);
         this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.food.saved'));
@@ -169,10 +177,8 @@ export default {
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
       }
-      this.isLoading = false;
     },
     async onFoodModalRemove (item) {
-      this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/removeFood', item);
         this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.food.removed'));
@@ -180,11 +186,9 @@ export default {
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
       }
-      this.isLoading = false;
     },
 
     async onRecipeModalConfirm (item) {
-      this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/saveRecipe', item);
         this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.recipe.saved'));
@@ -192,10 +196,8 @@ export default {
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
       }
-      this.isLoading = false;
     },
     async onRecipeModalRemove (item) {
-      this.isLoading = true;
       try {
         await this.$store.dispatch('health/diet/removeRecipe', item);
         this.$store.dispatch('core/notify/success', this.$t('health.views.diet.notifications.recipe.removed'));
@@ -203,20 +205,7 @@ export default {
       } catch ({ error }) {
         this.serverErrorType = 'unknown';
       }
-      this.isLoading = false;
     },
-
-    async fetchItems () {
-      this.isLoading = true;
-      await this.$store.dispatch('health/diet/fetchItems');
-      this.isLoading = false;
-    },
-  },
-
-  created () {
-    if (!this.items || !this.items.length) {
-      this.fetchItems();
-    }
   },
 };
 </script>

@@ -1,34 +1,41 @@
 <template lang="pug">
   modal.select-modal(
     v-model="value"
-    :title="$t('health.components.selectModal.title')"
+    :title="title || $t('health.components.selectModal.title')"
     :loading="loading"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', localSelectedItems)"
   )
-    diet-table.select-modal__table(
-      v-model="localSelectedItems"
-      :items="items"
-      :loading="loading"
-      selectable
-      with-search
-      with-amount
-      with-filters
-    )
+    v-row
+      v-col
+        diet-table-filters(v-model="searchString")
+    v-row
+      v-col
+        diet-table.select-modal__table(
+          v-model="localSelectedItems"
+          :search-string="searchString"
+          :items="items"
+          :loading="loading"
+          selectable
+          with-amount
+        )
 </template>
 
 <script>
-import Modal from '../../core/components/Modal.vue';
-import DietTable from './DietTable.vue';
+import Modal from '../../core/components/Modal';
+import DietTable from './DietTable';
+import DietTableFilters from './DietTableFilters';
 
 export default {
   components: {
     Modal,
     DietTable,
+    DietTableFilters,
   },
   props: {
     value: Boolean,
     loading: Boolean,
+    title: String,
     items: {
       type: Array,
       default: () => [],
@@ -40,11 +47,12 @@ export default {
   },
   data () {
     return {
+      searchString: '',
       localSelectedItems: [...this.selectedItems],
     };
   },
   watch: {
-    selectedItems (newValue) { this.localSelectedItems = [...newValue]; },
+    'selectedItems' (newValue) { this.localSelectedItems = [...newValue]; },
   },
 };
 </script>

@@ -1,36 +1,36 @@
 <template lang="pug">
-  v-list.sidebar-list(flat)
-      sidebar-list-item(:item="dashboard")
+  v-list.list(flat)
+      list-item(:item="dashboard")
       v-divider
 
       template(
         v-for="item in items"
       )
-        sidebar-list-group(
+        list-group(
           v-if="item.items"
           :key="item.label || item.labelKey"
           :group="item"
         )
-        sidebar-list-item(
+        list-item(
           v-else
           :key="item.label || item.labelKey"
           :item="item"
         )
       v-divider
 
-      sidebar-list-item(:item="profile")
+      list-item(:item="profile")
 
 </template>
 
 <script>
-import { SidebarItem } from '../../models';
-import SidebarListGroup from './SidebarListGroup.vue';
-import SidebarListItem from './SidebarListItem.vue';
+import SidebarItem from '../../models/sidebar-item';
+import ListGroup from './ListGroup.vue';
+import ListItem from './ListItem.vue';
 
 export default {
   components: {
-    SidebarListGroup,
-    SidebarListItem,
+    ListGroup,
+    ListItem,
   },
   props: {
     items: Array,

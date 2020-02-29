@@ -7,7 +7,7 @@
       v-row
         v-col
           register-form(
-            :loading="isLoading"
+            :loading="loading"
             :server-error-type="serverErrorType"
             @submit="register($event)"
           )
@@ -20,7 +20,7 @@
               h1.text-center.mb-2 {{ $t('core.views.register.title') }}
             v-card-text
               register-form(
-                :loading="isLoading"
+                :loading="loading"
                 :server-error-type="serverErrorType"
                 @submit="register($event)"
               )
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import RegisterForm from './RegisterForm';
 
 export default {
@@ -37,15 +39,15 @@ export default {
 
   data () {
     return {
-      isLoading: false,
       serverErrorType: '',
     };
   },
-
+  computed: {
+    ...mapState('core', [ 'loading' ]),
+  },
   methods: {
     async register (form) {
       this.serverErrorType = '';
-      this.isLoading = true;
       try {
         await this.$store.dispatch('core/register', form);
         this.$store.dispatch('core/notify/success', this.$t('core.views.register.notifications.success'));
@@ -57,7 +59,6 @@ export default {
           default: this.serverErrorType = 'unknown';
         }
       }
-      this.isLoading = false;
     },
   },
 };

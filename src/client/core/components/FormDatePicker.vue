@@ -1,21 +1,24 @@
 <template lang="pug">
   v-menu.form-date-picker(
     v-model="menu"
-    :disabled="disabled"
+    :disabled="disabled || loading"
+    min-width="0"
   )
     template(v-slot:activator="{ on }")
       v-text-field(
-        v-model="_value"
+        v-model="localValue"
         v-on="on"
         :label="label"
-        :disabled="disabled"
+        :disabled="disabled || loading"
+        :append-icon="appendIcon ? $theme.icons.mdiCalendar : ''"
+        :prepend-icon="!appendIcon ? $theme.icons.mdiCalendar : ''"
         readonly
+        hide-details
       )
     v-date-picker(
-      v-model="_value"
-      ref="datePicker"
+      v-model="localValue"
       no-title
-      scrollable
+      offset-y
     )
       v-spacer
       v-btn(
@@ -38,12 +41,14 @@ export default {
     value: String,
     label: String,
     disabled: Boolean,
+    loading: Boolean,
+    appendIcon: Boolean,
   },
   data: () => ({
     menu: false,
   }),
   computed: {
-    _value: {
+    localValue: {
       get () { return this.value; },
       set (newValue) { this.$emit('input', newValue); },
     },

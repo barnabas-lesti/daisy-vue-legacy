@@ -1,12 +1,14 @@
 export default {
   diet: {
-    foods: [],
-    areFoodsLoaded: false,
-    recipes: [],
-    areRecipesLoaded: false,
+    foods: null,
+    recipes: null,
   },
 
   calculator: {
-    itemSkeletons: [],
+    itemSkeletons: null,
+  },
+
+  diary: {
+    item: null,
   },
 };

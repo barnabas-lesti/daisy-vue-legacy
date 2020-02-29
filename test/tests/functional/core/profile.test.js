@@ -11,9 +11,9 @@ describe('Functional / Core / Profile', () => {
     cy['core/signIn'](user)
       .visit('/');
 
-    cy.get('.navbar-profile-menu__activator')
+    cy.get('.profile-menu__activator')
       .click();
-    cy.get('.navbar-profile-menu__item--profile')
+    cy.get('.profile-menu__item--profile')
       .click();
     cy.url()
       .should('include', '/profile');
@@ -22,7 +22,7 @@ describe('Functional / Core / Profile', () => {
       .visit('/');
     cy.get('.navbar__toggle')
       .click();
-    cy.get('.sidebar-list-item--profile')
+    cy.get('.list-item--profile')
       .click();
 
     cy.url()
@@ -78,19 +78,19 @@ describe('Functional / Core / Profile', () => {
     cy['core/signIn'](user)
       .visit('/profile');
 
-    cy.get('.navbar-profile-menu__activator').as('activator')
+    cy.get('.profile-menu__activator').as('activator')
       .click();
-    cy.get('.navbar-profile-menu__activator__icon').as('activatorIcon')
+    cy.get('.profile-menu__activator__icon').as('activatorIcon')
       .should('not.be.visible');
-    cy.get('.navbar-profile-menu__activator__image').as('activatorImage')
+    cy.get('.profile-menu__activator__image').as('activatorImage')
       .invoke('attr', 'src').should('eq', user.profileImageUrl);
-    cy.get('.navbar-profile-menu__item--profile .navbar-profile-menu__item__icon').as('profileIcon')
+    cy.get('.profile-menu__item--profile .profile-menu__item__icon').as('profileIcon')
       .should('not.be.visible');
-    cy.get('.navbar-profile-menu__item--profile .navbar-profile-menu__item__image').as('profileImage')
+    cy.get('.profile-menu__item--profile .profile-menu__item__image').as('profileImage')
       .invoke('attr', 'src').should('eq', user.profileImageUrl);
-    cy.get('.navbar-profile-menu__item--profile .navbar-profile-menu__item__title').as('fullName')
+    cy.get('.profile-menu__item--profile .profile-menu__item__title').as('fullName')
       .should('have.text', user.fullName);
-    cy.get('.navbar-profile-menu__item--profile .navbar-profile-menu__item__subtitle')
+    cy.get('.profile-menu__item--profile .profile-menu__item__subtitle')
       .should('have.text', user.email);
 
     cy.get('@activator')

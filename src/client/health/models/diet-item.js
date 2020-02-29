@@ -1,34 +1,36 @@
 import Food from './food';
 import Recipe from './recipe';
 
-const types = {
-  RECIPE: 'recipe',
-  FOOD: 'food',
+const itemTypes = {
+  FOOD: 'Food',
+  RECIPE: 'Recipe',
 };
 
-export default class CalculableItem {
-  static types = types;
+export default class DietItem {
+  static itemTypes = itemTypes;
+  static getNutrients = Food.getNutrients;
 
   /**
-   * @param {CalculableItem} args
+   * @param {DietItem} args
    */
-  constructor ({ id, userId, amount, name, description, type, nutrients, ingredients, serving } = {}) {
+  constructor ({ id, userId, name, description, serving, itemType, amount, nutrients, ingredients } = {}) {
     this.id = id;
     this.userId = userId;
     this.name = name;
     this.description = description;
-
-    this.type = type || types.FOOD;
     this.serving = new Food.Serving(serving);
+
+    this.itemType = itemType || (ingredients ? itemTypes.RECIPE : itemTypes.FOOD);
     this.amount = amount !== undefined && amount !== null ? amount : this.serving.value;
+
     this.nutrients = new Food.Nutrients(nutrients);
     this.ingredients = (ingredients || []).map(item => new Recipe.Ingredient(item));
   }
 
   getNutrients () {
-    switch (this.type) {
-      case types.FOOD: return this.nutrients;
-      case types.RECIPE: return Recipe.getNutrients(this.ingredients);
+    switch (this.itemType) {
+      case itemTypes.FOOD: return this.nutrients;
+      case itemTypes.RECIPE: return Recipe.getNutrients(this.ingredients);
       default: return {};
     }
   }
@@ -37,20 +39,20 @@ export default class CalculableItem {
    * @param {Food} food
    */
   static convertFromFood (food) {
-    return new CalculableItem({ type: types.FOOD, ...food });
+    return new DietItem({ itemType: itemTypes.FOOD, ...food });
   }
 
   /**
    * @param {Recipe} recipe
    */
   static convertFromRecipe (recipe) {
-    return new CalculableItem({ type: types.RECIPE, ...recipe });
+    return new DietItem({ itemType: itemTypes.RECIPE, ...recipe });
   }
 
   /**
    * @param {Recipe.Ingredient} ingredient
    */
   static convertFromIngredient (ingredient) {
-    return new CalculableItem({ type: types.FOOD, ...ingredient.food, amount: ingredient.amount });
+    return new DietItem({ itemType: itemTypes.FOOD, ...ingredient });
   }
 }

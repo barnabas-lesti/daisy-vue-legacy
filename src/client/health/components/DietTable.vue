@@ -1,36 +1,5 @@
 <template lang="pug">
   .diet-table
-    v-text-field.mb-4(
-      v-if="withSearch"
-      v-model="localSearchString"
-      :label="$t('health.components.dietTable.search')"
-      :append-icon="$theme.icons.mdiMagnify"
-      single-line
-      hide-details
-    )
-
-    template(v-if="withFilters")
-      v-divider
-      v-expansion-panels(
-        flat
-        tile
-        hover
-      )
-        v-expansion-panel.diet-table__filters
-          v-expansion-panel-header.px-2 {{ $t('health.components.dietTable.filters.title') }}
-          v-expansion-panel-content
-            v-checkbox.ma-0.diet-table__filters__show-foods(
-              v-model="showFoods"
-              :label="$t('health.components.dietTable.filters.showFoods')"
-              hide-details
-            )
-            v-checkbox.ma-0.diet-table__filters__show-recipes(
-              v-model="showRecipes"
-              :label="$t('health.components.dietTable.filters.showRecipes')"
-              hide-details
-            )
-      v-divider
-
     v-data-table.diet-table__table(
       v-model="localValue"
       :class="{ 'diet-table__table--mobile': $vuetify.breakpoint.xs, 'diet-table__table--selectable': selectable }"
@@ -49,6 +18,7 @@
       sort-by="name"
       must-sort
       ref="table"
+      :single-select="singleSelect"
       @item-selected="onSelect($event)"
     )
       template(v-slot:header.name="{ header }")
@@ -56,12 +26,16 @@
       template(v-slot:item.name="{ item }")
         .d-flex.align-center.py-2
           v-icon(
-            :color="getItemColor(item.type)"
-            :data-type="item.type"
-          ) {{ getItemIcon(item.type) }}
+            :color="getItemColor(item.itemType)"
+            :data-item-type="item.itemType"
+          ) {{ getItemIcon(item.itemType) }}
           .ml-4 {{ item.name }}
-      template(v-slot:item.serving="{ item }")
-        span {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
+      template(v-slot:item.serving.value="{ item }")
+        v-chip(
+          color="grey lighten-4"
+          label
+          link
+        ) {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
       template(
         v-slot:item.amount="{ item }"
       )
@@ -92,23 +66,21 @@
 </template>
 
 <script>
-import CalculableItem from '../models/calculable-item';
+import DietItem from '../models/diet-item';
 
 export default {
   props: {
     loading: Boolean,
     selectable: Boolean,
+    singleSelect: Boolean,
     withAmount: Boolean,
-    withSearch: Boolean,
-    withFilters: Boolean,
     withoutServing: Boolean,
     readonly: Boolean,
+    searchString: String,
     perPage: {
       type: Number,
-      default: 15,
+      default: () => 15,
     },
-
-    searchString: String,
     value: {
       type: Array,
       default: () => [],
@@ -129,7 +101,7 @@ export default {
           ? [{ text: this.$t('health.components.dietTable.amount'), value: 'amount', width: '9rem' }] : []
         ),
         ...(!this.withoutServing
-          ? [{ text: this.$t('health.components.dietTable.serving'), value: 'serving', width: '9rem', sort: this._servingSort() }] : []
+          ? [{ text: this.$t('health.components.dietTable.serving'), value: 'serving.value', width: '9rem' }] : []
         ),
         { text: this.$t('health.components.dietTable.calories'), value: 'nutrients.calories', width: '7rem' },
         { text: this.$t('health.components.dietTable.carbs'), value: 'nutrients.carbs', width: '7rem' },
@@ -148,11 +120,7 @@ export default {
       set (newValue) { this.$emit('input', newValue); },
     },
     localItems () {
-      if (!this.withFilters) return this.items;
-      return [
-        ...(this.showFoods ? this.items.filter(item => item.type === CalculableItem.types.FOOD) : []),
-        ...(this.showRecipes ? this.items.filter(item => item.type === CalculableItem.types.RECIPE) : []),
-      ];
+      return this.items;
     },
   },
 
@@ -169,16 +137,16 @@ export default {
       return parseFloat(value).toFixed(2);
     },
 
-    getItemColor (type) {
-      switch (type) {
-        case CalculableItem.types.RECIPE: return 'brown lighten-2';
-        case CalculableItem.types.FOOD: return 'green lighten-2';
+    getItemColor (itemType) {
+      switch (itemType) {
+        case DietItem.itemTypes.RECIPE: return 'brown lighten-2';
+        case DietItem.itemTypes.FOOD: return 'green lighten-2';
       }
     },
-    getItemIcon (type) {
-      switch (type) {
-        case CalculableItem.types.RECIPE: return this.$theme.icons.mdiFoodVariant;
-        case CalculableItem.types.FOOD: return this.$theme.icons.mdiFoodApple;
+    getItemIcon (itemType) {
+      switch (itemType) {
+        case DietItem.itemTypes.RECIPE: return this.$theme.icons.mdiFoodVariant;
+        case DietItem.itemTypes.FOOD: return this.$theme.icons.mdiFoodApple;
       }
     },
 
@@ -195,12 +163,11 @@ export default {
       this.$emit('select', item);
     },
 
-    _servingSort () {
-      return (a, b) => {
-        if (a.value > b.value) return 1;
-        if (a.value < b.value) return -1;
-        return 0;
-      };
+    onRemoveClick (item) {
+      this.$emit('item:remove', item);
+    },
+    onViewClick (item) {
+      this.$emit('item:view', item);
     },
   },
   mounted () {
@@ -209,10 +176,10 @@ export default {
     });
   },
   watch: {
-    searchString (newValue) {
+    'searchString' (newValue) {
       this.localSearchString = newValue;
     },
-    localSearchString (newValue) {
+    'localSearchString' (newValue) {
       this.$emit('search', newValue);
     },
   },

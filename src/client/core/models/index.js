@@ -1,4 +1,0 @@
-export { default as Breadcrumb } from './breadcrumb';
-export { default as Notification } from './notification';
-export { default as SidebarItem } from './sidebar-item';
-export { default as User } from './user';

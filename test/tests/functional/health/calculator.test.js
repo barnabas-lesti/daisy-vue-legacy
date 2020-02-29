@@ -17,10 +17,10 @@ describe('Functional / Health / Calculator', () => {
       .visit('/');
     cy.get('.navbar__toggle')
       .click();
-    cy.get('.sidebar-list-group--health')
+    cy.get('.list-group--health')
       .click()
       .should('have.class', 'v-list-group--active');
-    cy.get('.sidebar-list-item--health-calculator')
+    cy.get('.list-item--health-calculator')
       .click()
       .should('have.class', 'v-list-item--active');
     cy.url()
@@ -87,7 +87,7 @@ describe('Functional / Health / Calculator', () => {
     cy.get('.modal__toolbar__confirm')
       .click();
 
-    cy.get('.calculator__table').as('calculatorTable')
+    cy.get('.calculator__table')
       .contains(food1.name).click();
     cy.url()
       .should('include', `selected=${food1.id}`);
@@ -173,7 +173,7 @@ function formatValue (nutrient) {
 
 function getNutrientSummary (items) {
   return items
-    .map(item => mocks.convertToCalculableItem(item))
+    .map(item => mocks.convertToDietItem(item))
     .reduce((summary, nextItem) => {
       const multiplier = nextItem.amount / nextItem.serving.value;
       const { calories, carbs, protein, fat } = nextItem.getNutrients();

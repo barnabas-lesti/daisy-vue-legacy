@@ -1,4 +1,5 @@
-import { router, store } from './plugins';
+import router from './plugins/router';
+import store from './plugins/store';
 
 router.addRoutes([
   {

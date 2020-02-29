@@ -14,7 +14,7 @@
           sign-in-form(
             v-else
             :email="email"
-            :loading="isLoading"
+            :loading="loading"
             :server-error-type="serverErrorType"
             @submit="signInWithCredentials($event)"
           )
@@ -34,7 +34,7 @@
               sign-in-form(
                 v-else
                 :email="email"
-                :loading="isLoading"
+                :loading="loading"
                 :server-error-type="serverErrorType"
                 @submit="signInWithCredentials($event)"
               )
@@ -53,19 +53,17 @@ export default {
   data () {
     return {
       email: '',
-      isLoading: false,
       serverErrorType: '',
     };
   },
 
   computed: {
-    ...mapState('core', [ 'authHeader' ]),
+    ...mapState('core', [ 'loading', 'authHeader' ]),
   },
 
   methods: {
     async signInWithCredentials (form) {
       this.serverErrorType = '';
-      this.isLoading = true;
       try {
         await this.$store.dispatch('core/signInWithCredentials', form);
         this.$store.dispatch('core/notify/success', this.$t('core.views.signIn.notifications.success', { email: form.email }));
@@ -77,12 +75,10 @@ export default {
           default: this.serverErrorType = 'unknown';
         }
       }
-      this.isLoading = false;
     },
 
     async signInWithHeader (authHeader) {
       this.serverErrorType = '';
-      this.isLoading = true;
       try {
         await this.$store.dispatch('core/signInWithAuthHeader', authHeader);
         this._navigateToReferer();
@@ -94,7 +90,6 @@ export default {
         }
         this.$store.dispatch('core/signOut');
       }
-      this.isLoading = false;
     },
 
     _navigateToReferer () {

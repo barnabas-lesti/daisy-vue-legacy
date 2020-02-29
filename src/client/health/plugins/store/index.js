@@ -1,4 +1,5 @@
-import { store, storage } from '../../../core/plugins';
+import store from '../../../core/plugins/store';
+import storage from '../../../core/plugins/storage';
 
 import actions from './actions';
 import getters from './getters';

@@ -1,5 +1,7 @@
 import storage from '../../../core/plugins/storage';
-import { Food, Recipe } from '../../models';
+import Food from '../../models/food';
+import Recipe from '../../models/recipe';
+import DiaryItem from '../../models/diary-item';
 
 export default {
   'diet/setFoods' (state, { foods = [], setLoaded }) {
@@ -46,7 +48,14 @@ export default {
 
   'calculator/setItemSkeletons' (state, items) {
     state.calculator.itemSkeletons = [...items]
-      .map(item => ({ amount: item.amount, id: item.id, type: item.type }));
+      .map(item => ({ amount: item.amount, id: item.id, itemType: item.itemType }));
     storage.saveToLocalStorage('health/calculator/itemSkeletons', state.calculator.itemSkeletons);
+  },
+
+  'diary/setItem' (state, diaryItem) {
+    state.diary.item = new DiaryItem(diaryItem);
+  },
+  'diary/updateItem' (state, update) {
+    state.diary.item = new DiaryItem({ ...state.diary.item, ...update });
   },
 };
