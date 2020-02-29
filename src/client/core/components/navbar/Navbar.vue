@@ -8,7 +8,7 @@
     v-toolbar-title {{ $t('core.appTitle') }}
 
     v-spacer
-    v-btn(
+    v-btn.navbar__loader(
       v-if="loading"
       color="primary"
       loading

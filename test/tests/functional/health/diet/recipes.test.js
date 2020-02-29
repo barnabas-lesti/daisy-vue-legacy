@@ -56,11 +56,6 @@ describe('Functional / Health / Recipes', () => {
     stubs['health/dietItems'](user, { foods })
       .visit('/health/diet?selected=new-recipe');
 
-    cy.get('.recipe-modal__ingredient-selector')
-      .click();
-    cy.get('.recipe-modal__ingredients')
-      .click();
-
     fillForm(recipe);
     verifySummary(getNutrientSummary(recipe));
 
@@ -85,10 +80,7 @@ describe('Functional / Health / Recipes', () => {
 
     cy.get('.diet .diet-table tbody').contains(existingRecipe.name)
       .click();
-    cy.get('.recipe-modal__ingredient-selector')
-      .click();
-    cy.get('.recipe-modal__ingredients')
-      .click();
+
     verifyInForm(existingRecipe);
     verifySummary(getNutrientSummary(existingRecipe));
 
@@ -156,10 +148,24 @@ function fillForm (recipe, { clear = false, oldRecipe } = {}) {
     .click();
 
   if (oldRecipe) {
+    cy.get('.recipe-modal__fab')
+      .click();
+    cy.get('.recipe-modal__fab__remove')
+      .click();
     for (const ingredient of oldRecipe.ingredients) {
-      toggleIngredient(ingredient);
+      cy.get('.recipe-modal__ingredients').contains(ingredient.name)
+        .click();
     }
+    cy.get('.recipe-modal__fab')
+      .click();
+    cy.get('.recipe-modal__fab__remove')
+      .click();
   }
+
+  cy.get('.recipe-modal__fab')
+    .click();
+  cy.get('.recipe-modal__fab__ingredients')
+    .click();
 
   for (const ingredient of recipe.ingredients) {
     toggleIngredient(ingredient);
@@ -167,34 +173,37 @@ function fillForm (recipe, { clear = false, oldRecipe } = {}) {
   for (const ingredient of recipe.ingredients) {
     changeAmount(ingredient, ingredient.amount);
   }
-}
 
-function toggleIngredient ({ food }) {
-  return cy.get('.recipe-modal__ingredient-selector').contains(food.name)
+  cy.get('.recipe-modal__ingredient-selector .modal__toolbar__confirm')
     .click();
 }
 
-function changeAmount ({ food }, value) {
-  cy.get('.recipe-modal__ingredients')
-    .contains(food.name).parents('tr').find('.diet-table__table__amount-display')
+function toggleIngredient (ingredient) {
+  return cy.get('.recipe-modal__ingredient-selector').contains(ingredient.name)
+    .click();
+}
+
+function changeAmount (ingredient, value) {
+  cy.get('.recipe-modal__ingredient-selector')
+    .contains(ingredient.name).parents('tr').find('.diet-table__table__amount-display')
     .scrollIntoView()
     .click();
-  return cy.get(`input[name="amount"][data-id="${food.id}"]`)
+  return cy.get(`input[name="amount"][data-id="${ingredient.id}"]`)
     .scrollIntoView()
     .clear().type(`${value}{enter}`);
 }
 
-function verifySelectorRow ({ food }, { checkSelected = false } = {}) {
-  cy.get('.recipe-modal__ingredient-selector').contains(food.name).parents('tr').as('selectorRow')
-    .contains(formatValue(food.serving.value))
+function verifySelectorRow (ingredient, { checkSelected = false } = {}) {
+  cy.get('.recipe-modal__ingredient-selector').contains(ingredient.name).parents('tr').as('selectorRow')
+    .contains(formatValue(ingredient.serving.value))
     .scrollIntoView().should('be.visible');
-  cy.get('@selectorRow').contains(formatValue(food.nutrients.calories))
+  cy.get('@selectorRow').contains(formatValue(ingredient.nutrients.calories))
     .scrollIntoView().should('be.visible');
-  cy.get('@selectorRow').contains(formatValue(food.nutrients.carbs))
+  cy.get('@selectorRow').contains(formatValue(ingredient.nutrients.carbs))
     .scrollIntoView().should('be.visible');
-  cy.get('@selectorRow').contains(formatValue(food.nutrients.protein))
+  cy.get('@selectorRow').contains(formatValue(ingredient.nutrients.protein))
     .scrollIntoView().should('be.visible');
-  cy.get('@selectorRow').contains(formatValue(food.nutrients.fat))
+  cy.get('@selectorRow').contains(formatValue(ingredient.nutrients.fat))
     .scrollIntoView().should('be.visible');
 
   if (checkSelected) {
@@ -202,13 +211,14 @@ function verifySelectorRow ({ food }, { checkSelected = false } = {}) {
       .should('have.class', 'v-data-table__selected');
   }
 }
-function verifyIngredientsRow ({ amount, food }) {
-  cy.get('.recipe-modal__ingredients').contains(food.name).parents('tr').as('ingredientsRow')
-    .contains(formatValue(amount))
+
+function verifyIngredientsRow (ingredient) {
+  cy.get('.recipe-modal__ingredients').contains(ingredient.name).parents('tr').as('ingredientsRow')
+    .contains(formatValue(ingredient.amount))
     .scrollIntoView().should('be.visible');
 
-  const multiplier = amount / food.serving.value;
-  const { calories, carbs, protein, fat } = food.nutrients;
+  const multiplier = ingredient.amount / ingredient.serving.value;
+  const { calories, carbs, protein, fat } = ingredient.nutrients;
   cy.get('@ingredientsRow').contains(formatValue(calories * multiplier))
     .scrollIntoView().should('be.visible');
   cy.get('@ingredientsRow').contains(formatValue(carbs * multiplier))
@@ -233,11 +243,11 @@ function verifySummary (summary) {
 
   const total = carbs + protein + fat;
   cy.get('@summary')
-    .contains(`${formatValue(carbs / total * 100)} %`).should('be.visible');
+    .contains(`${formatValue(carbs / total * 100)} %`).should('to.exist');
   cy.get('@summary')
-    .contains(`${formatValue(protein / total * 100)} %`).should('be.visible');
+    .contains(`${formatValue(protein / total * 100)} %`).should('to.exist');
   cy.get('@summary')
-    .contains(`${formatValue(fat / total * 100)} %`).should('be.visible');
+    .contains(`${formatValue(fat / total * 100)} %`).should('to.exist');
 }
 
 function verifyInTable (recipe) {
@@ -266,9 +276,16 @@ function verifyInForm (recipe) {
   cy.get('input[name="servingUnit"]')
     .should('have.value', `${recipe.serving.unit}`);
 
+  cy.get('.recipe-modal__fab')
+    .click();
+  cy.get('.recipe-modal__fab__ingredients')
+    .click();
   for (const ingredient of recipe.ingredients) {
     verifySelectorRow(ingredient, { checkSelected: true });
   }
+  cy.get('.recipe-modal__ingredient-selector .modal__toolbar__cancel')
+    .click();
+
   for (const ingredient of recipe.ingredients) {
     verifyIngredientsRow(ingredient);
   }
@@ -280,11 +297,11 @@ function formatValue (nutrient) {
 
 function getNutrientSummary ({ ingredients }) {
   return ingredients.reduce((summary, nextItem) => {
-    const multiplier = nextItem.amount / nextItem.food.serving.value;
-    summary.calories += nextItem.food.nutrients.calories * multiplier;
-    summary.carbs += nextItem.food.nutrients.carbs * multiplier;
-    summary.protein += nextItem.food.nutrients.protein * multiplier;
-    summary.fat += nextItem.food.nutrients.fat * multiplier;
+    const multiplier = nextItem.amount / nextItem.serving.value;
+    summary.calories += nextItem.nutrients.calories * multiplier;
+    summary.carbs += nextItem.nutrients.carbs * multiplier;
+    summary.protein += nextItem.nutrients.protein * multiplier;
+    summary.fat += nextItem.nutrients.fat * multiplier;
     return summary;
   }, { calories: 0, carbs: 0, protein: 0, fat: 0 });
 }

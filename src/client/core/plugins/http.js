@@ -71,11 +71,14 @@ class Http {
    * @param {Object=} payload
    */
   async _sendRequest (method, path, payload) {
+    store.dispatch('core/loading', true);
     try {
       const { data } = await method(path, payload);
       return data;
     } catch ({ response }) {
       throw response.data;
+    } finally {
+      store.dispatch('core/loading', false);
     }
   }
 

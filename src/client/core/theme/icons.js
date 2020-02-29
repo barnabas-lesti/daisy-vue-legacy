@@ -1,3 +1,5 @@
+// https://materialdesignicons.com/
+
 import {
   mdiViewDashboard,
   mdiFoodApple,

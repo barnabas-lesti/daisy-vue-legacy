@@ -13,7 +13,7 @@
 
     v-row(v-if="nutrientSummary")
       v-col
-        nutrients-chart(:nutrients="nutrientSummary")
+        nutrients-chart.diary__summary(:nutrients="nutrientSummary")
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
@@ -25,7 +25,7 @@
           @click="saveItem()"
         )
           v-icon {{ $theme.icons.mdiCheck }}
-        v-btn.mr-4(
+        v-btn.mr-4.diary__open-select-modal(
           color="teal lighten-2"
           small
           fab
@@ -97,7 +97,7 @@
         @click="saveItem()"
       )
         v-icon {{ $theme.icons.mdiCheck }}
-      v-btn(
+      v-btn.diary__fab__open-select-modal(
         color="teal lighten-2"
         fab
         dark

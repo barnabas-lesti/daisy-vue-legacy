@@ -3,6 +3,7 @@
     v-model="value"
     :title="title || $t('health.components.selectModal.title')"
     :loading="loading"
+    :content-class="contentClass"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', localSelectedItems)"
   )
@@ -36,6 +37,7 @@ export default {
     value: Boolean,
     loading: Boolean,
     title: String,
+    contentClass: String,
     items: {
       type: Array,
       default: () => [],

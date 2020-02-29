@@ -76,7 +76,7 @@
 
       v-row
         v-col
-          diet-table(
+          diet-table.recipe-modal__ingredients(
             v-model="tableSelection"
             :search-string="searchString"
             :items="ingredients"
@@ -88,7 +88,7 @@
           )
           v-divider
       v-row
-        v-col
+        v-col.recipe-modal__summary
           .subtitle-1 {{ $t('health.views.diet.recipeModal.summary') }}
           nutrients-chart(
             v-if="localItem.ingredients.length"
@@ -102,6 +102,7 @@
       :items="localFoods"
       :selected-items="selectedItems"
       :title="$t('health.views.diet.recipeModal.ingredientSelector')"
+      content-class="recipe-modal__ingredient-selector"
       @cancel="onSelectModalCancel()"
       @confirm="onSelectModalConfirm($event)"
     )
@@ -114,7 +115,7 @@
       fixed
     )
       template(v-slot:activator)
-        v-btn(
+        v-btn.recipe-modal__fab(
           v-model="isFabActive"
           color="primary"
           fab
@@ -122,7 +123,7 @@
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose }}
           v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
-      v-btn(
+      v-btn.recipe-modal__fab__ingredients(
         v-if="$vuetify.breakpoint.xs"
         color="green lighten-2"
         dark
@@ -130,7 +131,7 @@
         @click="openSelectModal()"
       )
         v-icon {{ $theme.icons.mdiPlus }}
-      v-btn(
+      v-btn.recipe-modal__fab__remove(
         color="red lighten-2"
         fab
         dark

@@ -62,7 +62,7 @@ describe('Functional / Core / Profile', () => {
       .clear().type(updatedUser.profileImageUrl);
     cy.get('.profile__general__submit').as('submit')
       .click()
-      .should('have.class', 'v-btn--loading');
+      .should('be.disabled');
 
     cy.get('.notifications')
       .contains(/profile.*updated/i).should('be.visible');
@@ -164,7 +164,7 @@ describe('Functional / Core / Profile', () => {
       .type(update.password);
     cy.get('.profile__password__submit')
       .click()
-      .should('have.class', 'v-btn--loading');
+      .should('be.disabled');
 
     cy.get('.notifications')
       .contains(/password.*updated/i).should('be.visible');

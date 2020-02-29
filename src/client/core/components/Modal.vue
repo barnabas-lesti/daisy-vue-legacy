@@ -7,7 +7,10 @@
     :scrollable="!$vuetify.breakpoint.xs"
     max-width="40rem"
   )
-    v-card.modal__content(tile)
+    v-card.modal__content(
+      :class="contentClass"
+      tile
+    )
       v-toolbar.modal__toolbar(
         v-if="$vuetify.breakpoint.xs"
         :color="headerColor || 'primary'"
@@ -39,7 +42,7 @@
             v-icon {{ $theme.icons.mdiClose }}
       v-card-title.pa-4(v-if="!$vuetify.breakpoint.xs") {{ title }}
       v-divider
-      v-card-text.modal__toolbar.pa-4
+      v-card-text.modal__content
         slot
       template(v-if="!$vuetify.breakpoint.xs")
         v-divider
@@ -95,6 +98,7 @@ export default {
     withRemove: Boolean,
     headerColor: String,
     readonly: Boolean,
+    contentClass: String,
   },
   data () {
     return {
@@ -138,4 +142,6 @@ export default {
   &__toolbar
     .v-toolbar__content
       padding-right: .25rem
+  &__content
+    padding: 16px 16px 64px 16px !important
 </style>

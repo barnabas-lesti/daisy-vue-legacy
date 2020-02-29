@@ -8,24 +8,18 @@ export default {
   },
 
   async register (context, user) {
-    context.dispatch('loading', true);
     await http.put('/api/auth/register', user);
-    context.dispatch('loading', false);
   },
 
   async signInWithCredentials (context, { email, password }) {
-    context.dispatch('loading', true);
     const { user, authHeader } = await http.post('/api/auth/sign-in', { email, password });
     context.commit('setUser', user);
     context.commit('setAuthHeader', authHeader);
-    context.dispatch('loading', false);
   },
   async signInWithAuthHeader (context, authHeader) {
-    context.dispatch('loading', true);
     context.commit('setAuthHeader', authHeader);
     const user = await http.get('/api/auth/profile');
     context.commit('setUser', user);
-    context.dispatch('loading', false);
   },
   signOut (context) {
     context.commit('setUser', null);
@@ -33,15 +27,11 @@ export default {
   },
 
   async updatePassword (context, { password, newPassword }) {
-    context.dispatch('loading', true);
     await http.patch('/api/auth/profile/password', { password, newPassword });
-    context.dispatch('loading', false);
   },
   async updateProfile (context, update) {
-    context.dispatch('loading', true);
     const updatedUser = await http.patch('/api/auth/profile', update);
     context.commit('setUser', updatedUser);
-    context.dispatch('loading', false);
   },
 
   async notify (context, payload) {

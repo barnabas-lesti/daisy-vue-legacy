@@ -4,6 +4,7 @@ import User from '../../src/client/core/models/user';
 import Food from '../../src/client/health/models/food';
 import Recipe from '../../src/client/health/models/recipe';
 import DietItem from '../../src/client/health/models/diet-item';
+import DiaryItem from '../../src/client/health/models/diary-item';
 
 const authHeader = () => '<authHeaderValue>';
 const randomFloat = (max) => parseFloat((Math.random() * max).toFixed(2)); // Faker random.float() is/was bugged...
@@ -45,8 +46,8 @@ const recipe = (userId, foods, numberOfIngredients = 2) => {
   if (foods && foods.length > 0) {
     while (ingredients.length < numberOfIngredients) {
       const food = foods[faker.random.number(foods.length - 1)];
-      if (ingredients.map(item => item.food.id).indexOf(food.id) === -1) {
-        ingredients.push(new Recipe.Ingredient({ amount: randomFloat(2048), food }));
+      if (ingredients.map(item => item.id).indexOf(food.id) === -1) {
+        ingredients.push(new Recipe.Ingredient({ amount: randomFloat(2048), ...food }));
       }
     }
   }
@@ -71,6 +72,15 @@ const convertToDietItem = (item) => {
   else return DietItem.convertFromFood(item);
 };
 
+const diaryItem = (userId, items = []) => {
+  return new DiaryItem({
+    userId,
+    id: faker.random.uuid(),
+    summary: faker.random.words(4),
+    items,
+  });
+};
+
 export default {
   faker,
   randomFloat,
@@ -82,5 +92,6 @@ export default {
   foods,
   recipe,
   recipes,
+  diaryItem,
   convertToDietItem,
 };
