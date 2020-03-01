@@ -10,7 +10,6 @@ export default {
     return {
       options: {
         // Base setup, then component override
-
         ...this.chartOptions,
       },
     };

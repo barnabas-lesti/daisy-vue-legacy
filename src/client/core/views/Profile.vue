@@ -30,9 +30,8 @@
             name="profileImageUrl"
           )
           .d-flex.my-4.justify-end
-            v-btn.profile__general__submit(
+            v-btn.profile__general__submit.primary(
               :disabled="loading"
-              color="primary"
               type="submit"
               large
               tile
@@ -69,9 +68,8 @@
             type="password"
           )
           .d-flex.my-4.justify-end
-            v-btn.profile__password__submit(
+            v-btn.profile__password__submit.primary(
               :disabled="loading"
-              color="primary"
               type="submit"
               large
               tile
@@ -79,7 +77,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   data () {
@@ -113,7 +111,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('core', [ 'loading' ]),
+    ...mapGetters('core', [ 'loading' ]),
   },
   methods: {
     async updateProfile () {

@@ -4,19 +4,20 @@
     dense
     clipped-left
   )
-    v-app-bar-nav-icon.navbar__toggle(@click="$emit('toggle-sidebar')")
-    v-toolbar-title {{ $t('core.appTitle') }}
-
-    v-spacer
-    v-btn.navbar__loader(
+    v-btn(
       v-if="loading"
       color="primary"
       loading
-      small
       icon
     )
-    profile-menu(:user="user")
+    v-app-bar-nav-icon.navbar__toggle(
+      v-else
+      @click="$emit('toggle-sidebar')"
+    )
+    v-toolbar-title.title {{ $t('core.appTitle') }}
 
+    v-spacer
+    profile-menu(:user="user")
 </template>
 
 <script>

@@ -55,19 +55,15 @@
 
       v-row
         v-col(v-if="!readonly && !$vuetify.breakpoint.xs")
-          v-btn.mr-4(
-            color="green lighten-2"
+          v-btn.mr-4.green.lighten-2.white--text(
             small
-            dark
             fab
             @click="openSelectModal()"
           )
             v-icon {{ $theme.icons.mdiPlus }}
-          v-btn.mr-4(
-            color="red lighten-2"
+          v-btn.mr-4.red.lighten-2.white--text(
             small
             fab
-            dark
             @click="onRemoveClick()"
           )
             v-icon {{ $theme.icons.mdiPlaylistRemove }}
@@ -82,7 +78,7 @@
             :items="ingredients"
             with-amount
             without-serving
-            readonly
+            :readonly="readonly"
             :selectable="isInRemoveMode"
             :single-select="!isInRemoveMode"
             @item:change="onIngredientAmountChange($event)"
@@ -116,30 +112,24 @@
       fixed
     )
       template(v-slot:activator)
-        v-btn.recipe-modal__fab(
+        v-btn.recipe-modal__fab.primary(
           v-model="isFabActive"
-          color="primary"
           fab
           large
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose }}
           v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
-      v-btn.recipe-modal__fab__ingredients(
+      v-btn.recipe-modal__fab__ingredients.green.lighten-2.white--text(
         v-if="$vuetify.breakpoint.xs"
-        color="green lighten-2"
-        dark
         fab
         @click="openSelectModal()"
       )
         v-icon {{ $theme.icons.mdiPlus }}
-      v-btn.recipe-modal__fab__remove(
-        color="red lighten-2"
+      v-btn.recipe-modal__fab__remove.red.lighten-2.white--text(
         fab
-        dark
         @click="onRemoveClick()"
       )
         v-icon {{ $theme.icons.mdiPlaylistRemove }}
-
 </template>
 
 <script>

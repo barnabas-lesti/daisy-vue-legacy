@@ -6,18 +6,14 @@
 
     v-row
       v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
-        v-btn.diet__new-food.mr-4(
-          color="green lighten-1"
+        v-btn.diet__new-food.mr-4.green.lighten-1.white--text(
           small
-          dark
           fab
           @click="newFood()"
         )
           v-icon {{ $theme.icons.mdiFoodApple }}
-        v-btn.diet__new-recipe(
-          color="brown lighten-1"
+        v-btn.diet__new-recipe.brown.lighten-1.white--text(
           small
-          dark
           fab
           @click="newRecipe()"
         )
@@ -65,24 +61,19 @@
       fixed
     )
       template(v-slot:activator)
-        v-btn.diet__fab(
+        v-btn.diet__fab.primary(
           v-model="isFabActive"
-          color="primary"
           fab
           large
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose }}
           v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
-      v-btn.diet__fab__new-food(
-        color="green lighten-1"
-        dark
+      v-btn.diet__fab__new-food.green.lighten-1.white--text(
         fab
         @click="newFood()"
       )
         v-icon {{ $theme.icons.mdiFoodApple }}
-      v-btn.diet__fab__new-recipe(
-        color="brown lighten-1"
-        dark
+      v-btn.diet__fab__new-recipe.brown.lighten-1.white--text(
         fab
         @click="newRecipe()"
       )
@@ -119,10 +110,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('core', [ 'loading' ]),
     ...mapState('health', {
       foods: state => state.diet.foods.map(food => DietItem.convertFromFood(food)),
     }),
+    ...mapGetters('core', [ 'loading' ]),
     ...mapGetters('health', {
       items: 'diet/items',
     }),

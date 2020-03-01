@@ -4,8 +4,11 @@ import eventBus from '../event-bus';
 import User from '../../models/user';
 
 export default {
-  'setLoading' (state, value) {
-    state.loading = value;
+  'asyncRegistry/push' (state, item) {
+    state.asyncRegistry.push(item);
+  },
+  'asyncRegistry/remove' (state, item) {
+    state.asyncRegistry = [...state.asyncRegistry.filter(entry => entry !== item)];
   },
 
   'pushSidebarItems' ({ sidebarItems }, newItems) {

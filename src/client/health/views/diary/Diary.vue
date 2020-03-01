@@ -19,27 +19,22 @@
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
-        v-btn.mr-4(
-          color="green lighten-2"
+        v-btn.mr-4.green.lighten-2.white--text(
+          :disabled="loading"
           small
           fab
-          dark
           @click="saveItem()"
         )
           v-icon {{ $theme.icons.mdiCheck }}
-        v-btn.mr-4.diary__open-select-modal(
-          color="teal lighten-2"
+        v-btn.diary__open-select-modal.mr-4.teal.lighten-2.white--text(
           small
           fab
-          dark
           @click="openSelectModal()"
         )
           v-icon {{ $theme.icons.mdiPlus }}
-        v-btn(
-          color="red lighten-2"
+        v-btn.red.lighten-2.white--text(
           small
           fab
-          dark
           @click="onRemoveClick()"
         )
           v-icon {{ $theme.icons.mdiPlaylistRemove }}
@@ -98,32 +93,26 @@
       fixed
     )
       template(v-slot:activator)
-        v-btn.diary__fab(
+        v-btn.diary__fab.primary(
           v-model="isFabActive"
-          color="primary"
           fab
           large
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
           v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
-      v-btn(
-        color="green lighten-2"
+      v-btn.green.lighten-2.white--text(
+        :disabled="loading"
         fab
-        dark
         @click="saveItem()"
       )
         v-icon {{ $theme.icons.mdiCheck }}
-      v-btn.diary__fab__open-select-modal(
-        color="teal lighten-2"
+      v-btn.diary__fab__open-select-modal.teal.lighten-2.white--text(
         fab
-        dark
         @click="openSelectModal()"
       )
         v-icon {{ $theme.icons.mdiPlus }}
-      v-btn(
-        color="red lighten-2"
+      v-btn.red.lighten-2.white--text(
         fab
-        dark
         @click="onRemoveClick()"
       )
         v-icon {{ $theme.icons.mdiPlaylistRemove }}
@@ -163,10 +152,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('core', [ 'loading' ]),
     ...mapState('health', {
       diaryItem: state => state.diary.item,
     }),
+    ...mapGetters('core', [ 'loading' ]),
     ...mapGetters('health', {
       dietItems: 'diet/items',
     }),

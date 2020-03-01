@@ -19,9 +19,8 @@
       type="password"
     )
     .d-flex.mb-4.justify-end
-      v-btn(
+      v-btn.primary(
         :loading="loading"
-        color="primary"
         type="submit"
         large
         tile

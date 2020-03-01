@@ -5,6 +5,7 @@
         v-model="sidebar.isOpen"
         :items="sortedSidebarItems"
         :active-route="$route.name"
+        :loading="loading"
       )
       navbar(
         :user="user"
@@ -40,8 +41,8 @@ export default {
   }),
 
   computed: {
-    ...mapState('core', [ 'loading', 'user', 'notifications' ]),
-    ...mapGetters('core', [ 'sortedSidebarItems' ]),
+    ...mapState('core', [ 'user', 'notifications' ]),
+    ...mapGetters('core', [ 'loading', 'sortedSidebarItems' ]),
   },
 };
 </script>

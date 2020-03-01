@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import SignInForm from './SignInForm';
 
@@ -58,7 +58,8 @@ export default {
   },
 
   computed: {
-    ...mapState('core', [ 'loading', 'authHeader' ]),
+    ...mapState('core', [ 'authHeader' ]),
+    ...mapGetters('core', [ 'loading' ]),
   },
 
   methods: {

@@ -31,8 +31,7 @@
           ) {{ getItemIcon(item.itemType) }}
           .ml-4 {{ item.name }}
       template(v-slot:item.serving.value="{ item }")
-        v-chip(
-          color="grey lighten-4"
+        v-chip.grey.lighten-4(
           label
           link
         ) {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
@@ -44,8 +43,7 @@
             @save="onAmountSave(item)"
             @cancel="onAmountCancel(item)"
           )
-            v-chip.diet-table__table__amount-display(
-              color="grey lighten-2"
+            v-chip.diet-table__table__amount-display.grey.lighten-2(
               label
               link
             ) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}

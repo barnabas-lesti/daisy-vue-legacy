@@ -11,32 +11,28 @@
       :class="contentClass"
       tile
     )
-      v-toolbar.modal__toolbar(
+      v-toolbar.modal__toolbar.white--text(
         v-if="$vuetify.breakpoint.xs"
         :color="headerColor || 'primary'"
-        dark
       )
         v-toolbar-title {{ title }}
         v-spacer
         v-toolbar-items
-          v-btn.modal__toolbar__confirm(
+          v-btn.modal__toolbar__confirm.white--text(
             v-if="!readonly"
             :loading="loading"
             icon
-            dark
             @click="confirm()"
           )
             v-icon {{ $theme.icons.mdiCheck }}
-          v-btn.modal__toolbar__remove(
+          v-btn.modal__toolbar__remove.white--text(
             v-if="!readonly && withRemove"
             icon
-            dark
             @click="remove()"
           )
             v-icon {{ $theme.icons.mdiDelete }}
-          v-btn.modal__toolbar__cancel(
+          v-btn.modal__toolbar__cancel.white--text(
             icon
-            dark
             @click="cancel()"
           )
             v-icon {{ $theme.icons.mdiClose }}
@@ -54,17 +50,14 @@
             tile
             @click="cancel()"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn.modal__remove.ma-0.ml-4(
+          v-btn.modal__remove.ma-0.ml-4.red.lighten-2.white--text(
             v-if="!readonly && withRemove"
-            color="red lighten-2"
-            dark
             tile
             @click="remove()"
           ) {{ $t('core.components.modal.remove') }}
-          v-btn.modal__confirm.ma-0.ml-4(
+          v-btn.modal__confirm.ma-0.ml-4.primary(
             v-if="!readonly"
             :loading="loading"
-            color="primary"
             tile
             @click="confirm()"
           ) {{ $t('core.components.modal.confirm') }}
@@ -83,8 +76,7 @@
             autofocus
             @click="confirmRemoveDialog = false;"
           ) {{ $t('core.components.modal.cancel') }}
-          v-btn.modal__confirm-remove__confirm(
-            color="primary"
+          v-btn.modal__confirm-remove__confirm.primary(
             tile
             text
             @click="confirmRemove()"

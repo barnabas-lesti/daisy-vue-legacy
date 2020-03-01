@@ -2,7 +2,7 @@ import config from '../config';
 
 export default {
   config,
-  loading: false,
+  asyncRegistry: [],
   user: null,
   authHeader: null,
   notifications: [],

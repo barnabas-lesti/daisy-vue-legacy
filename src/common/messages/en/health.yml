@@ -95,13 +95,6 @@ components:
         required: Name is required
       server:
         unknown: Unknown error occurred
-  notifications:
-    food:
-      saved: Food successfully saved
-      removed: Food successfully deleted
-    recipe:
-      saved: Recipe successfully saved
-      removed: Recipe successfully deleted
 
 widgets:
   nutrientSummary:
@@ -121,6 +114,13 @@ views:
     newRecipeButton: Create recipe
     showFoods: Show food
     showRecipes: Show recipes
+    notifications:
+      food:
+        saved: Food successfully saved
+        removed: Food successfully deleted
+      recipe:
+        saved: Recipe successfully saved
+        removed: Recipe successfully deleted
 
   diary:
     title: Health Diary

@@ -22,14 +22,12 @@
       offset-y
     )
       v-spacer
-      v-btn(
-        color="primary"
+      v-btn.primary(
         text
         tile
         @click="menu = false"
       ) {{ $t('core.components.formDatePicker.cancel') }}
-      v-btn(
-        color="primary"
+      v-btn.primary(
         text
         tile
         @click="$datePicker.menu.save(_value)"

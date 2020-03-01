@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import RegisterForm from './RegisterForm';
 
@@ -43,7 +43,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('core', [ 'loading' ]),
+    ...mapGetters('core', [ 'loading' ]),
   },
   methods: {
     async register (form) {
