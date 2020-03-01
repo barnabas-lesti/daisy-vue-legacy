@@ -8,7 +8,11 @@ export default {
     {
       path: '/health/diary',
       name: 'health.diary',
-      redirect: { name: 'health.diary.date', params: { dateString: DiaryItem.today() } },
+      beforeEnter: async (to, from, next) => {
+        const diaryItem = store.state.health.diary.item || {};
+        const dateString = diaryItem.dateString || DiaryItem.today();
+        next({ name: 'health.diary.date', params: { dateString } });
+      },
     },
     {
       path: '/health/diary/:dateString',
@@ -30,7 +34,7 @@ export default {
   ],
   sidebarItems: [
     {
-      labelKey: 'health.views.diary.title',
+      labelKey: 'health.views.diary.sidebarTitle',
       icon: icons.mdiCalendar,
       routeName: 'health.diary',
     },

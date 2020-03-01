@@ -2,7 +2,6 @@
   v-list.list(flat)
       list-item(:item="dashboard")
       v-divider
-
       template(
         v-for="item in items"
       )
@@ -10,6 +9,7 @@
           v-if="item.items"
           :key="item.label || item.labelKey"
           :group="item"
+          :active-route="activeRoute"
         )
         list-item(
           v-else
@@ -17,9 +17,7 @@
           :item="item"
         )
       v-divider
-
       list-item(:item="profile")
-
 </template>
 
 <script>
@@ -34,16 +32,17 @@ export default {
   },
   props: {
     items: Array,
+    activeRoute: String,
   },
   data () {
     return {
       dashboard: new SidebarItem({
-        labelKey: 'core.views.dashboard.title',
+        labelKey: 'core.views.dashboard.sidebarTitle',
         icon: this.$theme.icons.mdiViewDashboard,
         routeName: 'dashboard',
       }),
       profile: new SidebarItem({
-        labelKey: 'core.views.profile.title',
+        labelKey: 'core.views.profile.sidebarTitle',
         icon: this.$theme.icons.mdiAccount,
         routeName: 'profile',
       }),

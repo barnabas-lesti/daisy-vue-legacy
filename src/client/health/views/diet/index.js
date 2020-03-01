@@ -4,7 +4,7 @@ import icons from '../../../core/theme/icons';
 export default {
   routes: [
     {
-      path: '/health/diet',
+      path: '/health/food-and-recipes',
       name: 'health.diet',
       component: () => import(/* webpackChunkName: "health.diet" */ './Diet.vue'),
       beforeEnter: async (to, from, next) => {
@@ -15,7 +15,7 @@ export default {
   ],
   sidebarItems: [
     {
-      labelKey: 'health.views.diet.title',
+      labelKey: 'health.views.diet.sidebarTitle',
       icon: icons.mdiFoodApple,
       routeName: 'health.diet',
     },

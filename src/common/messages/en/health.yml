@@ -1,4 +1,5 @@
 title: Health
+sidebarTitle: Health
 
 common:
   units:
@@ -50,12 +51,19 @@ components:
   dietTableFilters:
     search: Search
 
+widgets:
+  nutrientSummary:
+    title: Nutrient summary
+    date: Date
+
 views:
   dashboard:
-    title: Dashboard
+    title: Health Dashboard
+    sidebarTitle: Dashboard
 
   diet:
-    title: Diet
+    title: Food & Recipes
+    sidebarTitle: Food & Recipes
     search: Search
     newFoodButton: Create food
     newRecipeButton: Create recipe
@@ -112,7 +120,8 @@ views:
         removed: Recipe successfully deleted
 
   diary:
-    title: Diary
+    title: Health Diary
+    sidebarTitle: Diary
     datePicker: Date
     summary: Summary
     consumption: Consumption

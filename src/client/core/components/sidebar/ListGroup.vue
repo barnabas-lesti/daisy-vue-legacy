@@ -23,17 +23,10 @@ export default {
   },
   props: {
     group: Object,
+    activeRoute: String,
   },
   computed: {
-    isActive () {
-      return this.$route.path.indexOf(this.getActivePath()) !== -1;
-    },
-  },
-  methods: {
-    getActivePath () {
-      const { route } = this.$router.resolve({ name: this.group.routeName });
-      return route.path;
-    },
+    isActive () { return this.activeRoute.indexOf(this.group.routeName) !== -1; },
   },
 };
 </script>

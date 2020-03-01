@@ -7,5 +7,4 @@ export default {
   authHeader: null,
   notifications: [],
   sidebarItems: [],
-  breadcrumbs: [],
 };

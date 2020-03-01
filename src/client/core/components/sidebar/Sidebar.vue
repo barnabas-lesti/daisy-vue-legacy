@@ -6,7 +6,10 @@
       app
       clipped
     )
-      list(:items="items")
+      list(
+        :items="items"
+        :active-route="activeRoute"
+      )
     v-navigation-drawer(
       v-else
       :mini-variant="!model"
@@ -14,7 +17,10 @@
       app
       clipped
     )
-      list(:items="items")
+      list(
+        :items="items"
+        :active-route="activeRoute"
+      )
 
 </template>
 
@@ -28,6 +34,7 @@ export default {
   props: {
     value: Boolean,
     items: Array,
+    activeRoute: String,
   },
   computed: {
     model: {

@@ -1,5 +1,7 @@
 import http from '../../../core/plugins/http';
 
+import DiaryItem from '../../models/diary-item';
+
 export default {
   async 'diet/fetchFoods' (context) {
     const foods = await http.get('/api/health/diet/foods');
@@ -59,8 +61,9 @@ export default {
     }
   },
   async 'diary/ensureItem' (context, dateString) {
-    const { item } = context.state.diary;
-    if (!item || item.dateString !== dateString) {
+    const diaryItem = context.state.diary.item || {};
+    dateString = dateString || diaryItem.dateString || DiaryItem.today();
+    if (diaryItem.dateString !== dateString) {
       await context.dispatch('diary/fetchItem', dateString);
     }
   },

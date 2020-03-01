@@ -10,7 +10,7 @@ export default {
   ],
   sidebarItems: [
     {
-      labelKey: 'health.views.dashboard.title',
+      labelKey: 'health.views.dashboard.sidebarTitle',
       icon: icons.mdiViewDashboardOutline,
       routeName: 'health.dashboard',
     },

@@ -1,15 +1,17 @@
 <template lang="pug">
   .diary.view
     v-row
-      v-col.d-flex.justify-space-between
+      v-col
         h1 {{ $t('health.views.diary.title') }}
-        .diary__date-picker
-          form-date-picker(
-            v-model="dateString"
-            :label="$t('health.views.diary.datePicker')"
-            :loading="loading"
-            append-icon
-          )
+      v-col.d-flex.justify-sm-end(
+        :cols="$vuetify.breakpoint.xs ? 12 : ''"
+      )
+        .diary__date-picker(:class="[ !$vuetify.breakpoint.xs ? 'diary__date-picker--narrow' : '' ]")
+        form-date-picker(
+          v-model="dateString"
+          :label="$t('health.views.diary.datePicker')"
+          :loading="loading"
+        )
 
     v-row(v-if="nutrientSummary")
       v-col
@@ -217,7 +219,7 @@ export default {
 
 <style lang="sass">
 .diary
-  &__date-picker
+  &__date-picker--narrow
     max-width: 8rem
 
 </style>

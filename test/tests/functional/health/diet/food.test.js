@@ -12,7 +12,7 @@ describe('Functional / Health / Diet / Food', () => {
     const foods = mocks.foods(user.id);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
-      .visit('/health/diet');
+      .visit('/health/food-and-recipes');
 
     cy.get('.diet__fab')
       .click();
@@ -69,7 +69,7 @@ describe('Functional / Health / Diet / Food', () => {
     const food = mocks.food(user.id);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user)
-      .visit('/health/diet?selected=new-food');
+      .visit('/health/food-and-recipes?selected=new-food');
 
     cy.get('.food-modal__form').as('form')
       .submit()
@@ -92,7 +92,7 @@ describe('Functional / Health / Diet / Food', () => {
     const existingFood = foods[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
-      .visit('/health/diet');
+      .visit('/health/food-and-recipes');
 
     cy.get('.diet .diet-table tbody').contains(existingFood.name)
       .click();
@@ -116,7 +116,7 @@ describe('Functional / Health / Diet / Food', () => {
     const food = foods[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
-      .visit(`/health/diet?selected=${food.id}`);
+      .visit(`/health/food-and-recipes?selected=${food.id}`);
 
     cy.get('.modal__toolbar__remove')
       .click();

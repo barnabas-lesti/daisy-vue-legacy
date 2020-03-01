@@ -4,6 +4,7 @@
       sidebar(
         v-model="sidebar.isOpen"
         :items="sortedSidebarItems"
+        :active-route="$route.name"
       )
       navbar(
         :user="user"
@@ -13,10 +14,6 @@
 
     v-content
       v-container(fluid)
-        v-breadcrumbs.ma-0.pa-0(
-          v-if="user && breadcrumbs && breadcrumbs.length > 0"
-          :items="breadcrumbs"
-        )
         router-view
         notifications(:items="notifications")
 
@@ -43,7 +40,7 @@ export default {
   }),
 
   computed: {
-    ...mapState('core', [ 'loading', 'user', 'breadcrumbs', 'notifications' ]),
+    ...mapState('core', [ 'loading', 'user', 'notifications' ]),
     ...mapGetters('core', [ 'sortedSidebarItems' ]),
   },
 };

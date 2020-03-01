@@ -1,5 +1,7 @@
 <template lang="pug">
-  .nutrients-chart
+  .nutrients-chart(
+    :class="[ stretch ? 'nutrients-chart--stretch' : '' ]"
+  )
     v-row
       v-col(sm="6")
         doughnut-chart(
@@ -7,7 +9,10 @@
           :chart-options="chartOptions"
         )
       v-col(sm="6")
-        v-card
+        v-card(
+          tile
+          :flat="stretch"
+        )
           v-card-text
             .d-flex.justify-space-between.black--text
               .title {{ $t('health.components.nutrientsChart.table.calories') }}
@@ -39,6 +44,7 @@ export default {
   },
   props: {
     nutrients: Food.Nutrients,
+    stretch: Boolean,
   },
   data () {
     const { colors } = this.$theme;
@@ -101,6 +107,11 @@ export default {
       padding-left: 0
 
     th:last-of-type, td:last-of-type
+      padding-right: 0
+
+  &--stretch
+    .v-card__text
+      padding-left: 0
       padding-right: 0
 
 </style>

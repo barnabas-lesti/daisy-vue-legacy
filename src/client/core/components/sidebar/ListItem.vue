@@ -3,7 +3,6 @@
     :to="{ name: item.routeName }"
     :class="`list-item--${item.routeName.replace(/\\./i, '-')}`"
     color="primary"
-    :exact="item.exact !== undefined ? item.exact : true"
     link
     :dense="dense"
   )

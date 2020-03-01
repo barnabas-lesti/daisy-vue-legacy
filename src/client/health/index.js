@@ -9,7 +9,7 @@ import './plugins/store';
 
 router.addSidebarItems([
   {
-    labelKey: 'health.title',
+    labelKey: 'health.sidebarTitle',
     icon: icons.mdiCardsHeart,
     routeName: 'health',
     items: [

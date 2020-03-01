@@ -5,8 +5,7 @@ import store from './store';
 import SidebarItem from '../models/sidebar-item';
 
 class Route {
-  constructor ({ exact, path, name, component, meta, beforeEnter, redirect }) {
-    this.exact = exact;
+  constructor ({ path, name, component, meta, beforeEnter, redirect }) {
     this.path = path;
     this.name = name;
     this.component = component;

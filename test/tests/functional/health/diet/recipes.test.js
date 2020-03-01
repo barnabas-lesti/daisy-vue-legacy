@@ -11,7 +11,7 @@ describe('Functional / Health / Recipes', () => {
 
   it('Recipe modal should be accessible for the user', () => {
     stubs['health/dietItems'](user)
-      .visit('/health/diet');
+      .visit('/health/food-and-recipes');
     cy.get('.diet__fab')
       .should('be.visible')
       .click();
@@ -54,7 +54,7 @@ describe('Functional / Health / Recipes', () => {
     const foods = mocks.foods(user.id);
     const recipe = mocks.recipe(user.id, foods);
     stubs['health/dietItems'](user, { foods })
-      .visit('/health/diet?selected=new-recipe');
+      .visit('/health/food-and-recipes?selected=new-recipe');
 
     fillForm(recipe);
     verifySummary(getNutrientSummary(recipe));
@@ -76,7 +76,7 @@ describe('Functional / Health / Recipes', () => {
     const existingRecipe = recipes[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes })
-      .visit('/health/diet');
+      .visit('/health/food-and-recipes');
 
     cy.get('.diet .diet-table tbody').contains(existingRecipe.name)
       .click();
@@ -104,7 +104,7 @@ describe('Functional / Health / Recipes', () => {
     const recipe = recipes[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes })
-      .visit(`/health/diet?selected=${recipe.id}`);
+      .visit(`/health/food-and-recipes?selected=${recipe.id}`);
 
     cy.get('.modal__toolbar__remove')
       .click();

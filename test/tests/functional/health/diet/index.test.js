@@ -18,20 +18,20 @@ describe('Functional / Health / Diet', () => {
     cy.get('.navbar__toggle')
       .click();
     cy.get('.list-group--health')
-      .click();
-    // .should('have.class', 'v-list-group--active');
+      .click()
+      .should('have.class', 'v-list-group--active');
     cy.get('.list-item--health-diet')
-      .click();
-    // .should('have.class', 'v-list-item--active');
+      .click()
+      .should('have.class', 'v-list-item--active');
     cy.url()
-      .should('include', '/health/diet');
+      .should('include', '/health/food-and-recipes');
   });
 
   it('Should allow filtering on the table items', () => {
     const foods = mocks.foods(user.id);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
-      .visit('/health/diet');
+      .visit('/health/food-and-recipes');
 
     cy.get('.diet-table-filters__search')
       .type(foods[0].name);

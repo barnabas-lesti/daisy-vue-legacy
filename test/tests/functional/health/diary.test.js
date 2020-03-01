@@ -19,11 +19,11 @@ describe('Functional / Health / Calculator', () => {
     cy.get('.navbar__toggle')
       .click();
     cy.get('.list-group--health')
-      .click();
-    // .should('have.class', 'v-list-group--active');
+      .click()
+      .should('have.class', 'v-list-group--active');
     cy.get('.list-item--health-diary')
-      .click();
-    // .should('have.class', 'v-list-item--active');
+      .click()
+      .should('have.class', 'v-list-item--active');
     cy.url()
       .should('include', '/health/diary');
   });
