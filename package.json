@@ -1,6 +1,6 @@
 {
   "name": "aurora-web-app",
-  "version": "1.0.0",
+  "version": "1.3.3",
   "description": "Web application and data API for Aurora.",
   "author": "Barnabas Lesti <barnabas.lesti@gmail.com>",
   "license": "ISC",
