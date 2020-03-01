@@ -1,3 +1,5 @@
+title: Health
+
 common:
   units:
     g: g
@@ -49,8 +51,8 @@ components:
     search: Search
 
 views:
-  health:
-    title: Health
+  dashboard:
+    title: Dashboard
 
   diet:
     title: Diet
@@ -108,16 +110,6 @@ views:
       recipe:
         saved: Recipe successfully saved
         removed: Recipe successfully deleted
-
-  exercise:
-    title: Exercise
-
-  calculator:
-    title: Calculator
-    search: Search
-    changeItems: Add/remove items
-    selectModal:
-      title: Add/remove items
 
   diary:
     title: Diary

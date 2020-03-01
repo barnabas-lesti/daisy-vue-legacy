@@ -1,17 +1,33 @@
 import router from '../core/plugins/router';
+import icons from '../core/theme/icons';
 
-import health from './views/health';
+import dashboard from './views/dashboard';
 import diary from './views/diary';
 import diet from './views/diet';
 
 import './plugins/store';
 
 router.addSidebarItems([
-  ...health.sidebarItems,
+  {
+    labelKey: 'health.title',
+    icon: icons.mdiCardsHeart,
+    routeName: 'health',
+    items: [
+      ...dashboard.sidebarItems,
+      ...diet.sidebarItems,
+      ...diary.sidebarItems,
+    ],
+  },
 ]);
 
 router.addRoutes([
-  ...health.routes,
+  {
+    path: '/health',
+    name: 'health',
+    redirect: { name: 'health.dashboard' },
+  },
+
+  ...dashboard.routes,
   ...diary.routes,
   ...diet.routes,
 ]);

@@ -194,9 +194,9 @@ function changeAmountInModal (item, value) {
   return changeAmount(cy.get('.select-modal__table'), item, value);
 }
 
-function changeAmountInTable (item, value) {
-  return changeAmount(cy.get('.calculator__table'), item, value);
-}
+// function changeAmountInTable (item, value) {
+//   return changeAmount(cy.get('.calculator__table'), item, value);
+// }
 
 function changeAmount (source, item, value) {
   source

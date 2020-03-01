@@ -1,7 +1,5 @@
 <template lang="pug">
-  .health.view
-    h1 {{ $t('health.views.health.title') }}
-
+  .health-dashboard Lorem ipsum
 </template>
 
 <script>

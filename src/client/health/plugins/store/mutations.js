@@ -1,4 +1,3 @@
-import storage from '../../../core/plugins/storage';
 import Food from '../../models/food';
 import Recipe from '../../models/recipe';
 import DiaryItem from '../../models/diary-item';
@@ -44,12 +43,6 @@ export default {
   },
   'diet/removeRecipe' (state, recipe) {
     state.diet.recipes = state.diet.recipes.splice(0).filter(item => item.id !== recipe.id);
-  },
-
-  'calculator/setItemSkeletons' (state, items) {
-    state.calculator.itemSkeletons = [...items]
-      .map(item => ({ amount: item.amount, id: item.id, itemType: item.itemType }));
-    storage.saveToLocalStorage('health/calculator/itemSkeletons', state.calculator.itemSkeletons);
   },
 
   'diary/setItem' (state, diaryItem) {

@@ -4,10 +4,6 @@ export default {
     recipes: null,
   },
 
-  calculator: {
-    itemSkeletons: null,
-  },
-
   diary: {
     item: null,
   },

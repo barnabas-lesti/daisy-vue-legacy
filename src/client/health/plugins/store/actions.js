@@ -49,21 +49,6 @@ export default {
     await context.dispatch('diet/fetchItems');
   },
 
-  'calculator/setItems' (context, items) {
-    context.commit('calculator/setItemSkeletons', items);
-  },
-  'calculator/updateItem' (context, item) {
-    const items = context.getters['calculator/items'];
-    context.dispatch('calculator/setItems', items.map(subject => {
-      if (subject.id === item.id) return item;
-      return subject;
-    }));
-  },
-  'calculator/removeItem' (context, item) {
-    const items = context.getters['calculator/items'];
-    context.dispatch('calculator/setItems', items.filter(subject => subject.id !== item.id));
-  },
-
   async 'diary/fetchItem' (context, dateString) {
     try {
       const item = await http.get(`/api/health/diary/${dateString}`);

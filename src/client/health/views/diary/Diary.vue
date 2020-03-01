@@ -54,8 +54,8 @@
           :single-select="!isInRemoveMode"
           with-amount
           without-serving
-          @select="onCalculatorTableSelect($event)"
-          @item:change="onCalculatorItemChange($event)"
+          @select="onDiaryTableSelect($event)"
+          @item:change="onDiaryTableItemChange($event)"
         )
 
     v-row
@@ -168,12 +168,12 @@ export default {
     },
   },
   methods: {
-    onCalculatorTableSelect (item) {
+    onDiaryTableSelect (item) {
       if (!this.isInRemoveMode) {
         this.$router.push({ name: 'health.diet', query: { 'selected': item.id } });
       }
     },
-    onCalculatorItemChange (item) {
+    onDiaryTableItemChange (item) {
       this.$store.dispatch('health/diary/updateItem', item);
     },
     openSelectModal () {
