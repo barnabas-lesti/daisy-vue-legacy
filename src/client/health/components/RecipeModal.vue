@@ -13,30 +13,30 @@
     template(v-if="localItem")
       v-row
         v-col
-          .subtitle-1 {{ $t('health.views.diet.recipeModal.general') }}
+          .subtitle-1 {{ $t('health.components.recipeModal.general') }}
           v-form.recipe-modal__form(
             ref="form"
             @submit.prevent="confirm()"
           )
             .red--text.mb-4(v-if="serverErrorType")
-              | {{ $t(`health.views.diet.recipeModal.errors.server.${serverErrorType}`) }}
+              | {{ $t(`health.components.recipeModal.errors.server.${serverErrorType}`) }}
             v-text-field(
               v-model="localItem.name"
-              :label="$t('health.views.diet.recipeModal.form.name')"
+              :label="$t('health.components.recipeModal.form.name')"
               :rules="rules.name"
               :readonly="readonly"
               name="name"
             )
             v-text-field(
               v-model="localItem.description"
-              :label="$t('health.views.diet.recipeModal.form.description')"
+              :label="$t('health.components.recipeModal.form.description')"
               :readonly="readonly"
               name="description"
             )
             .recipe-modal__form__serving
               v-text-field(
                 v-model="localItem.serving.value"
-                :label="$t('health.views.diet.recipeModal.form.serving.value')"
+                :label="$t('health.components.recipeModal.form.serving.value')"
                 :readonly="readonly"
                 name="servingValue"
               )
@@ -44,7 +44,7 @@
                 v-select(
                   v-model="localItem.serving.unit"
                   :items="units"
-                  :label="$t('health.views.diet.recipeModal.form.serving.unit')"
+                  :label="$t('health.components.recipeModal.form.serving.unit')"
                   :readonly="readonly"
                   name="servingUnit"
                 )
@@ -54,7 +54,7 @@
             )
 
       v-row
-        v-col(v-if="!$vuetify.breakpoint.xs")
+        v-col(v-if="!readonly && !$vuetify.breakpoint.xs")
           v-btn.mr-4(
             color="green lighten-2"
             small
@@ -82,6 +82,7 @@
             :items="ingredients"
             with-amount
             without-serving
+            readonly
             :selectable="isInRemoveMode"
             :single-select="!isInRemoveMode"
             @item:change="onIngredientAmountChange($event)"
@@ -89,26 +90,26 @@
           v-divider
       v-row
         v-col.recipe-modal__summary
-          .subtitle-1 {{ $t('health.views.diet.recipeModal.summary') }}
+          .subtitle-1 {{ $t('health.components.recipeModal.summary') }}
           nutrients-chart(
             v-if="localItem.ingredients.length"
             :nutrients="localItem.getNutrients()"
           )
-          .text-center.mt-4(v-else) {{ $t('health.views.diet.recipeModal.noIngredients') }}
+          .text-center.mt-4(v-else) {{ $t('health.components.recipeModal.noIngredients') }}
 
     select-modal(
       v-model="isSelectModalOpen"
       :loading="loading"
       :items="localFoods"
       :selected-items="selectedItems"
-      :title="$t('health.views.diet.recipeModal.ingredientSelector')"
+      :title="$t('health.components.recipeModal.ingredientSelector')"
       content-class="recipe-modal__ingredient-selector"
       @cancel="onSelectModalCancel()"
       @confirm="onSelectModalConfirm($event)"
     )
 
     v-speed-dial(
-      v-if="$vuetify.breakpoint.xs"
+      v-if="!readonly && $vuetify.breakpoint.xs"
       v-model="isFabActive"
       bottom
       right
@@ -142,15 +143,15 @@
 </template>
 
 <script>
-import Food from '../../models/food';
-import Recipe from '../../models/recipe';
-import DietItem from '../../models/diet-item';
+import Food from '../models/food';
+import Recipe from '../models/recipe';
+import DietItem from '../models/diet-item';
 
-import Modal from '../../../core/components/Modal';
-import DietTable from '../../components/DietTable';
-import DietTableFilters from '../../components/DietTableFilters';
-import NutrientsChart from '../../components/NutrientsChart';
-import SelectModal from '../../components/SelectModal';
+import Modal from '../../core/components/Modal';
+import DietTable from './DietTable';
+import DietTableFilters from './DietTableFilters';
+import NutrientsChart from './NutrientsChart';
+import SelectModal from './SelectModal';
 
 export default {
   components: {
@@ -184,13 +185,13 @@ export default {
       tableSelection: [],
       units: Food.unitValues.map(value => ({ text: this.$tc(`health.common.units.${value}`, 2), value })),
       rules: {
-        name: [ v => !!v || this.$t('health.views.diet.recipeModal.errors.name.required') ],
+        name: [ v => !!v || this.$t('health.components.recipeModal.errors.name.required') ],
       },
     };
   },
   computed: {
     title () {
-      const prefix = 'health.views.diet.recipeModal.';
+      const prefix = 'health.components.recipeModal.';
       if (this.readonly) return this.$t(prefix + 'title.view');
       if (this.localItem && this.localItem.id) return this.$t(prefix + 'title.edit');
       return this.$t(prefix + 'title.new');

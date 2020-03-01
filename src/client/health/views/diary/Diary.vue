@@ -76,6 +76,20 @@
       @confirm="onSelectModalConfirm($event)"
     )
 
+    food-modal(
+      v-model="selectedItem && selectedItem.itemType === itemTypes.FOOD"
+      :item="selectedItem"
+      readonly
+      @cancel="onDietModalCancel()"
+    )
+
+    recipe-modal(
+      v-model="selectedItem && selectedItem.itemType === itemTypes.RECIPE"
+      :item="selectedItem"
+      readonly
+      @cancel="onDietModalCancel()"
+    )
+
     v-speed-dial(
       v-if="$vuetify.breakpoint.xs"
       v-model="isFabActive"
@@ -118,11 +132,14 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 
+import DietItem from '../../models/diet-item';
 import FormDatePicker from '../../../core/components/FormDatePicker';
 import DietTable from '../../components/DietTable';
 import DietTableFilters from '../../components/DietTableFilters';
 import NutrientsChart from '../../components/NutrientsChart';
 import SelectModal from '../../components/SelectModal';
+import FoodModal from '../../components/FoodModal';
+import RecipeModal from '../../components/RecipeModal';
 
 export default {
   components: {
@@ -131,9 +148,12 @@ export default {
     FormDatePicker,
     NutrientsChart,
     SelectModal,
+    FoodModal,
+    RecipeModal,
   },
   data () {
     return {
+      itemTypes: DietItem.itemTypes,
       searchString: '',
       isFabActive: false,
       isSelectModalOpen: false,
@@ -161,6 +181,25 @@ export default {
         }
       },
     },
+    selectedItem: {
+      get () {
+        const selected = this.$route.query['selected'];
+        const item = this.tableItems.filter(item => item.id === selected)[0];
+        if (item) {
+          return item;
+        } else {
+          this.$router.clearQuery('selected');
+          return null;
+        }
+      },
+      set (newValue) {
+        if (newValue) {
+          this.$router.pushQuery({ 'selected': newValue.id });
+        } else {
+          this.$router.clearQuery('selected');
+        }
+      },
+    },
     tableItems () {
       const { items } = this.diaryItem || {};
       return items || [];
@@ -170,9 +209,12 @@ export default {
     },
   },
   methods: {
+    onDietModalCancel () {
+      this.selectedItem = null;
+    },
     onDiaryTableSelect (item) {
       if (!this.isInRemoveMode) {
-        this.$router.push({ name: 'health.diet', query: { 'selected': item.id } });
+        this.selectedItem = item;
       }
     },
     onDiaryTableItemChange (item) {

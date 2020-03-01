@@ -16,24 +16,24 @@
       @submit.prevent="confirm()"
     )
       .red--text.mb-4(v-if="serverErrorType")
-        | {{ $t(`health.views.diet.foodModal.errors.server.${serverErrorType}`) }}
+        | {{ $t(`health.components.foodModal.errors.server.${serverErrorType}`) }}
       v-text-field(
         v-model="localItem.name"
-        :label="$t('health.views.diet.foodModal.form.name')"
+        :label="$t('health.components.foodModal.form.name')"
         :rules="rules.name"
         :readonly="readonly"
         name="name"
       )
       v-text-field(
         v-model="localItem.description"
-        :label="$t('health.views.diet.foodModal.form.description')"
+        :label="$t('health.components.foodModal.form.description')"
         :readonly="readonly"
         name="description"
       )
       .food-modal__form__serving
         v-text-field(
           v-model="localItem.serving.value"
-          :label="$t('health.views.diet.foodModal.form.serving.value')"
+          :label="$t('health.components.foodModal.form.serving.value')"
           :readonly="readonly"
           name="servingValue"
         )
@@ -41,34 +41,34 @@
           v-select(
             v-model="localItem.serving.unit"
             :items="units"
-            :label="$t('health.views.diet.foodModal.form.serving.unit')"
+            :label="$t('health.components.foodModal.form.serving.unit')"
             :readonly="readonly"
             name="servingUnit"
           )
       v-text-field(
         v-model="localItem.nutrients.calories"
-        :label="$t('health.views.diet.foodModal.form.calories')"
+        :label="$t('health.components.foodModal.form.calories')"
         :readonly="readonly"
         name="calories"
         type="number"
       )
       v-text-field(
         v-model="localItem.nutrients.carbs"
-        :label="$t('health.views.diet.foodModal.form.carbs')"
+        :label="$t('health.components.foodModal.form.carbs')"
         :readonly="readonly"
         name="carbs"
         type="number"
       )
       v-text-field(
         v-model="localItem.nutrients.protein"
-        :label="$t('health.views.diet.foodModal.form.protein')"
+        :label="$t('health.components.foodModal.form.protein')"
         :readonly="readonly"
         name="protein"
         type="number"
       )
       v-text-field(
         v-model="localItem.nutrients.fat"
-        :label="$t('health.views.diet.foodModal.form.fat')"
+        :label="$t('health.components.foodModal.form.fat')"
         :readonly="readonly"
         name="fat"
         type="number"
@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import Food from '../../models/food';
-import Modal from '../../../core/components/Modal';
+import Food from '../models/food';
+import Modal from '../../core/components/Modal';
 
 export default {
   components: {
@@ -101,13 +101,13 @@ export default {
       localItem: this.item ? new Food(this.item) : null,
       units: Food.unitValues.map(value => ({ text: this.$tc(`health.common.units.${value}`, 2), value })),
       rules: {
-        name: [ v => !!v || this.$t('health.views.diet.foodModal.errors.name.required') ],
+        name: [ v => !!v || this.$t('health.components.foodModal.errors.name.required') ],
       },
     };
   },
   computed: {
     title () {
-      const prefix = 'health.views.diet.foodModal.';
+      const prefix = 'health.components.foodModal.';
       if (this.readonly) return this.$t(prefix + 'title.view');
       if (this.localItem && this.localItem.id) return this.$t(prefix + 'title.edit');
       return this.$t(prefix + 'title.new');

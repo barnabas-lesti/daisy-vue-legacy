@@ -95,8 +95,8 @@ import { mapState, mapGetters } from 'vuex';
 import DietItem from '../../models/diet-item';
 import DietTable from '../../components/DietTable';
 import DietTableFilters from '../../components/DietTableFilters';
-import FoodModal from './FoodModal';
-import RecipeModal from './RecipeModal';
+import FoodModal from '../../components/FoodModal';
+import RecipeModal from '../../components/RecipeModal';
 
 const modalModes = {
   NEW_FOOD: 'new-food',
