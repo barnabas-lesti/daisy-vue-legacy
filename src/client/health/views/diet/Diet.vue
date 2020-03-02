@@ -1,11 +1,9 @@
 <template lang="pug">
-  .diet.view.pb-12
+  .diet.pb-12
     v-row
-      v-col
-        h1 {{ $t('health.views.diet.title') }}
-
-    v-row
-      v-col.d-flex.align-end(v-if="!$vuetify.breakpoint.xs")
+      v-col.d-flex.align-end(
+        v-if="!$vuetify.breakpoint.xs"
+      )
         v-btn.diet__new-food.mr-4.green.lighten-1.white--text(
           small
           fab

@@ -1,9 +1,5 @@
 <template lang="pug">
-  .dashboard.view
-    v-row
-      v-col
-        h1 {{ $t('core.views.dashboard.title') }}
-
+  .dashboard
 </template>
 
 <script>

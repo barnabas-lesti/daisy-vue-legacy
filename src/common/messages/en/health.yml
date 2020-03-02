@@ -104,7 +104,7 @@ widgets:
 
 views:
   dashboard:
-    title: Dashboard
+    title: Health Dashboard
 
   diet:
     title: Food & Recipes

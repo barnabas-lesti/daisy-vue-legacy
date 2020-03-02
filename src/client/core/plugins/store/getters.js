@@ -5,6 +5,7 @@ export default {
 
   'title': (state) => i18n.t(state.titleKey),
   'title/tab': (state, getters) => `${getters['title']} | Aurora`,
+  'title/navbar': (state, getters) => `${getters['title']}`,
 
   'sidebarItems/sorted' ({ sidebarItems }) {
     const sortedItems = [...sidebarItems];

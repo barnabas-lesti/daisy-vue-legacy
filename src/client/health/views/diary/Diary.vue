@@ -1,10 +1,9 @@
 <template lang="pug">
   .diary.view
     v-row
-      v-col
-        h1 {{ $t('health.views.diary.title') }}
-      v-col.d-flex.justify-sm-end(
-        :cols="$vuetify.breakpoint.xs ? 12 : ''"
+      v-col(
+        :cols="$vuetify.breakpoint.xs ? 12 : 6"
+        :offset="$vuetify.breakpoint.xs ? '': 6"
       )
         .diary__date-picker(:class="[ !$vuetify.breakpoint.xs ? 'diary__date-picker--narrow' : '' ]")
         form-date-picker(

@@ -14,7 +14,7 @@
       v-else
       @click="$emit('toggle-sidebar')"
     )
-    v-toolbar-title.title {{ $t('core.appTitle') }}
+    v-toolbar-title.title {{ title }}
 
     v-spacer
     profile-menu(:user="user")
@@ -30,6 +30,7 @@ export default {
   props: {
     user: Object,
     loading: Boolean,
+    title: String,
   },
 };
 </script>

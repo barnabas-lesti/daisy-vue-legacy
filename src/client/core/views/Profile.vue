@@ -1,9 +1,5 @@
 <template lang="pug">
-  .profile.view
-    v-row
-      v-col
-        h1 {{ $t('core.views.profile.title') }}
-
+  .profile
     v-row.profile__general
       v-col(md="6")
         h2 {{ $t('core.views.profile.general.title') }}

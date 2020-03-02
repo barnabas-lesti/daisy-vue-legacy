@@ -52,27 +52,30 @@ router.addRoutes([
   },
 ]);
 
-const auth = () => (to, from, next) => {
+const authGuard = () => (to, from, next) => {
   const { name, fullPath } = to;
   const { user } = store.state.core;
 
   const toRoute = router.getRoutes().filter(route => route.name === name)[0];
   if (!user && !toRoute.meta.isPublic) {
-    return next({ name: 'signIn', query: { referer: fullPath } });
+    next({ name: 'signIn', query: { referer: fullPath } });
+    return;
   }
 
   if (user && toRoute.meta.isPublic) {
-    return next({ name: 'home' });
+    next({ name: 'home' });
+    return;
   }
 
-  return next();
+  next();
 };
 
-router.beforeEach(auth());
-
-router.beforeEach(async (to, from, next) => {
+const pageTitleGuard = () => async (to, from, next) => {
   const toRoute = router.getRoutes().filter(route => route.name === to.name)[0];
   await store.dispatch('core/setTitleKey', toRoute.titleKey);
   document.title = store.getters['core/title/tab'];
   next();
-});
+};
+
+router.beforeEach(authGuard());
+router.beforeEach(pageTitleGuard());

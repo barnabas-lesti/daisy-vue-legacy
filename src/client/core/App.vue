@@ -46,7 +46,7 @@ export default {
     ...mapGetters('core', {
       loading: 'loading',
       sortedSidebarItems: 'sidebarItems/sorted',
-      navbarTitle: 'title',
+      navbarTitle: 'title/navbar',
     }),
   },
 };
