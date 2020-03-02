@@ -10,16 +10,19 @@ router.addRoutes([
   {
     path: '/dashboard',
     name: 'dashboard',
+    titleKey: 'core.views.dashboard.title',
     component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
   },
   {
     path: '/profile',
     name: 'profile',
+    titleKey: 'core.views.profile.title',
     component: () => import(/* webpackChunkName: "profile" */ './views/Profile.vue'),
   },
   {
     path: '/register',
     name: 'register',
+    titleKey: 'core.views.register.title',
     component: () => import(/* webpackChunkName: "register" */ './views/register/Register.vue'),
     meta: {
       isPublic: true,
@@ -28,6 +31,7 @@ router.addRoutes([
   {
     path: '/sign-in',
     name: 'signIn',
+    titleKey: 'core.views.signIn.title',
     component: () => import(/* webpackChunkName: "sign-in" */ './views/sign-in/SignIn.vue'),
     meta: {
       isPublic: true,
@@ -36,9 +40,9 @@ router.addRoutes([
   {
     path: '/sign-out',
     name: 'signOut',
-    beforeEnter: async () => {
-      await store.dispatch('core/signOut');
-      router.push({ name: 'signIn' });
+    beforeEnter: (to, from, next) => {
+      store.dispatch('core/signOut');
+      next({ name: 'signIn' });
     },
   },
   {
@@ -52,15 +56,23 @@ const auth = () => (to, from, next) => {
   const { name, fullPath } = to;
   const { user } = store.state.core;
 
-  const currentRoute = router.getRoutes().filter(route => route.name === name)[0];
-  if (!user && !currentRoute.meta.isPublic) {
+  const toRoute = router.getRoutes().filter(route => route.name === name)[0];
+  if (!user && !toRoute.meta.isPublic) {
     return next({ name: 'signIn', query: { referer: fullPath } });
   }
 
-  if (user && currentRoute.meta.isPublic) {
+  if (user && toRoute.meta.isPublic) {
     return next({ name: 'home' });
   }
 
   return next();
 };
+
 router.beforeEach(auth());
+
+router.beforeEach(async (to, from, next) => {
+  const toRoute = router.getRoutes().filter(route => route.name === to.name)[0];
+  await store.dispatch('core/setTitleKey', toRoute.titleKey);
+  document.title = store.getters['core/title/tab'];
+  next();
+});

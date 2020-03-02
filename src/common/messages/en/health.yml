@@ -1,5 +1,4 @@
 title: Health
-sidebarTitle: Health
 
 common:
   units:
@@ -100,15 +99,15 @@ widgets:
   nutrientSummary:
     title: Nutrient summary
     date: Date
+    noItems: No items added for today. To show the nutrient summary, {0}
+    noItemsLink: add items to this day.
 
 views:
   dashboard:
-    title: Health Dashboard
-    sidebarTitle: Dashboard
+    title: Dashboard
 
   diet:
     title: Food & Recipes
-    sidebarTitle: Food & Recipes
     search: Search
     newFoodButton: Create food
     newRecipeButton: Create recipe
@@ -123,8 +122,7 @@ views:
         removed: Recipe successfully deleted
 
   diary:
-    title: Health Diary
-    sidebarTitle: Diary
+    title: Diary
     datePicker: Date
     summary: Summary
     consumption: Consumption

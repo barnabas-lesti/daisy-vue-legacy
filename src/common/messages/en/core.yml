@@ -17,7 +17,6 @@ components:
 views:
   dashboard:
     title: Dashboard
-    sidebarTitle: Dashboard
 
   register:
     title: Register
@@ -68,7 +67,6 @@ views:
 
   profile:
     title: Profile
-    sidebarTitle: Profile
     general:
       title: General
       notifications:

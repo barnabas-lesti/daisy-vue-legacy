@@ -15,6 +15,8 @@
         :nutrients="nutrientSummary"
         stretch
       )
+      i18n(v-else, path="health.widgets.nutrientSummary.noItems")
+        router-link(:to="{ name: 'health.diary' }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
 </template>
 
 <script>

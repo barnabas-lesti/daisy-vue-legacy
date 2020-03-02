@@ -10,6 +10,7 @@
       navbar(
         :user="user"
         :loading="loading"
+        :title="navbarTitle"
         @toggle-sidebar="sidebar.isOpen = !sidebar.isOpen"
       )
 
@@ -42,7 +43,11 @@ export default {
 
   computed: {
     ...mapState('core', [ 'user', 'notifications' ]),
-    ...mapGetters('core', [ 'loading', 'sortedSidebarItems' ]),
+    ...mapGetters('core', {
+      loading: 'loading',
+      sortedSidebarItems: 'sidebarItems/sorted',
+      navbarTitle: 'title',
+    }),
   },
 };
 </script>

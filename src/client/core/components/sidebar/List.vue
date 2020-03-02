@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import SidebarItem from '../../models/sidebar-item';
 import ListGroup from './ListGroup.vue';
 import ListItem from './ListItem.vue';
 
@@ -36,16 +35,16 @@ export default {
   },
   data () {
     return {
-      dashboard: new SidebarItem({
-        labelKey: 'core.views.dashboard.sidebarTitle',
+      dashboard: {
+        labelKey: 'core.views.dashboard.title',
         icon: this.$theme.icons.mdiViewDashboard,
         routeName: 'dashboard',
-      }),
-      profile: new SidebarItem({
-        labelKey: 'core.views.profile.sidebarTitle',
+      },
+      profile: {
+        labelKey: 'core.views.profile.title',
         icon: this.$theme.icons.mdiAccount,
         routeName: 'profile',
-      }),
+      },
     };
   },
 };

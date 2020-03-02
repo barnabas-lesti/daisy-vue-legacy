@@ -5,12 +5,15 @@ import Notification from '../../models/notification';
 export default {
   async 'asyncRegistry/create' (context) {
     const id = createUUIDv4();
-    console.log(id);
     context.commit('asyncRegistry/push', id);
     return id;
   },
   'asyncRegistry/remove' (context, item) {
     context.commit('asyncRegistry/remove', item);
+  },
+
+  'setTitleKey' (context, titleKey) {
+    context.commit('setTitleKey', titleKey);
   },
 
   async register (context, user) {
@@ -40,8 +43,8 @@ export default {
     context.commit('setUser', updatedUser);
   },
 
-  async notify (context, payload) {
-    const notification = new Notification(getNotificationFromPayload(payload));
+  async 'notify' (context, payload) {
+    const notification = getNotificationFromPayload(payload);
     context.commit('pushNotification', notification);
     return new Promise(resolve => {
       window.setTimeout(() => {
@@ -51,16 +54,16 @@ export default {
     });
   },
   async 'notify/success' (context, payload) {
-    return context.dispatch('notify', { type: 'success', ...getNotificationFromPayload(payload) });
+    return context.dispatch('notify', { type: Notification.types.SUCCESS, ...getNotificationFromPayload(payload) });
   },
   async 'notify/info' (context, payload) {
-    return context.dispatch('notify', { type: 'info', ...getNotificationFromPayload(payload) });
+    return context.dispatch('notify', { type: Notification.types.INFO, ...getNotificationFromPayload(payload) });
   },
   async 'notify/warning' (context, payload) {
-    return context.dispatch('notify', { type: 'warning', ...getNotificationFromPayload(payload) });
+    return context.dispatch('notify', { type: Notification.types.WARNING, ...getNotificationFromPayload(payload) });
   },
   async 'notify/error' (context, payload) {
-    return context.dispatch('notify', { type: 'error', ...getNotificationFromPayload(payload) });
+    return context.dispatch('notify', { type: Notification.types.ERROR, ...getNotificationFromPayload(payload) });
   },
 };
 

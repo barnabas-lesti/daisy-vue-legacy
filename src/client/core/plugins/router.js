@@ -2,16 +2,27 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import store from './store';
-import SidebarItem from '../models/sidebar-item';
 
 class Route {
-  constructor ({ path, name, component, meta, beforeEnter, redirect }) {
+  constructor ({ path, name, titleKey, component, meta, beforeEnter, redirect }) {
     this.path = path;
     this.name = name;
+    this.titleKey = titleKey;
     this.component = component;
     this.meta = meta || {};
     this.beforeEnter = beforeEnter;
     this.redirect = redirect;
+  }
+}
+
+class SidebarItem {
+  constructor ({ icon, items, label, labelKey, order, routeName }) {
+    this.icon = icon;
+    this.items = items;
+    this.label = label;
+    this.labelKey = labelKey;
+    this.order = order || 0;
+    this.routeName = routeName;
   }
 }
 
@@ -55,16 +66,6 @@ class Router extends VueRouter {
 
   clearQuery (queryName) {
     this.pushQuery({ [queryName]: undefined });
-  }
-
-  backToReferer () {
-    const referer = this.currentRoute.query['referer'];
-    if (referer) {
-      this.push(referer)
-        // When reloading page, referer components are not created and error
-        // is thrown, for now clearing the params
-        .catch(() => this.clearQuery('referer'));
-    }
   }
 }
 

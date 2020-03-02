@@ -8,7 +8,8 @@ export default {
     {
       path: '/health/diary',
       name: 'health.diary',
-      beforeEnter: async (to, from, next) => {
+      titleKey: 'health.views.diary.title',
+      beforeEnter: (to, from, next) => {
         const diaryItem = store.state.health.diary.item || {};
         const dateString = diaryItem.dateString || DiaryItem.today();
         next({ name: 'health.diary.date', params: { dateString } });
@@ -17,6 +18,7 @@ export default {
     {
       path: '/health/diary/:dateString',
       name: 'health.diary.date',
+      titleKey: 'health.views.diary.title',
       component: () => import(/* webpackChunkName: "health.diary" */ './Diary.vue'),
       beforeEnter: async (to, from, next) => {
         const { dateString } = to.params;
@@ -34,7 +36,7 @@ export default {
   ],
   sidebarItems: [
     {
-      labelKey: 'health.views.diary.sidebarTitle',
+      labelKey: 'health.views.diary.title',
       icon: icons.mdiCalendar,
       routeName: 'health.diary',
     },

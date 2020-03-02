@@ -2,6 +2,7 @@ import storage from '../storage';
 import eventBus from '../event-bus';
 
 import User from '../../models/user';
+import Notification from '../../models/notification';
 
 export default {
   'asyncRegistry/push' (state, item) {
@@ -9,6 +10,10 @@ export default {
   },
   'asyncRegistry/remove' (state, item) {
     state.asyncRegistry = [...state.asyncRegistry.filter(entry => entry !== item)];
+  },
+
+  'setTitleKey' (state, titleKey) {
+    state.titleKey = titleKey;
   },
 
   'pushSidebarItems' ({ sidebarItems }, newItems) {
@@ -25,9 +30,9 @@ export default {
   },
 
   'pushNotification' (state, notification) {
-    state.notifications.push(notification);
+    state.notifications.push(new Notification(notification));
   },
   'removeNotification' (state, { id }) {
-    state.notifications = state.notifications.filter(item => item.id !== id);
+    state.notifications = [...state.notifications.filter(item => item.id !== id)];
   },
 };
