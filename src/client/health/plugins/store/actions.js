@@ -79,4 +79,21 @@ export default {
       context.commit('diary/setItem', savedItem);
     }
   },
+  async 'diary/nutrientTrend/fetchItems' (context, dateString) {
+    const items = await http.get('/api/health/diary', { params: { 'week-of-day': dateString } });
+    context.commit('diary/nutrientTrend/setItems', items);
+  },
+  async 'diary/nutrientTrend/ensureItems' (context, dateStringCandidate) {
+    const { nutrientTrend } = context.state.diary;
+    const currentDateString = nutrientTrend.dateString;
+    const newDateString = dateStringCandidate || currentDateString || DiaryItem.today();
+    if (!nutrientTrend.items || currentDateString !== newDateString) {
+      const activeDateRange = DiaryItem.getDatesOfWeek(currentDateString)
+        .map(date => date.format(DiaryItem.DATE_FORMAT));
+      context.commit('diary/nutrientTrend/setDateString', newDateString);
+      if (activeDateRange.indexOf(newDateString) === -1) {
+        await context.dispatch('diary/nutrientTrend/fetchItems', newDateString);
+      }
+    }
+  },
 };

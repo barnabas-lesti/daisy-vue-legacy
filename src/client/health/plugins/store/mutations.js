@@ -45,10 +45,16 @@ export default {
     state.diet.recipes = state.diet.recipes.splice(0).filter(item => item.id !== recipe.id);
   },
 
-  'diary/setItem' (state, diaryItem) {
-    state.diary.item = new DiaryItem(diaryItem);
+  'diary/setItem' (state, item) {
+    state.diary.item = new DiaryItem(item);
   },
   'diary/updateItem' (state, update) {
     state.diary.item = new DiaryItem({ ...state.diary.item, ...update });
+  },
+  'diary/nutrientTrend/setDateString' (state, dateString) {
+    state.diary.nutrientTrend.dateString = dateString;
+  },
+  'diary/nutrientTrend/setItems' (state, items) {
+    state.diary.nutrientTrend.items = [...(items || []).map(item => new DiaryItem(item))];
   },
 };

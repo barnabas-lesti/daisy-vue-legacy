@@ -29,10 +29,10 @@ export default {
     storage.saveToLocalStorage('core/authHeader', authHeader);
   },
 
-  'pushNotification' (state, notification) {
+  'notifications/push' (state, notification) {
     state.notifications.push(new Notification(notification));
   },
-  'removeNotification' (state, { id }) {
+  'notifications/remove' (state, { id }) {
     state.notifications = [...state.notifications.filter(item => item.id !== id)];
   },
 };

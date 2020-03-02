@@ -1,6 +1,6 @@
 <template lang="pug">
-  .nutrients-chart(
-    :class="[ stretch ? 'nutrients-chart--stretch' : '' ]"
+  .nutrient-summary-chart(
+    :class="[ stretch ? 'nutrient-summary-chart--stretch' : '' ]"
   )
     v-row
       v-col(sm="6")
@@ -15,27 +15,26 @@
         )
           v-card-text
             .d-flex.justify-space-between.black--text
-              .title {{ $t('health.components.nutrientsChart.table.calories') }}
+              .title {{ $t('health.components.nutrientSummaryChart.table.calories') }}
               .title.text-right
-                | {{ formatValue(nutrients.calories) }} {{ $t('health.common.units.calories') }}
-            v-simple-table.nutrients-chart__table
+                | {{ formatValue(summary.calories) }} {{ $t('health.common.units.calories') }}
+            v-simple-table.nutrient-summary-chart__table
               tbody
                 tr
-                  td {{ $t('health.components.nutrientsChart.table.carbs') }}
-                  td.text-right {{ formatValue(nutrients.carbs) }} {{ $t('health.common.units.g') }}
-                  td.text-right {{ getPercentage(nutrients.carbs) }} {{ $t('health.common.units.percent') }}
+                  td {{ $t('health.components.nutrientSummaryChart.table.carbs') }}
+                  td.text-right {{ formatValue(summary.carbs) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(summary.carbs) }} {{ $t('health.common.units.percent') }}
                 tr
-                  td {{ $t('health.components.nutrientsChart.table.protein') }}
-                  td.text-right {{ formatValue(nutrients.protein) }} {{ $t('health.common.units.g') }}
-                  td.text-right {{ getPercentage(nutrients.protein) }} {{ $t('health.common.units.percent') }}
+                  td {{ $t('health.components.nutrientSummaryChart.table.protein') }}
+                  td.text-right {{ formatValue(summary.protein) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(summary.protein) }} {{ $t('health.common.units.percent') }}
                 tr
-                  td {{ $t('health.components.nutrientsChart.table.fat') }}
-                  td.text-right {{ formatValue(nutrients.fat) }} {{ $t('health.common.units.g') }}
-                  td.text-right {{ getPercentage(nutrients.fat) }} {{ $t('health.common.units.percent') }}
+                  td {{ $t('health.components.nutrientSummaryChart.table.fat') }}
+                  td.text-right {{ formatValue(summary.fat) }} {{ $t('health.common.units.g') }}
+                  td.text-right {{ getPercentage(summary.fat) }} {{ $t('health.common.units.percent') }}
 </template>
 
 <script>
-import Food from '../models/food';
 import DoughnutChart from '../../core/components/charts/Doughnut';
 
 export default {
@@ -43,7 +42,7 @@ export default {
     DoughnutChart,
   },
   props: {
-    nutrients: Food.Nutrients,
+    item: Object,
     stretch: Boolean,
   },
   data () {
@@ -63,19 +62,22 @@ export default {
     };
   },
   computed: {
+    summary () {
+      return this.item ? this.item.getNutrients() : null;
+    },
     chartData () {
       const { colors } = this.$theme;
       return {
         labels: [
-          this.$t('health.components.nutrientsChart.legend.carbs'),
-          this.$t('health.components.nutrientsChart.legend.protein'),
-          this.$t('health.components.nutrientsChart.legend.fat'),
+          this.$t('health.components.nutrientSummaryChart.legend.carbs'),
+          this.$t('health.components.nutrientSummaryChart.legend.protein'),
+          this.$t('health.components.nutrientSummaryChart.legend.fat'),
         ],
         datasets: [{
           data: [
-            this.formatValue(this.nutrients.carbs),
-            this.formatValue(this.nutrients.protein),
-            this.formatValue(this.nutrients.fat),
+            this.formatValue(this.summary.carbs),
+            this.formatValue(this.summary.protein),
+            this.formatValue(this.summary.fat),
           ],
           backgroundColor: [
             colors.lightBlue.lighten2,
@@ -88,7 +90,7 @@ export default {
   },
   methods: {
     getPercentage (nutrient) {
-      const { carbs, protein, fat } = this.nutrients;
+      const { carbs, protein, fat } = this.summary;
       const total = carbs + protein + fat;
       if (!nutrient || !total) return 0;
       return this.formatValue(nutrient / total * 100);
@@ -101,7 +103,7 @@ export default {
 </script>
 
 <style lang="sass">
-.nutrients-chart
+.nutrient-summary-chart
   &__table
     th:first-of-type, td:first-of-type
       padding-left: 0

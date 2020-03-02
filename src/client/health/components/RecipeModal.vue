@@ -87,9 +87,9 @@
       v-row
         v-col.recipe-modal__summary
           .subtitle-1 {{ $t('health.components.recipeModal.summary') }}
-          nutrients-chart(
+          nutrient-summary-chart(
             v-if="localItem.ingredients.length"
-            :nutrients="localItem.getNutrients()"
+            :item="localItem"
           )
           .text-center.mt-4(v-else) {{ $t('health.components.recipeModal.noIngredients') }}
 
@@ -140,13 +140,13 @@ import DietItem from '../models/diet-item';
 import Modal from '../../core/components/Modal';
 import DietTable from './DietTable';
 import DietTableFilters from './DietTableFilters';
-import NutrientsChart from './NutrientsChart';
+import NutrientSummaryChart from './NutrientSummaryChart';
 import SelectModal from './SelectModal';
 
 export default {
   components: {
     Modal,
-    NutrientsChart,
+    NutrientSummaryChart,
     DietTable,
     DietTableFilters,
     SelectModal,

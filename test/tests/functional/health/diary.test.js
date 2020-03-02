@@ -36,7 +36,7 @@ describe('Functional / Health / Calculator', () => {
     stubs['health/diary'](user)
       .visit('/health/diary');
 
-    cy.get('.nutrients-chart')
+    cy.get('.nutrient-summary-chart')
       .should('not.be.visible');
 
     const food1 = foods[0];
@@ -117,7 +117,7 @@ describe('Functional / Health / Calculator', () => {
   //     .click();
   //   cy.get('.modal__confirm')
   //     .click();
-  //   cy.get('.nutrients-chart')
+  //   cy.get('.nutrient-summary-chart')
   //     .should('not.be.visible');
   // });
 

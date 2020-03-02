@@ -10,6 +10,7 @@ export default class DiaryItem {
   static isDateStringValid = isDateStringValid;
   static getNutrients = Food.getNutrients;
   static today = today;
+  static getDatesOfWeek = getDatesOfWeek;
 
   /**
    * @param {DiaryItem} args
@@ -36,4 +37,14 @@ function isDateStringValid (dateString) {
 
 function today () {
   return moment().format(DATE_FORMAT);
+}
+
+function getDatesOfWeek (date) {
+  date = typeof date === 'string' ? moment(date, DATE_FORMAT) : moment(date);
+  const firstDateOfWeek = moment(date).subtract(date.isoWeekday() - 1, 'days');
+  const dateList = [];
+  for (let i = 0; i < 7; i++) {
+    dateList.push(moment(firstDateOfWeek).add(i, 'days'));
+  }
+  return dateList;
 }

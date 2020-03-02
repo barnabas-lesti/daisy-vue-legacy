@@ -1,39 +1,39 @@
 <template lang="pug">
-  v-card.nutrient-summary-widget
+  v-card.nutrient-trend-widget
     v-card-title
       v-row(no-gutters)
-        v-col.mb-4 {{ $t('health.widgets.nutrientSummary.title') }}
+        v-col.mb-4 {{ $t('health.widgets.nutrientTrend.title') }}
         v-col(:cols="$vuetify.breakpoint.xs ? 12 : ''")
           form-date-picker(
             v-model="dateString"
-            :label="$t('health.widgets.nutrientSummary.date')"
+            :label="$t('health.widgets.nutrientTrend.date')"
             :loading="isLoading"
           )
     v-card-text
-      nutrient-summary-chart(
-        v-if="diaryItem"
-        :item="diaryItem"
-        stretch
+      nutrient-trend-chart(
+        v-if="items && items.length > 0"
+        :included-date-string="dateString"
+        :diaryItems="items"
       )
       v-progress-circular(
         v-else-if="isLoading"
         color="primary"
         indeterminate
       )
-      i18n(v-else, path="health.widgets.nutrientSummary.noItems")
-        router-link(:to="{ name: 'health.diary' }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
+      i18n(v-else, path="health.widgets.nutrientTrend.noItems")
+        router-link(:to="{ name: 'health.diary' }") {{ $t('health.widgets.nutrientTrend.noItemsLink') }}
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
 import FormDatePicker from '../../core/components/FormDatePicker';
-import NutrientSummaryChart from '../components/NutrientSummaryChart';
+import NutrientTrendChart from '../components/NutrientTrendChart';
 
 export default {
   components: {
     FormDatePicker,
-    NutrientSummaryChart,
+    NutrientTrendChart,
   },
   data () {
     return {
@@ -42,20 +42,20 @@ export default {
   },
   computed: {
     ...mapState('health', {
-      diaryItem: state => state.diary.item,
+      items: state => state.diary.nutrientTrend.items,
     }),
 
     dateString: {
-      get () { return this.diaryItem ? this.diaryItem.dateString : ''; },
+      get () { return this.$store.state.health.diary.nutrientTrend.dateString; },
       set (newDateString) {
         this.isLoading = true;
-        this.$store.dispatch('health/diary/ensureItem', newDateString)
+        this.$store.dispatch('health/diary/nutrientTrend/ensureItems', newDateString)
           .then(() => this.isLoading = false);
       },
     },
   },
   created () {
-    this.$store.dispatch('health/diary/ensureItem')
+    this.$store.dispatch('health/diary/nutrientTrend/ensureItems', this.dateString)
       .then(() => this.isLoading = false);
   },
 };

@@ -44,11 +44,11 @@ export default {
   },
 
   async 'notify' (context, payload) {
-    const notification = getNotificationFromPayload(payload);
-    context.commit('pushNotification', notification);
+    const notification = { id: Notification.createId(), ...getNotificationFromPayload(payload) };
+    context.commit('notifications/push', notification);
     return new Promise(resolve => {
       window.setTimeout(() => {
-        context.commit('removeNotification', notification);
+        context.commit('notifications/remove', notification);
         resolve();
       }, 3000);
     });

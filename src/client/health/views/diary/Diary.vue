@@ -12,9 +12,9 @@
           :loading="loading"
         )
 
-    v-row(v-if="nutrientSummary")
+    v-row(v-if="diaryItem")
       v-col
-        nutrients-chart.diary__summary(:nutrients="nutrientSummary")
+        nutrient-summary-chart.diary__summary(:item="diaryItem")
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
@@ -124,7 +124,7 @@ import DietItem from '../../models/diet-item';
 import FormDatePicker from '../../../core/components/FormDatePicker';
 import DietTable from '../../components/DietTable';
 import DietTableFilters from '../../components/DietTableFilters';
-import NutrientsChart from '../../components/NutrientsChart';
+import NutrientSummaryChart from '../../components/NutrientSummaryChart';
 import SelectModal from '../../components/SelectModal';
 import FoodModal from '../../components/FoodModal';
 import RecipeModal from '../../components/RecipeModal';
@@ -134,7 +134,7 @@ export default {
     DietTable,
     DietTableFilters,
     FormDatePicker,
-    NutrientsChart,
+    NutrientSummaryChart,
     SelectModal,
     FoodModal,
     RecipeModal,
@@ -191,9 +191,6 @@ export default {
     tableItems () {
       const { items } = this.diaryItem || {};
       return items || [];
-    },
-    nutrientSummary () {
-      return this.diaryItem ? this.diaryItem.getNutrients() : null;
     },
   },
   methods: {

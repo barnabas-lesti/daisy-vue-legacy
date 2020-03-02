@@ -6,5 +6,9 @@ export default {
 
   diary: {
     item: null,
+    nutrientTrend: {
+      dateString: '',
+      items: null,
+    },
   },
 };

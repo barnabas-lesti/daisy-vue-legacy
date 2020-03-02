@@ -17,7 +17,7 @@ components:
   selectModal:
     title: 'Add/remove items'
 
-  nutrientsChart:
+  nutrientSummaryChart:
     table:
       calories: Calories
       carbs: Carbs
@@ -27,6 +27,22 @@ components:
       carbs: Carbs (g)
       protein: Protein (g)
       fat: Fat (g)
+  nutrientTrendChart:
+    legend:
+      labels:
+        calories: Calories (cal)
+        carbs: Carbs (g)
+        protein: Protein (g)
+        fat: Fat (g)
+      days:
+        1: '{0}, Mo'
+        2: '{0}, Tu'
+        3: '{0}, We'
+        4: '{0}, Th'
+        5: '{0}, Fr'
+        6: '{0}, Sa'
+        0: '{0}, Su'
+
 
   dietTable:
     search: Search
@@ -99,6 +115,11 @@ widgets:
   nutrientSummary:
     title: Nutrient summary
     date: Date
+    noItems: No items added for today. To show the nutrient summary, {0}
+    noItemsLink: add items to this day.
+  nutrientTrend:
+    title: Nutrient trend
+    date: Date of week
     noItems: No items added for today. To show the nutrient summary, {0}
     noItemsLink: add items to this day.
 
