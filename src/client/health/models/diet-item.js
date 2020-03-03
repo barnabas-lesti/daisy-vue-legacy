@@ -31,7 +31,7 @@ export default class DietItem {
     switch (this.itemType) {
       case itemTypes.FOOD: return this.nutrients;
       case itemTypes.RECIPE: return Recipe.getNutrients(this.ingredients);
-      default: return {};
+      default: return new Food.Nutrients();
     }
   }
 

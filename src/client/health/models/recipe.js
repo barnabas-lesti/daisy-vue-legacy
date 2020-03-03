@@ -10,6 +10,7 @@ class Ingredient extends Food {
 export default class Recipe {
   static Ingredient = Ingredient;
   static getNutrients = Food.getNutrients;
+  static areNutrientsEmpty = Food.areNutrientsEmpty;
 
   /**
    * @param {Recipe} args
@@ -26,5 +27,9 @@ export default class Recipe {
 
   getNutrients () {
     return Food.getNutrients(this.ingredients);
+  }
+
+  areNutrientsEmpty () {
+    return Food.areNutrientsEmpty(this.getNutrients());
   }
 }

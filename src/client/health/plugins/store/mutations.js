@@ -45,16 +45,15 @@ export default {
     state.diet.recipes = state.diet.recipes.splice(0).filter(item => item.id !== recipe.id);
   },
 
-  'diary/setItem' (state, item) {
-    state.diary.item = new DiaryItem(item);
-  },
-  'diary/updateItem' (state, update) {
-    state.diary.item = new DiaryItem({ ...state.diary.item, ...update });
-  },
-  'diary/healthTrend/setDateString' (state, dateString) {
-    state.diary.healthTrend.dateString = dateString;
-  },
-  'diary/healthTrend/setItems' (state, items) {
-    state.diary.healthTrend.items = [...(items || []).map(item => new DiaryItem(item))];
+  'diary/updateItems' (state, payload = []) {
+    const providedDateStrings = payload.map(item => item.dateString);
+    const existingItems = state.diary.items.filter(item => providedDateStrings.indexOf(item.dateString) !== -1);
+    const updatedItems = payload.map(payloadItem => {
+      const existingItem = existingItems.filter(item => item.dateString === payloadItem.dateString)[0] || {};
+      return new DiaryItem({ ...existingItem, ...payloadItem });
+    });
+    const filteredExistingItems = state.diary.items.filter(item => providedDateStrings.indexOf(item.dateString) === -1);
+    filteredExistingItems.push(...updatedItems);
+    state.diary.items = [...filteredExistingItems];
   },
 };

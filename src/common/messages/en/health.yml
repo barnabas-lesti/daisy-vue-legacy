@@ -18,6 +18,7 @@ components:
     title: 'Add/remove items'
 
   nutrientSummaryChart:
+    noData: Nothing to display
     table:
       calories: Calories
       carbs: Carbs
@@ -43,7 +44,6 @@ components:
         5: '{0}, Fr'
         6: '{0}, Sa'
         0: '{0}, Su'
-
 
   dietTable:
     search: Search

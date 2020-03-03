@@ -21,6 +21,11 @@ export default {
     const { colors } = this.$theme;
     return {
       chartOptions: {
+        scales: {
+          yAxes: [{
+            ticks: { beginAtZero: true },
+          }],
+        },
         legend: {
           position: 'bottom',
           labels: {

@@ -2,7 +2,7 @@
   .nutrient-summary-chart(
     :class="[ stretch ? 'nutrient-summary-chart--stretch' : '' ]"
   )
-    v-row
+    v-row(v-if="!isSummaryEmpty")
       v-col(:cols="cols")
         doughnut-chart(
           :chart-data="chartData"
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import DiaryItem from '../models/diary-item';
 import DoughnutChart from '../../core/components/charts/Doughnut';
 
 export default {
@@ -62,6 +63,9 @@ export default {
     };
   },
   computed: {
+    isSummaryEmpty () {
+      return DiaryItem.areNutrientsEmpty(this.summary);
+    },
     cols () {
       switch (this.$vuetify.breakpoint.name) {
         case 'sm': return 6;

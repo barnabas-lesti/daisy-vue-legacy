@@ -32,6 +32,7 @@ export default class Food {
   static Nutrients = Nutrients;
   static Serving = Serving;
   static getNutrients = getNutrients;
+  static areNutrientsEmpty = areNutrientsEmpty;
 
   /**
    * @param {Food} args
@@ -48,6 +49,10 @@ export default class Food {
 
   getNutrients () {
     return this.nutrients;
+  }
+
+  areNutrientsEmpty () {
+    return areNutrientsEmpty(this.getNutrients());
   }
 }
 
@@ -66,4 +71,9 @@ function getNutrients (items) {
   }, new Nutrients());
 
   return summary;
+}
+
+function areNutrientsEmpty (nutrients) {
+  const { calories, carbs, protein, fat } = nutrients || {};
+  return !calories && !carbs && !protein && !fat;
 }

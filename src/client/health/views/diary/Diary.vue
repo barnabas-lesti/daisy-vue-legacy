@@ -15,10 +15,9 @@
     v-row
       v-col
         nutrient-summary-chart.diary__summary(
-          v-if="diaryItem && diaryItem.items.length"
+          v-if="nutrientSummary"
           :summary="nutrientSummary"
         )
-        .caption(v-else) {{ $t('health.views.diary.noItems') }}
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
@@ -58,13 +57,14 @@
           @item:change="onDiaryTableItemChange($event)"
         )
 
-    v-row
-      v-col
-        v-textarea(
-          v-model="diaryItem.summary"
-          :label="$t('health.views.diary.summary')"
-          name="summary"
-        )
+    template(v-if="diaryItem")
+      v-row
+        v-col
+          v-textarea(
+            v-model="diaryItem.summary"
+            :label="$t('health.views.diary.summary')"
+            name="summary"
+          )
 
     select-modal(
       v-model="isSelectModalOpen"
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import DietItem from '../../models/diet-item';
 import FormDatePicker from '../../../core/components/FormDatePicker';
@@ -152,12 +152,10 @@ export default {
       selectModalSelection: [],
       isInRemoveMode: false,
       tableSelection: [],
+      diaryItemCache: null,
     };
   },
   computed: {
-    ...mapState('health', {
-      diaryItem: state => state.diary.item,
-    }),
     ...mapGetters('core', [ 'loading' ]),
     ...mapGetters('health', {
       dietItems: 'diet/items',
@@ -167,11 +165,18 @@ export default {
       get () {
         return this.$route.params.dateString;
       },
-      set (dateString) {
-        if (dateString !== this.$route.params.dateString) {
-          this.$router.push({ name: 'health.diary.date', params: { dateString } });
+      set (newDateString) {
+        if (newDateString !== this.$route.params.dateString) {
+          this.diaryItemCache = this.diaryItem;
+          this.$router.push({ name: 'health.diary.date', params: { dateString: newDateString } });
         }
       },
+    },
+    diaryItem () {
+      return this.$store.state.health.diary.items.filter(item => item.dateString === this.dateString)[0] || this.diaryItemCache;
+    },
+    nutrientSummary () {
+      return this.diaryItem && this.diaryItem.getNutrients();
     },
     selectedItem: {
       get () {
@@ -193,11 +198,7 @@ export default {
       },
     },
     tableItems () {
-      const { items } = this.diaryItem || {};
-      return items || [];
-    },
-    nutrientSummary () {
-      return this.diaryItem.getNutrients();
+      return this.diaryItem && this.diaryItem.items;
     },
   },
   methods: {
@@ -210,7 +211,9 @@ export default {
       }
     },
     onDiaryTableItemChange (item) {
-      this.$store.dispatch('health/diary/updateItem', item);
+      const updatedItems = this.diaryItem.items.filter(subject => subject.id !== item.id);
+      updatedItems.push(item);
+      this.$store.dispatch('health/diary/updateLocalItem', { dateString: this.dateString, items: [ ...updatedItems ] } );
     },
     openSelectModal () {
       this.selectModalSelection = [...this.tableItems];
@@ -220,7 +223,7 @@ export default {
       this.isSelectModalOpen = false;
     },
     onSelectModalConfirm (items) {
-      this.$store.dispatch('health/diary/updateItem', { items });
+      this.$store.dispatch('health/diary/updateLocalItem', { items, dateString: this.dateString });
       this.isSelectModalOpen = false;
     },
     onRemoveClick () {
@@ -228,7 +231,7 @@ export default {
       if (!this.isInRemoveMode) {
         const removeIds = this.tableSelection.map(item => item.id);
         const items = this.diaryItem.items.filter(item => removeIds.indexOf(item.id) === -1);
-        this.$store.dispatch('health/diary/updateItem', { items });
+        this.$store.dispatch('health/diary/updateLocalItem', { items, dateString: this.dateString });
         this.tableSelection = [];
       }
     },
@@ -243,9 +246,12 @@ export default {
       }
     },
   },
+  created () {
+    this.diaryItemCache = this.diaryItem;
+  },
   watch: {
     async '$route.params.dateString' (newDateString) {
-      await this.$store.dispatch('health/diary/ensureItem', newDateString);
+      await this.$store.dispatch('health/diary/ensureItems', [ newDateString ]);
     },
   },
 };

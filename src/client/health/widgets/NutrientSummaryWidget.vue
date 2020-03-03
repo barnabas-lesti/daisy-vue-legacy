@@ -15,18 +15,17 @@
         :summary="nutrientSummary"
         stretch
       )
-      v-progress-circular(
-        v-else-if="isLoading"
-        color="primary"
-        indeterminate
-      )
+      .d-flex.align-center.justify-center.pa-4(v-else-if="isLoading")
+        v-progress-circular(
+          color="primary"
+          indeterminate
+        )
       i18n(v-else, path="health.widgets.nutrientSummary.noItems")
         router-link(:to="{ name: 'health.diary.date', params: { dateString } }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
+import DiaryItem from '../models/diary-item';
 import FormDatePicker from '../../core/components/FormDatePicker';
 import NutrientSummaryChart from '../components/NutrientSummaryChart';
 
@@ -38,28 +37,31 @@ export default {
   data () {
     return {
       isLoading: true,
+      dateString: DiaryItem.today(),
+      diaryItemCache: null,
     };
   },
   computed: {
-    ...mapState('health', {
-      diaryItem: state => state.diary.item,
-    }),
-
-    dateString: {
-      get () { return this.diaryItem ? this.diaryItem.dateString : ''; },
-      set (newDateString) {
-        this.isLoading = true;
-        this.$store.dispatch('health/diary/ensureItem', newDateString)
-          .then(() => this.isLoading = false);
-      },
+    diaryItem () {
+      return this.$store.state.health.diary.items.filter(item => item.dateString === this.dateString)[0] || this.diaryItemCache;
     },
     nutrientSummary () {
       return this.diaryItem && this.diaryItem.getNutrients();
     },
   },
-  created () {
-    this.$store.dispatch('health/diary/ensureItem')
-      .then(() => this.isLoading = false);
+  async created () {
+    this.isLoading = true;
+    await this.$store.dispatch('health/diary/ensureItems', [ this.dateString ]);
+    this.diaryItemCache = this.diaryItem;
+    this.isLoading = false;
+  },
+  watch: {
+    async 'dateString' (newDateString) {
+      this.isLoading = true;
+      await this.$store.dispatch('health/diary/ensureItems', [ newDateString ]);
+      this.diaryItemCache = this.diaryItem;
+      this.isLoading = false;
+    },
   },
 };
 </script>

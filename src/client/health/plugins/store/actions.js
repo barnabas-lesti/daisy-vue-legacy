@@ -1,7 +1,5 @@
 import http from '../../../core/plugins/http';
 
-import DiaryItem from '../../models/diary-item';
-
 export default {
   async 'diet/fetchFoods' (context) {
     const foods = await http.get('/api/health/diet/foods');
@@ -51,49 +49,30 @@ export default {
     await context.dispatch('diet/fetchItems');
   },
 
-  async 'diary/fetchItem' (context, dateString) {
-    try {
-      const item = await http.get(`/api/health/diary/${dateString}`);
-      context.commit('diary/setItem', { ...item, dateString });
-    } catch ({ error }) {
-      if (error !== 'NOT_FOUND') throw error;
-      context.commit('diary/setItem', { dateString });
+  async 'diary/fetchItems' (context, dateStrings = []) {
+    const responseItems = await http.get('/api/health/diary', { params: { 'by-date-strings': dateStrings } });
+    const items = dateStrings.map(dateString => {
+      return responseItems.filter(item => item.dateString === dateString)[0] || { dateString };
+    });
+    context.commit('diary/updateItems', items);
+  },
+  async 'diary/ensureItems' (context, dateStrings = []) {
+    const existingDateStrings = context.state.diary.items.map(item => item.dateString);
+    const missingDateStrings = dateStrings.filter(dateString => existingDateStrings.indexOf(dateString) === -1);
+    if (missingDateStrings.length > 0) {
+      await context.dispatch('diary/fetchItems', missingDateStrings);
     }
   },
-  async 'diary/ensureItem' (context, dateString) {
-    const diaryItem = context.state.diary.item || {};
-    dateString = dateString || diaryItem.dateString || DiaryItem.today();
-    if (diaryItem.dateString !== dateString) {
-      await context.dispatch('diary/fetchItem', dateString);
-    }
-  },
-  async 'diary/updateItem' (context, item) {
-    context.commit('diary/updateItem', item);
+  async 'diary/updateLocalItem' (context, item) {
+    context.commit('diary/updateItems', [ item ]);
   },
   async 'diary/saveItem' (context, item) {
     if (item.id) {
       const updatedItem = await http.patch(`/api/health/diary/${item.dateString}`, item);
-      context.commit('diary/setItem', updatedItem);
+      context.commit('diary/updateItems', [ updatedItem ]);
     } else {
       const savedItem = await http.put('/api/health/diary', item);
-      context.commit('diary/setItem', savedItem);
-    }
-  },
-  async 'diary/healthTrend/fetchItems' (context, dateString) {
-    const items = await http.get('/api/health/diary', { params: { 'week-of-day': dateString } });
-    context.commit('diary/healthTrend/setItems', items);
-  },
-  async 'diary/healthTrend/ensureItems' (context, dateStringCandidate) {
-    const { healthTrend } = context.state.diary;
-    const currentDateString = healthTrend.dateString;
-    const newDateString = dateStringCandidate || currentDateString || DiaryItem.today();
-    if (!healthTrend.items || currentDateString !== newDateString) {
-      const activeDateRange = DiaryItem.getDatesOfWeek(currentDateString)
-        .map(date => date.format(DiaryItem.DATE_FORMAT));
-      context.commit('diary/healthTrend/setDateString', newDateString);
-      if (activeDateRange.indexOf(newDateString) === -1) {
-        await context.dispatch('diary/healthTrend/fetchItems', newDateString);
-      }
+      context.commit('diary/updateItems', [ savedItem ]);
     }
   },
 };

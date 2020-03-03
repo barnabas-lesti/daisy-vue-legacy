@@ -5,10 +5,6 @@ export default {
   },
 
   diary: {
-    item: null,
-    healthTrend: {
-      dateString: '',
-      items: null,
-    },
+    items: [],
   },
 };

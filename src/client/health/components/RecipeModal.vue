@@ -88,7 +88,7 @@
         v-col.recipe-modal__summary
           .subtitle-1 {{ $t('health.components.recipeModal.summary') }}
           nutrient-summary-chart(
-            v-if="nutrientSummary"
+            v-if="!isNutrientSummaryEmpty"
             :summary="nutrientSummary"
           )
           .text-center.mt-4(v-else) {{ $t('health.components.recipeModal.noIngredients') }}
@@ -208,6 +208,9 @@ export default {
     },
     nutrientSummary () {
       return this.localItem && this.localItem.getNutrients();
+    },
+    isNutrientSummaryEmpty () {
+      return Recipe.areNutrientsEmpty(this.nutrientSummary);
     },
   },
   methods: {

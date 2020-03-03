@@ -19,22 +19,18 @@
           )
     v-card-text
       health-trend-chart(
-        v-if="diaryItems && diaryItems.length > 0"
+        v-if="diaryItems.length > 0"
         :labels="labels"
         :datasets="datasets"
       )
-      v-progress-circular(
-        v-else-if="isLoading"
-        color="primary"
-        indeterminate
-      )
-      i18n(v-else, path="health.widgets.healthTrend.noItems")
-        router-link(:to="{ name: 'health.diary.date', params: { dateString } }") {{ $t('health.widgets.healthTrend.noItemsLink') }}
+      .d-flex.align-center.justify-center.pa-4(v-else-if="isLoading")
+        v-progress-circular(
+          color="primary"
+          indeterminate
+        )
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 import DiaryItem from '../models/diary-item';
 import FormDatePicker from '../../core/components/FormDatePicker';
 import HealthTrendChart from '../components/HealthTrendChart';
@@ -60,38 +56,32 @@ export default {
     initialTrendType: {
       type: String,
       default: () => trendTypes.CALORIES,
-    }
+    },
   },
   data () {
     return {
       trendType: this.initialTrendType,
-      trendTypeOptions: Object.keys(trendTypes)
-        .map(key => ({
-          text: this.$t(`health.widgets.healthTrend.trendTypeOptions.${trendTypes[key]}`),
-          value: trendTypes[key],
-        })),
+      trendTypeOptions: Object.keys(trendTypes).map(key => ({
+        text: this.$t(`health.widgets.healthTrend.trendTypeOptions.${trendTypes[key]}`),
+        value: trendTypes[key],
+      })),
+
       isLoading: true,
+      dateString: DiaryItem.today(),
+      diaryItemsCache: [],
     };
   },
   computed: {
-    ...mapState('health', {
-      diaryItems: state => state.diary.healthTrend.items,
-    }),
-
-    dateString: {
-      get () { return this.$store.state.health.diary.healthTrend.dateString; },
-      set (newDateString) {
-        this.isLoading = true;
-        this.$store.dispatch('health/diary/healthTrend/ensureItems', newDateString)
-          .then(() => this.isLoading = false);
-      },
-    },
-
     datesOfWeek () {
       return DiaryItem.getDatesOfWeek(this.dateString);
     },
-    diaryItemDates () {
-      return this.diaryItems.map(item => item.dateString);
+    dateStringsOfWeek () {
+      return this.datesOfWeek.map(date => DiaryItem.convertDateToDateString(date));
+    },
+    diaryItems () {
+      const diaryItemsFromStore = this.$store.getters['health/diary/items/sorted']
+        .filter(item => this.dateStringsOfWeek.indexOf(item.dateString) !== -1);
+      return diaryItemsFromStore.length > 0 ? diaryItemsFromStore : this.diaryItemsCache;
     },
 
     labels () {
@@ -104,7 +94,6 @@ export default {
     datasets () {
       const { CALORIES, CARBS, PROTEIN, FAT } = nutrientNames;
       const { colors } = this.$theme;
-
       switch (this.trendType) {
         case trendTypes.MACROS:
           return [
@@ -130,27 +119,39 @@ export default {
     },
     getNutrientData (nutrientName) {
       const nutrientData = [];
-      for (let i = 0; i < this.datesOfWeek.length; i++) {
-        const dateString = this.datesOfWeek[i].format(DiaryItem.DATE_FORMAT);
-        const diaryItem = this.diaryItems.filter(item => item.dateString === dateString)[0];
-        if (!diaryItem || diaryItem.items.length < 1) {
+      for (let i = 0; i < this.diaryItems.length; i++) {
+        const diaryItem = this.diaryItems[i];
+        const nutrients = diaryItem.getNutrients();
+        if (DiaryItem.areNutrientsEmpty(nutrients)) {
           nutrientData.push(null);
         } else {
-          const nutrients = diaryItem.getNutrients();
           switch (nutrientName) {
-            case nutrientNames.CALORIES: nutrientData.push(nutrients.calories); break;
-            case nutrientNames.CARBS: nutrientData.push(nutrients.carbs); break;
-            case nutrientNames.PROTEIN: nutrientData.push(nutrients.protein); break;
-            case nutrientNames.FAT: nutrientData.push(nutrients.fat); break;
+            case nutrientNames.CALORIES: nutrientData.push(this.formatValue(nutrients.calories)); break;
+            case nutrientNames.CARBS: nutrientData.push(this.formatValue(nutrients.carbs)); break;
+            case nutrientNames.PROTEIN: nutrientData.push(this.formatValue(nutrients.protein)); break;
+            case nutrientNames.FAT: nutrientData.push(this.formatValue(nutrients.fat)); break;
           }
         }
       }
       return nutrientData;
     },
+    formatValue (value) {
+      return parseFloat(value).toFixed(2);
+    },
   },
-  created () {
-    this.$store.dispatch('health/diary/healthTrend/ensureItems', this.dateString)
-      .then(() => this.isLoading = false);
+  async created () {
+    this.isLoading = true;
+    await this.$store.dispatch('health/diary/ensureItems', [ ...this.dateStringsOfWeek ]);
+    this.diaryItemsCache = [ ...this.diaryItems ];
+    this.isLoading = false;
+  },
+  watch: {
+    async 'dateString' () {
+      this.isLoading = true;
+      await this.$store.dispatch('health/diary/ensureItems', [ ...this.dateStringsOfWeek ]);
+      this.diaryItemsCache = [ ...this.diaryItems ];
+      this.isLoading = false;
+    },
   },
 };
 </script>

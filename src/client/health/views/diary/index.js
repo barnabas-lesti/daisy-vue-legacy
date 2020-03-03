@@ -9,11 +9,7 @@ export default {
       path: '/health/diary',
       name: 'health.diary',
       titleKey: 'health.views.diary.title',
-      beforeEnter: (to, from, next) => {
-        const diaryItem = store.state.health.diary.item || {};
-        const dateString = diaryItem.dateString || DiaryItem.today();
-        next({ name: 'health.diary.date', params: { dateString } });
-      },
+      redirect: { name: 'health.diary.date', params: { dateString: DiaryItem.today() } },
     },
     {
       path: '/health/diary/:dateString',
@@ -25,7 +21,7 @@ export default {
         if (DiaryItem.isDateStringValid(dateString)) {
           await Promise.all([
             store.dispatch('health/diet/ensureItems'),
-            store.dispatch('health/diary/ensureItem', dateString),
+            store.dispatch('health/diary/ensureItems', [ dateString ]),
           ]);
           next();
         } else {

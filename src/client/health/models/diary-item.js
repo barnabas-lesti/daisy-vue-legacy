@@ -11,6 +11,8 @@ export default class DiaryItem {
   static getNutrients = Food.getNutrients;
   static today = today;
   static getDatesOfWeek = getDatesOfWeek;
+  static convertDateToDateString = convertDateToDateString;
+  static areNutrientsEmpty = Food.areNutrientsEmpty;
 
   /**
    * @param {DiaryItem} args
@@ -27,6 +29,10 @@ export default class DiaryItem {
 
   getNutrients () {
     return Food.getNutrients(this.items);
+  }
+
+  areNutrientsEmpty () {
+    return Food.areNutrientsEmpty(this.getNutrients());
   }
 }
 
@@ -47,4 +53,8 @@ function getDatesOfWeek (date) {
     dateList.push(moment(firstDateOfWeek).add(i, 'days'));
   }
   return dateList;
+}
+
+function convertDateToDateString (date) {
+  return moment(date).format(DATE_FORMAT);
 }
