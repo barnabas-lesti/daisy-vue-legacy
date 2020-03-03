@@ -1,4 +1,5 @@
 import i18n from '../i18n';
+import storage from '../storage';
 
 export default {
   'loading': (state) => state.asyncRegistry.length > 0,
@@ -16,4 +17,6 @@ export default {
     });
     return sortedItems;
   },
+
+  'storage/get': () => (id) => storage.getFromLocalStorage(id),
 };

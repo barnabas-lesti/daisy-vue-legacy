@@ -5,6 +5,7 @@ import i18n from './i18n';
 import router from './router';
 import storage from './storage';
 import store from './store';
+import utils from './utils';
 
 export default {
   config,
@@ -14,4 +15,5 @@ export default {
   router,
   storage,
   store,
+  utils,
 };

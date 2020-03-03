@@ -1,10 +1,12 @@
 import http from '../http';
+import utils from '../utils';
+import storage from '../storage';
 
 import Notification from '../../models/notification';
 
 export default {
   async 'asyncRegistry/create' (context) {
-    const id = createUUIDv4();
+    const id = utils.createUUID();
     context.commit('asyncRegistry/push', id);
     return id;
   },
@@ -44,7 +46,7 @@ export default {
   },
 
   async 'notify' (context, payload) {
-    const notification = { id: Notification.createId(), ...getNotificationFromPayload(payload) };
+    const notification = { id: utils.createUUID(), ...getNotificationFromPayload(payload) };
     context.commit('notifications/push', notification);
     return new Promise(resolve => {
       window.setTimeout(() => {
@@ -65,16 +67,12 @@ export default {
   async 'notify/error' (context, payload) {
     return context.dispatch('notify', { type: Notification.types.ERROR, ...getNotificationFromPayload(payload) });
   },
+
+  'storage/save' (context, { id, ...payload }) {
+    storage.saveToLocalStorage(id, payload);
+  },
 };
 
 function getNotificationFromPayload (payload) {
   return typeof payload === 'object' ? payload : { text: payload };
-}
-
-function createUUIDv4 () {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
 }

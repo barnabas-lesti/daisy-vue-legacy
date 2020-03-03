@@ -34,10 +34,14 @@ export default {
     FormDatePicker,
     NutrientSummaryChart,
   },
+  props: {
+    widgetId: String,
+  },
   data () {
+    const { dateString = DiaryItem.today() } = this.$store.getters['core/storage/get'](this.widgetId) || {};
     return {
+      dateString,
       isLoading: true,
-      dateString: DiaryItem.today(),
       diaryItemCache: null,
     };
   },
@@ -49,18 +53,21 @@ export default {
       return this.diaryItem && this.diaryItem.getNutrients();
     },
   },
+  methods: {
+    async updateItems (dateString) {
+      this.isLoading = true;
+      await this.$store.dispatch('health/diary/ensureItems', [ dateString ]);
+      this.diaryItemCache = this.diaryItem;
+      this.$store.dispatch('core/storage/save', { id: this.widgetId, dateString });
+      this.isLoading = false;
+    },
+  },
   async created () {
-    this.isLoading = true;
-    await this.$store.dispatch('health/diary/ensureItems', [ this.dateString ]);
-    this.diaryItemCache = this.diaryItem;
-    this.isLoading = false;
+    await this.updateItems(this.dateString);
   },
   watch: {
-    async 'dateString' (newDateString) {
-      this.isLoading = true;
-      await this.$store.dispatch('health/diary/ensureItems', [ newDateString ]);
-      this.diaryItemCache = this.diaryItem;
-      this.isLoading = false;
+    async dateString (newDateString) {
+      await this.updateItems(newDateString);
     },
   },
 };

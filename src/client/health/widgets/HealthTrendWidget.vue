@@ -53,21 +53,19 @@ export default {
     HealthTrendChart,
   },
   props: {
+    widgetId: String,
     initialTrendType: {
       type: String,
       default: () => trendTypes.CALORIES,
     },
   },
   data () {
+    const { dateString = DiaryItem.today() } = this.$store.getters['core/storage/get'](this.widgetId) || {};
     return {
+      dateString,
       trendType: this.initialTrendType,
-      trendTypeOptions: Object.keys(trendTypes).map(key => ({
-        text: this.$t(`health.widgets.healthTrend.trendTypeOptions.${trendTypes[key]}`),
-        value: trendTypes[key],
-      })),
-
+      trendTypeOptions: this.getTrendTypeOptions(),
       isLoading: true,
-      dateString: DiaryItem.today(),
       diaryItemsCache: [],
     };
   },
@@ -109,6 +107,12 @@ export default {
     },
   },
   methods: {
+    getTrendTypeOptions () {
+      return Object.keys(trendTypes).map(key => ({
+        text: this.$t(`health.widgets.healthTrend.trendTypeOptions.${trendTypes[key]}`),
+        value: trendTypes[key],
+      }));
+    },
     getDatasetOptions (nutrientName, color, data) {
       return {
         label: this.$t(`health.components.healthTrendChart.legend.labels.${nutrientName}`),
@@ -138,19 +142,21 @@ export default {
     formatValue (value) {
       return parseFloat(value).toFixed(2);
     },
-  },
-  async created () {
-    this.isLoading = true;
-    await this.$store.dispatch('health/diary/ensureItems', [ ...this.dateStringsOfWeek ]);
-    this.diaryItemsCache = [ ...this.diaryItems ];
-    this.isLoading = false;
-  },
-  watch: {
-    async 'dateString' () {
+
+    async updateItems () {
       this.isLoading = true;
       await this.$store.dispatch('health/diary/ensureItems', [ ...this.dateStringsOfWeek ]);
       this.diaryItemsCache = [ ...this.diaryItems ];
+      this.$store.dispatch('core/storage/save', { id: this.widgetId, dateString: this.dateString });
       this.isLoading = false;
+    }
+  },
+  async created () {
+    await this.updateItems();
+  },
+  watch: {
+    async dateString () {
+      await this.updateItems();
     },
   },
 };

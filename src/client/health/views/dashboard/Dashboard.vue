@@ -1,10 +1,13 @@
 <template lang="pug">
   .health-dashboard
     v-row
-      v-col(:cols="cols")
-        nutrient-summary-widget
-      v-col(:cols="cols")
-        health-trend-widget(initial-trend-type="macros")
+      v-col(md="6")
+        nutrient-summary-widget(widget-id="health/dashboard/summaryWidget")
+      v-col(md="6")
+        health-trend-widget(
+          widget-id="health/dashboard/trendWidget1"
+          initial-trend-type="macros"
+        )
 </template>
 
 <script>
@@ -15,14 +18,6 @@ export default {
   components: {
     NutrientSummaryWidget,
     HealthTrendWidget,
-  },
-  computed: {
-    cols () {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'md': return 6;
-        default: return 12;
-      }
-    },
   },
 };
 </script>
