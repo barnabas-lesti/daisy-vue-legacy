@@ -18,6 +18,7 @@
         )
     v-date-picker(
       v-model="localValue"
+      :first-day-of-week="1"
       no-title
       offset-y
     )

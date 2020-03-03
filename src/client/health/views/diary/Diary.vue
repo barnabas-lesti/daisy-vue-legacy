@@ -12,9 +12,13 @@
           :loading="loading"
         )
 
-    v-row(v-if="diaryItem")
+    v-row
       v-col
-        nutrient-summary-chart.diary__summary(:item="diaryItem")
+        nutrient-summary-chart.diary__summary(
+          v-if="diaryItem && diaryItem.items.length"
+          :summary="nutrientSummary"
+        )
+        .caption(v-else) {{ $t('health.views.diary.noItems') }}
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
@@ -191,6 +195,9 @@ export default {
     tableItems () {
       const { items } = this.diaryItem || {};
       return items || [];
+    },
+    nutrientSummary () {
+      return this.diaryItem.getNutrients();
     },
   },
   methods: {

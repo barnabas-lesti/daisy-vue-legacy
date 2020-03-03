@@ -52,7 +52,7 @@ export default class Food {
 }
 
 function getNutrients (items) {
-  if (!items || !items.length) return null;
+  if (!items || !items.length) return new Nutrients();
 
   const summary = items.reduce((summary, nextItem) => {
     const multiplier = nextItem.amount / nextItem.serving.value;

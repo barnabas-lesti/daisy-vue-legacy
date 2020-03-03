@@ -24,10 +24,11 @@ components:
       protein: Protein
       fat: Fat
     legend:
+      calories: Calories (cal)
       carbs: Carbs (g)
       protein: Protein (g)
       fat: Fat (g)
-  nutrientTrendChart:
+  healthTrendChart:
     legend:
       labels:
         calories: Calories (cal)
@@ -117,11 +118,15 @@ widgets:
     date: Date
     noItems: No items added for today. To show the nutrient summary, {0}
     noItemsLink: add items to this day.
-  nutrientTrend:
-    title: Nutrient trend
+  healthTrend:
+    title: Health trend
     date: Date of week
     noItems: No items added for today. To show the nutrient summary, {0}
     noItemsLink: add items to this day.
+    trendTypes: Trend type
+    trendTypeOptions:
+      macros: Macros
+      calories: Calories
 
 views:
   dashboard:
@@ -148,6 +153,7 @@ views:
     summary: Summary
     consumption: Consumption
     nutrientSummary: Nutrient summary
+    noItems: Add items to display the nutrient breakdown
     notifications:
       saved: Diary item successfully saved
       unknownError: Unknown error occurred

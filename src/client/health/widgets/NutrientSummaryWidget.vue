@@ -11,8 +11,8 @@
           )
     v-card-text
       nutrient-summary-chart(
-        v-if="diaryItem"
-        :item="diaryItem"
+        v-if="diaryItem && diaryItem.items.length > 0"
+        :summary="nutrientSummary"
         stretch
       )
       v-progress-circular(
@@ -21,7 +21,7 @@
         indeterminate
       )
       i18n(v-else, path="health.widgets.nutrientSummary.noItems")
-        router-link(:to="{ name: 'health.diary' }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
+        router-link(:to="{ name: 'health.diary.date', params: { dateString } }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
 </template>
 
 <script>
@@ -52,6 +52,9 @@ export default {
         this.$store.dispatch('health/diary/ensureItem', newDateString)
           .then(() => this.isLoading = false);
       },
+    },
+    nutrientSummary () {
+      return this.diaryItem && this.diaryItem.getNutrients();
     },
   },
   created () {

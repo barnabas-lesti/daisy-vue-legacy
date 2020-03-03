@@ -51,10 +51,10 @@ export default {
   'diary/updateItem' (state, update) {
     state.diary.item = new DiaryItem({ ...state.diary.item, ...update });
   },
-  'diary/nutrientTrend/setDateString' (state, dateString) {
-    state.diary.nutrientTrend.dateString = dateString;
+  'diary/healthTrend/setDateString' (state, dateString) {
+    state.diary.healthTrend.dateString = dateString;
   },
-  'diary/nutrientTrend/setItems' (state, items) {
-    state.diary.nutrientTrend.items = [...(items || []).map(item => new DiaryItem(item))];
+  'diary/healthTrend/setItems' (state, items) {
+    state.diary.healthTrend.items = [...(items || []).map(item => new DiaryItem(item))];
   },
 };

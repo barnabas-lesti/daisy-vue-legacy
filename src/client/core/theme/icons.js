@@ -16,6 +16,7 @@ import {
   mdiDotsVertical,
   mdiPlaylistRemove,
   mdiMenu,
+  mdiFinance,
 } from '@mdi/js';
 
 const usedIcons = {
@@ -34,6 +35,7 @@ const usedIcons = {
   mdiDotsVertical,
   mdiPlaylistRemove,
   mdiMenu,
+  mdiFinance,
 };
 
 export default usedIcons;

@@ -3,12 +3,12 @@
     :class="[ stretch ? 'nutrient-summary-chart--stretch' : '' ]"
   )
     v-row
-      v-col(sm="6")
+      v-col(:cols="cols")
         doughnut-chart(
           :chart-data="chartData"
           :chart-options="chartOptions"
         )
-      v-col(sm="6")
+      v-col(:cols="cols")
         v-card(
           tile
           :flat="stretch"
@@ -42,7 +42,7 @@ export default {
     DoughnutChart,
   },
   props: {
-    item: Object,
+    summary: Object,
     stretch: Boolean,
   },
   data () {
@@ -62,8 +62,11 @@ export default {
     };
   },
   computed: {
-    summary () {
-      return this.item ? this.item.getNutrients() : null;
+    cols () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'sm': return 6;
+        default: return 12;
+      }
     },
     chartData () {
       const { colors } = this.$theme;

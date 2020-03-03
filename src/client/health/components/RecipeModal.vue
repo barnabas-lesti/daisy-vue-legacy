@@ -88,8 +88,8 @@
         v-col.recipe-modal__summary
           .subtitle-1 {{ $t('health.components.recipeModal.summary') }}
           nutrient-summary-chart(
-            v-if="localItem.ingredients.length"
-            :item="localItem"
+            v-if="nutrientSummary"
+            :summary="nutrientSummary"
           )
           .text-center.mt-4(v-else) {{ $t('health.components.recipeModal.noIngredients') }}
 
@@ -205,6 +205,9 @@ export default {
       set (newValue) {
         this.localItem.ingredients = (newValue || []).map(item => new Recipe.Ingredient(item));
       },
+    },
+    nutrientSummary () {
+      return this.localItem && this.localItem.getNutrients();
     },
   },
   methods: {

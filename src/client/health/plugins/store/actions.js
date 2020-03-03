@@ -79,20 +79,20 @@ export default {
       context.commit('diary/setItem', savedItem);
     }
   },
-  async 'diary/nutrientTrend/fetchItems' (context, dateString) {
+  async 'diary/healthTrend/fetchItems' (context, dateString) {
     const items = await http.get('/api/health/diary', { params: { 'week-of-day': dateString } });
-    context.commit('diary/nutrientTrend/setItems', items);
+    context.commit('diary/healthTrend/setItems', items);
   },
-  async 'diary/nutrientTrend/ensureItems' (context, dateStringCandidate) {
-    const { nutrientTrend } = context.state.diary;
-    const currentDateString = nutrientTrend.dateString;
+  async 'diary/healthTrend/ensureItems' (context, dateStringCandidate) {
+    const { healthTrend } = context.state.diary;
+    const currentDateString = healthTrend.dateString;
     const newDateString = dateStringCandidate || currentDateString || DiaryItem.today();
-    if (!nutrientTrend.items || currentDateString !== newDateString) {
+    if (!healthTrend.items || currentDateString !== newDateString) {
       const activeDateRange = DiaryItem.getDatesOfWeek(currentDateString)
         .map(date => date.format(DiaryItem.DATE_FORMAT));
-      context.commit('diary/nutrientTrend/setDateString', newDateString);
+      context.commit('diary/healthTrend/setDateString', newDateString);
       if (activeDateRange.indexOf(newDateString) === -1) {
-        await context.dispatch('diary/nutrientTrend/fetchItems', newDateString);
+        await context.dispatch('diary/healthTrend/fetchItems', newDateString);
       }
     }
   },
