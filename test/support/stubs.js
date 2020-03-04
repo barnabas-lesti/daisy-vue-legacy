@@ -13,9 +13,9 @@ export default {
       .route({ method: 'GET', url: '/api/health/diet/foods', status: 200, response: foods })
       .route({ method: 'GET', url: '/api/health/diet/recipes', status: 200, response: recipes });
   },
-  'health/diary' (user, items = []) {
-    const diaryItem = mocks.diaryItem(user.id, items);
+  'health/diary' (user, diaryItem) {
+    const response = diaryItem ? [ diaryItem ] : [];
     return cy.server()
-      .route({ method: 'GET', url: '/api/health/diary/**', status: 200, response: diaryItem });
+      .route({ method: 'GET', url: '/api/health/diary**', status: 200, response });
   },
 };

@@ -34,7 +34,7 @@
         v-chip.grey.lighten-4(
           label
           link
-        ) {{ formatValue(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
+        ) {{ formatNumber(item.serving.value) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.serving.value)}}
       template(
         v-slot:item.amount="{ item }"
       )
@@ -46,7 +46,7 @@
             v-chip.diet-table__table__amount-display.grey.lighten-2(
               label
               link
-            ) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
+            ) {{ formatNumber(item.amount) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
             template(v-slot:input)
               v-text-field(
                 v-model="item.amount"
@@ -56,7 +56,7 @@
                 single-line
                 autofocus
               )
-        template(v-else) {{ item.amount }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
+        template(v-else) {{ formatNumber(item.amount) }} {{ $tc(`health.common.units.${item.serving.unit}`, item.amount)}}
       template(v-slot:item.nutrients.calories="{ item }") {{ formatNutrient(item, item.getNutrients().calories) }}
       template(v-slot:item.nutrients.carbs="{ item }") {{ formatNutrient(item, item.getNutrients().carbs) }}
       template(v-slot:item.nutrients.protein="{ item }") {{ formatNutrient(item, item.getNutrients().protein) }}
@@ -129,9 +129,9 @@ export default {
     },
     formatNutrient (item, nutrient) {
       nutrient = this.withAmount ? this.applyAmount(item, nutrient) : nutrient;
-      return this.formatValue(nutrient);
+      return this.formatNumber(nutrient);
     },
-    formatValue (value) {
+    formatNumber (value) {
       return parseFloat(value).toFixed(2);
     },
 

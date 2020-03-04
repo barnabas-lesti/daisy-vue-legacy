@@ -5,12 +5,12 @@
         :cols="$vuetify.breakpoint.xs ? 12 : 6"
         :offset="$vuetify.breakpoint.xs ? '': 6"
       )
-        .diary__date-picker(:class="[ !$vuetify.breakpoint.xs ? 'diary__date-picker--narrow' : '' ]")
-        form-date-picker(
-          v-model="dateString"
-          :label="$t('health.views.diary.datePicker')"
-          :loading="loading"
-        )
+        .diary__date-picker
+          form-date-picker(
+            v-model="dateString"
+            :label="$t('health.views.diary.datePicker')"
+            :loading="loading"
+          )
 
     v-row
       v-col
@@ -21,7 +21,7 @@
 
     v-row
       v-col(v-if="!$vuetify.breakpoint.xs")
-        v-btn.mr-4.green.lighten-2.white--text(
+        v-btn.diary__save.mr-4.green.lighten-2.white--text(
           :disabled="loading"
           small
           fab
@@ -34,7 +34,7 @@
           @click="openSelectModal()"
         )
           v-icon {{ $theme.icons.mdiPlus }}
-        v-btn.red.lighten-2.white--text(
+        v-btn.diary__remove.red.lighten-2.white--text(
           small
           fab
           @click="onRemoveClick()"
@@ -103,7 +103,7 @@
         )
           v-icon(v-if="isFabActive") {{ $theme.icons.mdiClose}}
           v-icon(v-else) {{ $theme.icons.mdiDotsVertical }}
-      v-btn.green.lighten-2.white--text(
+      v-btn.diary__fab__save.green.lighten-2.white--text(
         :disabled="loading"
         fab
         @click="saveItem()"
@@ -114,7 +114,7 @@
         @click="openSelectModal()"
       )
         v-icon {{ $theme.icons.mdiPlus }}
-      v-btn.red.lighten-2.white--text(
+      v-btn.diary__fab__remove.red.lighten-2.white--text(
         fab
         @click="onRemoveClick()"
       )

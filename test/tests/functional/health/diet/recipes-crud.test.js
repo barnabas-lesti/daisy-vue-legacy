@@ -9,9 +9,34 @@ describe('Functional / Health / Recipes', () => {
       .viewport('iphone-6');
   });
 
-  it('Recipe modal should be accessible for the user', () => {
-    stubs['health/dietItems'](user)
+  it('Should allow the user to CREATE a recipe', () => {
+    const foods = mocks.foods(user.id);
+    const recipe = mocks.recipe(user.id, foods);
+    stubs['health/dietItems'](user, { foods })
+      .visit('/health/food-and-recipes?selected=new-recipe');
+
+    cy.server()
+      .route({ method: 'PUT', url: '/api/health/diet/recipes', status: 200, response: recipe, delay: 128 });
+    fillForm(recipe);
+    verifySummary(getNutrientSummary(recipe));
+    cy.get('.recipe-modal__form')
+      .submit();
+    cy.get('.modal__toolbar__confirm')
+      .should('have.class', 'v-btn--loading');
+    cy.get('.notifications')
+      .contains(/recipe.*saved/i)
+      .should('be.visible');
+    verifyInTable(recipe);
+  });
+
+  it('Should allow the user to READ a recipe', () => {
+    const foods = mocks.foods(user.id);
+    const recipes = mocks.recipes(user.id, foods);
+    const existingRecipe = recipes[0];
+    cy['core/signIn'](user);
+    stubs['health/dietItems'](user, { foods, recipes })
       .visit('/health/food-and-recipes');
+
     cy.get('.diet__fab')
       .should('be.visible')
       .click();
@@ -19,58 +44,48 @@ describe('Functional / Health / Recipes', () => {
       .click();
     cy.url()
       .should('include', 'selected=new-recipe');
-    cy.get('.recipe-modal__form').as('recipeForm')
+    cy.get('.recipe-modal__form')
       .should('be.visible');
-    cy.get('@recipeForm')
+    cy.get('.recipe-modal__form')
       .submit()
-      .contains(/name.*required/i).should('be.visible');
+      .contains(/name.*required/i)
+      .should('be.visible');
 
     cy.get('.modal__toolbar__cancel')
       .should('be.visible')
       .click();
     cy.url()
       .should('not.include', 'selected=new-recipe');
-    cy.get('@recipeForm')
+    cy.get('.recipe-modal__form')
       .should('not.be.visible');
 
-    cy.viewport('macbook-13')
-      .get('.diet__new-recipe')
+    cy.get('.diet .diet-table tbody')
+      .contains(existingRecipe.name)
+      .click();
+    verifyInForm(existingRecipe);
+    verifySummary(getNutrientSummary(existingRecipe));
+    cy.get('.diet__recipe-modal .modal__toolbar__cancel')
+      .click();
+
+    cy.viewport('macbook-13');
+
+    cy.get('.diet__new-recipe')
       .should('be.visible')
       .click();
     cy.url()
       .should('include', 'selected=new-recipe');
-    cy.get('@recipeForm')
+    cy.get('.recipe-modal__form')
       .should('be.visible');
     cy.get('.modal__cancel')
       .should('be.visible')
       .click();
     cy.url()
       .should('not.include', 'selected=new-recipe');
-    cy.get('@recipeForm')
+    cy.get('.recipe-modal__form')
       .should('not.be.visible');
   });
 
-  it('User should be able to create a recipe', () => {
-    const foods = mocks.foods(user.id);
-    const recipe = mocks.recipe(user.id, foods);
-    stubs['health/dietItems'](user, { foods })
-      .visit('/health/food-and-recipes?selected=new-recipe');
-
-    fillForm(recipe);
-    verifySummary(getNutrientSummary(recipe));
-
-    cy.server()
-      .route({ method: 'PUT', url: '/api/health/diet/recipes', status: 200, response: recipe, delay: 128 });
-    cy.get('.recipe-modal__form')
-      .submit();
-    cy.get('.modal__toolbar__confirm')
-      .should('have.class', 'v-btn--loading');
-    cy.get('.notifications')
-      .contains(/recipe.*saved/i).should('be.visible');
-    verifyInTable(recipe);
-  });
-
-  it('Should allow the modification of existing recipe', () => {
+  it('Should allow the user to UPDATE a recipe', () => {
     const foods = mocks.foods(user.id);
     const recipes = mocks.recipes(user.id, foods);
     const existingRecipe = recipes[0];
@@ -80,7 +95,6 @@ describe('Functional / Health / Recipes', () => {
 
     cy.get('.diet .diet-table tbody').contains(existingRecipe.name)
       .click();
-
     verifyInForm(existingRecipe);
     verifySummary(getNutrientSummary(existingRecipe));
 
@@ -98,7 +112,7 @@ describe('Functional / Health / Recipes', () => {
     verifyInTable(update);
   });
 
-  it('Should allow the removal of existing recipe', () => {
+  it('Should allow the user to DELETE a recipe', () => {
     const foods = mocks.foods(user.id);
     const recipes = mocks.recipes(user.id, foods);
     const recipe = recipes[0];

@@ -1,4 +1,5 @@
 import faker from 'faker';
+import moment from 'moment';
 
 import User from '../../src/client/core/models/user';
 import Food from '../../src/client/health/models/food';
@@ -72,17 +73,19 @@ const convertToDietItem = (item) => {
   else return DietItem.convertFromFood(item);
 };
 
-const diaryItem = (userId, items = []) => {
+const diaryItem = (userId, dateString = moment().format('YYYY-MM-DD'), items = []) => {
   return new DiaryItem({
     userId,
     id: faker.random.uuid(),
     summary: faker.random.words(4),
     items,
+    dateString,
   });
 };
 
 export default {
   faker,
+  moment,
   randomFloat,
 
   authHeader,

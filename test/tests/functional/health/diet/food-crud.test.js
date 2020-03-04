@@ -8,8 +8,33 @@ describe('Functional / Health / Diet / Food', () => {
     cy.viewport('iphone-6');
   });
 
-  it('Food modal should be accessible for the user', () => {
+  it('Should allow the user to CREATE food', () => {
+    const food = mocks.food(user.id);
+    cy['core/signIn'](user);
+    stubs['health/dietItems'](user)
+      .visit('/health/food-and-recipes?selected=new-food');
+
+    cy.get('.food-modal__form')
+      .submit()
+      .contains(/name.*required/i)
+      .should('be.visible');
+    fillForm(food);
+
+    cy.server()
+      .route({ method: 'PUT', url: '/api/health/diet/foods', status: 200, response: food, delay: 64 });
+    cy.get('.food-modal__form')
+      .submit();
+    cy.get('.modal__toolbar__confirm')
+      .should('have.class', 'v-btn--loading');
+    cy.get('.notifications')
+      .contains(/food.*saved/i)
+      .should('be.visible');
+    verifyInTable(food);
+  });
+
+  it('Should allow the user to READ existing food', () => {
     const foods = mocks.foods(user.id);
+    const food = foods[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
       .visit('/health/food-and-recipes');
@@ -20,89 +45,71 @@ describe('Functional / Health / Diet / Food', () => {
       .click();
     cy.url()
       .should('include', 'selected=new-food');
-    cy.get('.food-modal__form').as('form')
+    cy.get('.food-modal__form')
       .should('be.visible');
 
-    cy.get('.modal__toolbar__cancel').as('toolbarCancel')
+    cy.get('.modal__toolbar__cancel')
       .click();
     cy.url()
       .should('not.include', 'selected=new-food');
-    cy.get('@form')
+    cy.get('.food-modal__form')
       .should('not.be.visible');
 
-    cy.get('.diet .diet-table tbody').as('table')
-      .contains(foods[0].name).click();
+    cy.get('.diet .diet-table tbody')
+      .contains(food.name)
+      .click();
     cy.url()
-      .should('include', `selected=${foods[0].id}`);
+      .should('include', `selected=${food.id}`);
+    verifyInForm(food);
     cy.get('.modal__toolbar__remove')
       .should('be.visible');
     cy.get('.modal__toolbar__confirm')
       .should('be.visible');
-    cy.get('@toolbarCancel')
+    cy.get('.modal__toolbar__cancel')
       .click();
 
     cy.viewport('macbook-13');
+
     cy.get('.diet__new-food')
       .click();
     cy.url()
       .should('include', 'selected=new-food');
-    cy.get('@form')
+    cy.get('.food-modal__form')
       .should('be.visible');
-    cy.get('.modal__cancel').as('cancel')
+    cy.get('.modal__cancel')
       .click();
     cy.url()
       .should('not.include', 'selected=new-food');
-    cy.get('@form')
+    cy.get('.food-modal__form')
       .should('not.be.visible');
 
-    cy.get('@table')
-      .contains(foods[0].name).click();
+    cy.get('.diet .diet-table tbody')
+      .contains(food.name)
+      .click();
+    verifyInForm(food);
     cy.get('.modal__remove')
       .should('be.visible');
     cy.get('.modal__confirm')
       .should('be.visible');
-    cy.get('@cancel')
+    cy.get('.modal__cancel')
       .click();
   });
 
-  it('Should allow the creation of new food', () => {
-    const food = mocks.food(user.id);
-    cy['core/signIn'](user);
-    stubs['health/dietItems'](user)
-      .visit('/health/food-and-recipes?selected=new-food');
-
-    cy.get('.food-modal__form').as('form')
-      .submit()
-      .contains(/name.*required/i).should('be.visible');
-    fillForm(food);
-
-    cy.server()
-      .route({ method: 'PUT', url: '/api/health/diet/foods', status: 200, response: food, delay: 64 });
-    cy.get('.food-modal__form')
-      .submit();
-    cy.get('.modal__toolbar__confirm')
-      .should('have.class', 'v-btn--loading');
-    cy.get('.notifications')
-      .contains(/food.*saved/i).should('be.visible');
-    verifyInTable(food);
-  });
-
-  it('Should allow the modification of existing food', () => {
+  it('Should allow the user to UPDATE food', () => {
     const foods = mocks.foods(user.id);
     const existingFood = foods[0];
+    const update = { ...mocks.food(user.id), id: existingFood.id };
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
       .visit('/health/food-and-recipes');
 
-    cy.get('.diet .diet-table tbody').contains(existingFood.name)
-      .click();
-    verifyInForm(existingFood);
-
-    const update = { ...mocks.food(user.id), id: existingFood.id };
     cy.server()
       .route({ method: 'PATCH', url: `/api/health/diet/foods/${update.id}`, status: 200, response: update, delay: 64 });
+    cy.get('.diet .diet-table tbody')
+      .contains(existingFood.name)
+      .click();
     fillForm(update, { clear: true });
-    cy.get('.food-modal__form').as('form')
+    cy.get('.food-modal__form')
       .submit();
     cy.get('.modal__toolbar__confirm')
       .should('have.class', 'v-btn--loading');
@@ -111,7 +118,7 @@ describe('Functional / Health / Diet / Food', () => {
     verifyInTable(update);
   });
 
-  it('Should allow the removal of existing food', () => {
+  it('Should allow the user to DELETE food', () => {
     const foods = mocks.foods(user.id);
     const food = foods[0];
     cy['core/signIn'](user);
@@ -130,7 +137,7 @@ describe('Functional / Health / Diet / Food', () => {
 
     cy.server()
       .route({ method: 'DELETE', url: `/api/health/diet/foods/${food.id}`, status: 200, response: '', delay: 64 });
-    cy.get('.diet .diet-table tbody').as('table')
+    cy.get('.diet .diet-table tbody')
       .contains(food.name)
       .click();
     cy.get('.modal__toolbar__remove')
@@ -140,9 +147,11 @@ describe('Functional / Health / Diet / Food', () => {
     cy.get('.modal__toolbar__confirm')
       .should('have.class', 'v-btn--loading');
     cy.get('.notifications')
-      .contains(/food.*deleted/i).should('be.visible');
-    cy.get('@table')
-      .contains(food.name).should('not.be.visible');
+      .contains(/food.*deleted/i)
+      .should('be.visible');
+    cy.get('.diet .diet-table tbody')
+      .contains(food.name)
+      .should('not.be.visible');
   });
 });
 
@@ -156,7 +165,8 @@ function fillForm (food, { clear = false } = {}) {
     .type(food.serving.value);
   cy.get('.food-modal__form__serving__unit .v-select__slot')
     .click()
-    .get('.v-select-list').contains(food.serving.unit)
+    .get('.v-select-list')
+    .contains(food.serving.unit)
     .click();
   clearWrapper(cy.get('input[name="calories"]'))
     .type(food.nutrients.calories);
@@ -169,18 +179,25 @@ function fillForm (food, { clear = false } = {}) {
 }
 
 function verifyInTable (food) {
-  cy.get('.diet .diet-table tbody').contains(food.name).parents('tr').as('row')
-    .find('.v-icon[data-item-type="Food"]').should('be.visible');
+  cy.get('.diet .diet-table tbody').contains(food.name).parents('tr').as('row');
   cy.get('@row')
-    .contains(food.serving.value).should('be.visible');
+    .find('.v-icon[data-item-type="Food"]')
+    .should('be.visible');
   cy.get('@row')
-    .contains(food.nutrients.calories).should('be.visible');
+    .contains(food.serving.value)
+    .should('be.visible');
   cy.get('@row')
-    .contains(food.nutrients.carbs).should('be.visible');
+    .contains(food.nutrients.calories)
+    .should('be.visible');
   cy.get('@row')
-    .contains(food.nutrients.protein).should('be.visible');
+    .contains(food.nutrients.carbs)
+    .should('be.visible');
+  cy.get('@row')
+    .contains(food.nutrients.protein)
+    .should('be.visible');
   return cy.get('@row')
-    .contains(food.nutrients.fat).should('be.visible');
+    .contains(food.nutrients.fat)
+    .should('be.visible');
 }
 
 function verifyInForm (food) {

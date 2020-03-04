@@ -6,6 +6,7 @@
     :headerColor="headerColor"
     :readonly="readonly"
     :with-remove="localItem && !!localItem.id"
+    :content-class="contentClass"
     @cancel="cancel()"
     @confirm="confirm()"
     @remove="remove()"
@@ -158,6 +159,7 @@ export default {
     readonly: Boolean,
     value: Boolean,
     item: Object,
+    contentClass: String,
     foods: {
       type: Array,
       default: () => [],
