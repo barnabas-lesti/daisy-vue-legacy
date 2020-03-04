@@ -37,6 +37,15 @@ describe('Functional / Health / Recipes', () => {
     stubs['health/dietItems'](user, { foods, recipes })
       .visit('/health/food-and-recipes');
 
+    cy.get('.diet .diet-table tbody')
+      .contains(existingRecipe.name)
+      .click();
+    verifyInForm(existingRecipe);
+    verifySummary(getNutrientSummary(existingRecipe));
+    cy.screenshot();
+    cy.get('.diet__recipe-modal .modal__toolbar__cancel')
+      .click();
+
     cy.get('.diet__fab')
       .should('be.visible')
       .click();
@@ -46,12 +55,12 @@ describe('Functional / Health / Recipes', () => {
       .should('include', 'selected=new-recipe');
     cy.get('.recipe-modal__form')
       .should('be.visible');
+    cy.screenshot();
     cy.get('.recipe-modal__form')
       .submit()
       .contains(/name.*required/i)
       .should('be.visible');
-
-    cy.get('.modal__toolbar__cancel')
+    cy.get('.diet__recipe-modal .modal__toolbar__cancel')
       .should('be.visible')
       .click();
     cy.url()
@@ -59,15 +68,16 @@ describe('Functional / Health / Recipes', () => {
     cy.get('.recipe-modal__form')
       .should('not.be.visible');
 
+    cy.viewport('macbook-13');
+
     cy.get('.diet .diet-table tbody')
       .contains(existingRecipe.name)
       .click();
-    verifyInForm(existingRecipe);
-    verifySummary(getNutrientSummary(existingRecipe));
-    cy.get('.diet__recipe-modal .modal__toolbar__cancel')
+    cy.get('.recipe-modal__summary')
+      .scrollIntoView();
+    cy.screenshot();
+    cy.get('.diet__recipe-modal .modal__cancel')
       .click();
-
-    cy.viewport('macbook-13');
 
     cy.get('.diet__new-recipe')
       .should('be.visible')
@@ -76,6 +86,9 @@ describe('Functional / Health / Recipes', () => {
       .should('include', 'selected=new-recipe');
     cy.get('.recipe-modal__form')
       .should('be.visible');
+    cy.get('.recipe-modal__summary')
+      .scrollIntoView();
+    cy.screenshot();
     cy.get('.modal__cancel')
       .should('be.visible')
       .click();

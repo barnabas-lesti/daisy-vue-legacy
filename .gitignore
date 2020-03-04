@@ -1,10 +1,10 @@
 # Build
-node_modules
+/node_modules
 /dist
 
 # Tests
-/tests/e2e/videos/
-/tests/e2e/screenshots/
+/test/videos
+/test/screenshots
 /cypress
 
 # Sensitive env config
