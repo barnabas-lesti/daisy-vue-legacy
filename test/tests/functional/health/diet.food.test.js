@@ -1,7 +1,7 @@
-import mocks from '../../../../support/mocks';
-import stubs from '../../../../support/stubs';
+import mocks from '../../../support/mocks';
+import stubs from '../../../support/stubs';
 
-const user = mocks.user();
+const user = mocks.getUser();
 
 describe('Functional / Health / Diet / Food', () => {
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('Functional / Health / Diet / Food', () => {
   });
 
   it('Should allow the user to CREATE food', () => {
-    const food = mocks.food(user.id);
+    const food = mocks.getFood(user.id);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user)
       .visit('/health/food-and-recipes?selected=new-food');
@@ -33,7 +33,7 @@ describe('Functional / Health / Diet / Food', () => {
   });
 
   it('Should allow the user to READ existing food', () => {
-    const foods = mocks.foods(user.id);
+    const foods = mocks.getFoods(user.id);
     const food = foods[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
@@ -96,9 +96,9 @@ describe('Functional / Health / Diet / Food', () => {
   });
 
   it('Should allow the user to UPDATE food', () => {
-    const foods = mocks.foods(user.id);
+    const foods = mocks.getFoods(user.id);
     const existingFood = foods[0];
-    const update = { ...mocks.food(user.id), id: existingFood.id };
+    const update = { ...mocks.getFood(user.id), id: existingFood.id };
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
       .visit('/health/food-and-recipes');
@@ -119,7 +119,7 @@ describe('Functional / Health / Diet / Food', () => {
   });
 
   it('Should allow the user to DELETE food', () => {
-    const foods = mocks.foods(user.id);
+    const foods = mocks.getFoods(user.id);
     const food = foods[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })

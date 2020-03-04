@@ -1,6 +1,6 @@
 import mocks from '../../../support/mocks';
 
-const user = mocks.user();
+const user = mocks.getUser();
 
 describe('Functional / Core / Profile', () => {
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should update the users general profile information', () => {
-    const { fullName, profileImageUrl } = mocks.user();
+    const { fullName, profileImageUrl } = mocks.getUser();
     const updatedUser = { ...user, profileImageUrl, fullName };
     cy['core/signIn'](user)
       .visit('/profile');
@@ -115,7 +115,7 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should validate the users old password and the form before password update', () => {
-    const update = mocks.user();
+    const update = mocks.getUser();
     cy['core/signIn'](user)
       .visit('/profile');
 
@@ -150,7 +150,7 @@ describe('Functional / Core / Profile', () => {
   });
 
   it('Should update the users password', () => {
-    const update = mocks.user();
+    const update = mocks.getUser();
     cy['core/signIn'](user)
       .visit('/profile');
 

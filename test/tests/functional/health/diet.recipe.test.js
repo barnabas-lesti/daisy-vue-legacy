@@ -1,7 +1,7 @@
-import mocks from '../../../../support/mocks';
-import stubs from '../../../../support/stubs';
+import mocks from '../../../support/mocks';
+import stubs from '../../../support/stubs';
 
-const user = mocks.user();
+const user = mocks.getUser();
 
 describe('Functional / Health / Recipes', () => {
   beforeEach(() => {
@@ -10,8 +10,8 @@ describe('Functional / Health / Recipes', () => {
   });
 
   it('Should allow the user to CREATE a recipe', () => {
-    const foods = mocks.foods(user.id);
-    const recipe = mocks.recipe(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipe = mocks.getRecipe(user.id, foods);
     stubs['health/dietItems'](user, { foods })
       .visit('/health/food-and-recipes?selected=new-recipe');
 
@@ -30,8 +30,8 @@ describe('Functional / Health / Recipes', () => {
   });
 
   it('Should allow the user to READ a recipe', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     const existingRecipe = recipes[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes })
@@ -99,8 +99,8 @@ describe('Functional / Health / Recipes', () => {
   });
 
   it('Should allow the user to UPDATE a recipe', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     const existingRecipe = recipes[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes })
@@ -111,7 +111,7 @@ describe('Functional / Health / Recipes', () => {
     verifyInForm(existingRecipe);
     verifySummary(getNutrientSummary(existingRecipe));
 
-    const update = { ...mocks.recipe(user.id, foods), id: existingRecipe.id };
+    const update = { ...mocks.getRecipe(user.id, foods), id: existingRecipe.id };
     cy.server()
       .route({ method: 'PATCH', url: `/api/health/diet/recipes/${update.id}`, status: 200, response: update, delay: 128 });
     fillForm(update, { clear: true, oldRecipe: existingRecipe });
@@ -126,8 +126,8 @@ describe('Functional / Health / Recipes', () => {
   });
 
   it('Should allow the user to DELETE a recipe', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     const recipe = recipes[0];
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes })

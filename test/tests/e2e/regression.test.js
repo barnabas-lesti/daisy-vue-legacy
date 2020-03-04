@@ -6,7 +6,7 @@ describe('E2E / Regression', () => {
   });
 
   it('Daisy should work as expected 😉', () => {
-    const user = mocks.user();
+    const user = mocks.getUser();
     cy.visit('/');
 
     // Registration
@@ -39,7 +39,7 @@ describe('E2E / Regression', () => {
     cy.get('.profile__general form')
       .click();
 
-    const { password: newPassword } = mocks.user();
+    const { password: newPassword } = mocks.getUser();
     cy.get('input[name="password"]')
       .type(user.password);
     cy.get('input[name="newPassword"]')
@@ -70,7 +70,7 @@ describe('E2E / Regression', () => {
       .click();
 
     // Create food
-    const food = mocks.food();
+    const food = mocks.getFood();
     cy.get('.diet__fab')
       .click();
     cy.get('.diet__fab__new-food')
@@ -108,7 +108,7 @@ describe('E2E / Regression', () => {
     cy.viewport('iphone-6');
 
     // Crate recipe
-    const recipe = mocks.recipe(user.id, [ food ], 1);
+    const recipe = mocks.getRecipe(user.id, [ food ], 1);
     cy.get('.diet__fab')
       .click();
     cy.get('.diet__fab__new-recipe')
@@ -178,6 +178,12 @@ describe('E2E / Regression', () => {
     cy.get('.modal__confirm')
       .click();
     cy.get('.diary__save')
+      .click();
+
+    // Visit the dashboard
+    cy.get('.navbar__toggle')
+      .click();
+    cy.get('.list-item--dashboard')
       .click();
   });
 });

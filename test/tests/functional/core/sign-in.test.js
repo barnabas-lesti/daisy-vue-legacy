@@ -41,7 +41,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Form should be validated before submit', () => {
-    const { email, password } = mocks.user();
+    const { email, password } = mocks.getUser();
     cy.visit('/sign-in');
 
     cy.get('.sign-in-form').as('form')
@@ -62,7 +62,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should display "invalid credentials" error if user is not found', () => {
-    const user = mocks.user();
+    const user = mocks.getUser();
     cy.visit('/sign-in');
 
     cy.server()
@@ -78,7 +78,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should display "invalid credentials" error if credentials are invalid', () => {
-    const user = mocks.user();
+    const user = mocks.getUser();
     cy.server()
       .route({ method: 'POST', url: '/api/auth/sign-in', status: 401, response: { error: 'INVALID_CREDENTIALS' } });
     cy.visit('/sign-in');
@@ -95,7 +95,7 @@ describe('Functional / Core / Sign in', () => {
   });
 
   it('Should sign in the user', () => {
-    const user = mocks.user();
+    const user = mocks.getUser();
     const authHeader = mocks.authHeader();
     cy.visit('/sign-in');
 

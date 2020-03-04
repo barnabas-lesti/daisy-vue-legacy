@@ -1,7 +1,7 @@
-import mocks from '../../../../support/mocks';
-import stubs from '../../../../support/stubs';
+import mocks from '../../../support/mocks';
+import stubs from '../../../support/stubs';
 
-const user = mocks.user();
+const user = mocks.getUser();
 
 describe('Functional / Health / Diary', () => {
   beforeEach(() => {
@@ -9,8 +9,8 @@ describe('Functional / Health / Diary', () => {
   });
 
   it('Should allow the user the CREATE a diary entry', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes });
     stubs['health/diary'](user)
@@ -35,7 +35,7 @@ describe('Functional / Health / Diary', () => {
       .click();
     verifySummary(getNutrientSummary([ food1, recipe1 ]));
 
-    const diaryItem1 = mocks.diaryItem(user.id, null, [ food1, recipe1 ]);
+    const diaryItem1 = mocks.getDiaryItem(user.id, { items: [ food1, recipe1 ] });
     cy.server()
       .route({ method: 'PUT', url: '/api/health/diary', status: 200, response: diaryItem1, delay: 64 });
     cy.get('.diary__fab')
@@ -59,7 +59,7 @@ describe('Functional / Health / Diary', () => {
       .click();
     verifySummary(getNutrientSummary([ food1, recipe1, food2, recipe2 ]));
 
-    const diaryItem2 = mocks.diaryItem(user.id, null, [ food1, recipe1, food2, recipe2 ]);
+    const diaryItem2 = mocks.getDiaryItem(user.id, { items: [ food1, recipe1, food2, recipe2 ] });
     cy.server()
       .route({ method: 'PATCH', url: '/api/health/diary/**', status: 200, response: diaryItem2, delay: 64 });
     cy.get('.diary__save')
@@ -70,14 +70,14 @@ describe('Functional / Health / Diary', () => {
   });
 
   it('Should allow the user to READ a diary entry', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     const today = mocks.moment().format('YYYY-MM-DD');
     const dateString = mocks.moment(mocks.faker.date.future()).format('YYYY-MM-DD');
-    const diaryItem = mocks.diaryItem(user.id, dateString, [ foods[0], recipes[0] ]);
+    const diaryItem = mocks.getDiaryItem(user.id, { dateString, items: [ foods[0], recipes[0] ] });
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes });
-    stubs['health/diary'](user, diaryItem)
+    stubs['health/diary'](user, [ diaryItem ])
       .visit('/');
 
     cy.get('.navbar__toggle')
@@ -95,7 +95,7 @@ describe('Functional / Health / Diary', () => {
 
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes });
-    stubs['health/diary'](user, diaryItem)
+    stubs['health/diary'](user, [ diaryItem ])
       .visit(`/health/diary/${dateString}`);
     cy.get('.diary__date-picker input')
       .should('have.value', dateString);
@@ -103,15 +103,15 @@ describe('Functional / Health / Diary', () => {
   });
 
   it('Should allow the user to UPDATE a diary entry', () => {
-    const foods = mocks.foods(user.id);
-    const recipes = mocks.recipes(user.id, foods);
+    const foods = mocks.getFoods(user.id);
+    const recipes = mocks.getRecipes(user.id, foods);
     const dateString = mocks.moment(mocks.faker.date.future()).format('YYYY-MM-DD');
     const food1 = foods[0];
     const recipe1 = recipes[0];
-    const diaryItem1 = mocks.diaryItem(user.id, dateString, [ food1, recipe1 ]);
+    const diaryItem1 = mocks.getDiaryItem(user.id, { dateString, items: [ food1, recipe1 ] });
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods, recipes });
-    stubs['health/diary'](user, diaryItem1)
+    stubs['health/diary'](user, [ diaryItem1 ])
       .visit(`/health/diary/${dateString}`);
 
     const food2 = foods[1];

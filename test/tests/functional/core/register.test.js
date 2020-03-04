@@ -14,8 +14,8 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Form should be validated before submit', () => {
-    const { email, password } = mocks.user();
-    const { password: differentPassword } = mocks.user();
+    const { email, password } = mocks.getUser();
+    const { password: differentPassword } = mocks.getUser();
     cy.visit('/register');
 
     cy.get('.register-form').as('form')
@@ -50,7 +50,7 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should not allow registering already existing user', () => {
-    const existingUser = mocks.user();
+    const existingUser = mocks.getUser();
     cy.visit('/register');
 
     cy.server()
@@ -69,7 +69,7 @@ describe('Functional / Core / Register', () => {
   });
 
   it('Should register a new user', () => {
-    const user = mocks.user();
+    const user = mocks.getUser();
     cy.visit('/register');
 
     cy.server()

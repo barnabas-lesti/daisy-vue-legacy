@@ -1,7 +1,7 @@
-import mocks from '../../../../support/mocks';
-import stubs from '../../../../support/stubs';
+import mocks from '../../../support/mocks';
+import stubs from '../../../support/stubs';
 
-const user = mocks.user();
+const user = mocks.getUser();
 
 describe('Functional / Health / Diet', () => {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Functional / Health / Diet', () => {
   });
 
   it('Should allow filtering on the table items', () => {
-    const foods = mocks.foods(user.id);
+    const foods = mocks.getFoods(user.id);
     cy['core/signIn'](user);
     stubs['health/dietItems'](user, { foods })
       .visit('/health/food-and-recipes');

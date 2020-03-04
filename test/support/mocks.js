@@ -11,7 +11,7 @@ const authHeader = () => '<authHeaderValue>';
 const randomFloat = (max) => parseFloat((Math.random() * max).toFixed(2)); // Faker random.float() is/was bugged...
 const randomUnit = () => Food.unitValues[faker.random.number(Food.unitValues.length - 1)];
 
-const user = () => {
+const getUser = () => {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   return new User({
@@ -23,7 +23,7 @@ const user = () => {
   });
 };
 
-const food = (userId) => new Food({
+const getFood = (userId) => new Food({
   userId,
   id: faker.random.uuid(),
   name: faker.random.words(4),
@@ -40,9 +40,9 @@ const food = (userId) => new Food({
   }),
 });
 
-const foods = (userId, numberOfItems = 5) => [...Array(numberOfItems)].map(() => food(userId));
+const getFoods = (userId, numberOfItems = 5) => [...Array(numberOfItems)].map(() => getFood(userId));
 
-const recipe = (userId, foods, numberOfIngredients = 2) => {
+const getRecipe = (userId, foods, numberOfIngredients = 2) => {
   const ingredients = [];
   if (foods && foods.length > 0) {
     while (ingredients.length < numberOfIngredients) {
@@ -66,14 +66,30 @@ const recipe = (userId, foods, numberOfIngredients = 2) => {
   });
 };
 
-const recipes = (userId, foods, numberOfItems = 2) => [...Array(numberOfItems)].map(() => recipe(userId, foods));
+const getRecipes = (userId, foods, numberOfItems = 2) => [...Array(numberOfItems)].map(() => getRecipe(userId, foods));
 
 const convertToDietItem = (item) => {
   if (item.ingredients) return DietItem.convertFromRecipe(item);
   else return DietItem.convertFromFood(item);
 };
 
-const diaryItem = (userId, dateString = moment().format('YYYY-MM-DD'), items = []) => {
+const getDiaryItem = (userId, {
+  dietItems = {},
+  items = [],
+  numberOfItems = 2,
+  dateString = moment().format('YYYY-MM-DD'),
+} = {}) => {
+  if (items.length < 1) {
+    while (items.length < numberOfItems) {
+      const food = dietItems.foods[faker.random.number(dietItems.foods.length - 1)];
+      const recipe = dietItems.recipes[faker.random.number(dietItems.recipes.length - 1)];
+      const candidate = faker.random.boolean() ? food : recipe;
+      if (items.map(item => item.id).indexOf(candidate.id) === -1) {
+        items.push(convertToDietItem({ amount: randomFloat(2048), ...candidate }));
+      }
+    }
+  }
+
   return new DiaryItem({
     userId,
     id: faker.random.uuid(),
@@ -83,18 +99,31 @@ const diaryItem = (userId, dateString = moment().format('YYYY-MM-DD'), items = [
   });
 };
 
+const getDiaryItems = (userId, { dietItems, numberOfItems = 2 }) => {
+  const dateStrings = [];
+  for (let i = 0; i < numberOfItems; i++) {
+    dateStrings.push(moment().subtract(i, 'days').format(DiaryItem.DATE_FORMAT));
+  }
+  const diaryItems = [];
+  for (let i = 0; i < numberOfItems; i++) {
+    diaryItems.push(getDiaryItem(userId, { dietItems, dateString: dateStrings[i] }));
+  }
+  return diaryItems;
+};
+
 export default {
   faker,
   moment,
   randomFloat,
 
   authHeader,
-  user,
+  getUser,
 
-  food,
-  foods,
-  recipe,
-  recipes,
-  diaryItem,
+  getFood,
+  getFoods,
+  getRecipe,
+  getRecipes,
+  getDiaryItem,
+  getDiaryItems,
   convertToDietItem,
 };
