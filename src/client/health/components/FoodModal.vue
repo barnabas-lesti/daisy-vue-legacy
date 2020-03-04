@@ -6,6 +6,7 @@
     :headerColor="headerColor"
     :readonly="readonly"
     :with-remove="localItem && !!localItem.id"
+    :content-class="contentClass"
     @cancel="cancel()"
     @confirm="confirm()"
     @remove="remove()"
@@ -95,6 +96,7 @@ export default {
     serverErrorType: String,
     value: Boolean,
     item: Object,
+    contentClass: String,
   },
   data () {
     return {
