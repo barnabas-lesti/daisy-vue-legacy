@@ -1,26 +1,23 @@
 <template lang="pug">
   v-card.nutrient-summary-widget
-    v-card-title
-      v-row(no-gutters)
-        v-col.mb-4 {{ $t('health.widgets.nutrientSummary.title') }}
-        v-col(:cols="$vuetify.breakpoint.xs ? 12 : ''")
-          form-date-picker(
-            v-model="dateString"
-            :label="$t('health.widgets.nutrientSummary.date')"
-            :loading="isLoading"
-          )
+    v-card-title.d-block
+      .title.pr-8 {{ $t('health.widgets.nutrientSummary.title') }}
+      .caption {{ dateString }}
+      .nutrient-summary-widget__date-picker
+        form-date-picker(
+          v-model="dateString"
+          :label="$t('health.widgets.nutrientSummary.date')"
+          :loading="isLoading"
+          only-icon
+        )
     v-card-text
       nutrient-summary-chart(
         v-if="diaryItem && diaryItem.items.length > 0"
         :summary="nutrientSummary"
+        compact
         stretch
       )
-      .d-flex.align-center.justify-center.pa-4(v-else-if="isLoading")
-        v-progress-circular(
-          color="primary"
-          indeterminate
-        )
-      i18n(v-else, path="health.widgets.nutrientSummary.noItems")
+      i18n(v-else-if="!isLoading", path="health.widgets.nutrientSummary.noItems")
         router-link(:to="{ name: 'health.diary.date', params: { dateString } }") {{ $t('health.widgets.nutrientSummary.noItemsLink') }}
 </template>
 
@@ -30,6 +27,7 @@ import FormDatePicker from '../../core/components/FormDatePicker';
 import NutrientSummaryChart from '../components/NutrientSummaryChart';
 
 export default {
+  name: 'NutrientSummaryWidget',
   components: {
     FormDatePicker,
     NutrientSummaryChart,
@@ -38,7 +36,7 @@ export default {
     widgetId: String,
   },
   data () {
-    const { dateString = DiaryItem.today() } = this.$store.getters['core/storage/get'](this.widgetId) || {};
+    const { dateString = DiaryItem.today() } = this.$storage.getFromLocalStorage(this.widgetId) || {};
     return {
       dateString,
       isLoading: true,
@@ -58,7 +56,7 @@ export default {
       this.isLoading = true;
       await this.$store.dispatch('health/diary/ensureItems', [ dateString ]);
       this.diaryItemCache = this.diaryItem;
-      this.$store.dispatch('core/storage/save', { id: this.widgetId, dateString });
+      this.$storage.saveToLocalStorage(this.widgetId, { dateString });
       this.isLoading = false;
     },
   },
@@ -72,3 +70,12 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.nutrient-summary-widget
+  position: relative
+  &__date-picker
+    position: absolute
+    top: 16px
+    right: 16px
+</style>

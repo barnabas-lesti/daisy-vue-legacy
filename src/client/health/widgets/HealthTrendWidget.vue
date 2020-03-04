@@ -1,33 +1,30 @@
 <template lang="pug">
   v-card.health-trend-widget
-    v-card-title
-      v-row(no-gutters)
-        v-col.mb-4 {{ $t('health.widgets.healthTrend.title') }}
-        v-col(:cols="$vuetify.breakpoint.xs ? 12 : ''")
-          v-select(
-            v-model="trendType"
-            :items="trendTypeOptions"
-            :label="$t('health.widgets.healthTrend.trendTypes')"
-            :prepend-icon="$theme.icons.mdiFinance"
-            :disabled="isLoading"
-            name="trendTypes"
-          )
-          form-date-picker(
-            v-model="dateString"
-            :label="$t('health.widgets.healthTrend.date')"
-            :loading="isLoading"
-          )
+    v-card-title.d-block
+      .title.pr-8 {{ $t('health.widgets.healthTrend.title') }}
+      .caption {{ dateRangeString }}
+      .health-trend-widget__date-picker
+        form-date-picker(
+          v-model="dateString"
+          :label="$t('health.widgets.healthTrend.date')"
+          :loading="isLoading"
+          only-icon
+        )
     v-card-text
+      .d-block
+        v-select(
+          v-model="trendType"
+          :items="trendTypeOptions"
+          :label="$t('health.widgets.healthTrend.trendTypes')"
+          :prepend-icon="$theme.icons.mdiFinance"
+          :disabled="isLoading"
+          name="trendTypes"
+        )
       health-trend-chart(
         v-if="diaryItems.length > 0"
         :labels="labels"
         :datasets="datasets"
       )
-      .d-flex.align-center.justify-center.pa-4(v-else-if="isLoading")
-        v-progress-circular(
-          color="primary"
-          indeterminate
-        )
 </template>
 
 <script>
@@ -48,22 +45,20 @@ const trendTypes = {
 };
 
 export default {
+  name: 'HealthTrendWidget',
   components: {
     FormDatePicker,
     HealthTrendChart,
   },
   props: {
     widgetId: String,
-    initialTrendType: {
-      type: String,
-      default: () => trendTypes.CALORIES,
-    },
   },
   data () {
-    const { dateString = DiaryItem.today() } = this.$store.getters['core/storage/get'](this.widgetId) || {};
+    const storedSettings = this.$storage.getFromLocalStorage(this.widgetId) || {};
+    const { trendType = trendTypes.CALORIES, dateString = DiaryItem.today() } = storedSettings;
     return {
       dateString,
-      trendType: this.initialTrendType,
+      trendType,
       trendTypeOptions: this.getTrendTypeOptions(),
       isLoading: true,
       diaryItemsCache: [],
@@ -75,6 +70,9 @@ export default {
     },
     dateStringsOfWeek () {
       return this.datesOfWeek.map(date => DiaryItem.convertDateToDateString(date));
+    },
+    dateRangeString () {
+      return `${this.dateStringsOfWeek[0]} / ${this.dateStringsOfWeek[this.dateStringsOfWeek.length - 1]}`;
     },
     diaryItems () {
       const diaryItemsFromStore = this.$store.getters['health/diary/items/sorted']
@@ -147,9 +145,8 @@ export default {
       this.isLoading = true;
       await this.$store.dispatch('health/diary/ensureItems', [ ...this.dateStringsOfWeek ]);
       this.diaryItemsCache = [ ...this.diaryItems ];
-      this.$store.dispatch('core/storage/save', { id: this.widgetId, dateString: this.dateString });
       this.isLoading = false;
-    }
+    },
   },
   async created () {
     await this.updateItems();
@@ -157,7 +154,20 @@ export default {
   watch: {
     async dateString () {
       await this.updateItems();
+      this.$storage.saveToLocalStorage(this.widgetId, { dateString: this.dateString });
+    },
+    async trendType () {
+      this.$storage.saveToLocalStorage(this.widgetId, { trendType: this.trendType });
     },
   },
 };
 </script>
+
+<style lang="sass">
+.health-trend-widget
+  position: relative
+  &__date-picker
+    position: absolute
+    top: 16px
+    right: 16px
+</style>

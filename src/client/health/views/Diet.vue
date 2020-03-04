@@ -83,11 +83,14 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 
-import DietItem from '../../models/diet-item';
-import DietTable from '../../components/DietTable';
-import DietTableFilters from '../../components/DietTableFilters';
-import FoodModal from '../../components/FoodModal';
-import RecipeModal from '../../components/RecipeModal';
+import store from '../../core/plugins/store';
+
+import DietItem from '../models/diet-item';
+
+import DietTable from '../components/DietTable';
+import DietTableFilters from '../components/DietTableFilters';
+import FoodModal from '../components/FoodModal';
+import RecipeModal from '../components/RecipeModal';
 
 const modalModes = {
   NEW_FOOD: 'new-food',
@@ -197,6 +200,10 @@ export default {
         this.serverErrorType = 'unknown';
       }
     },
+  },
+  async beforeRouteEnter (to, from, next) {
+    await store.dispatch('health/diet/ensureItems');
+    next();
   },
 };
 </script>

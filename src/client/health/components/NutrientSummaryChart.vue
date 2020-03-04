@@ -3,12 +3,12 @@
     :class="[ stretch ? 'nutrient-summary-chart--stretch' : '' ]"
   )
     v-row(v-if="!isSummaryEmpty")
-      v-col(md="6")
+      v-col(:cols="cols")
         doughnut-chart(
           :chart-data="chartData"
           :chart-options="chartOptions"
         )
-      v-col(md="6")
+      v-col(:cols="cols")
         v-card(
           tile
           :flat="stretch"
@@ -45,7 +45,7 @@ export default {
   props: {
     summary: Object,
     stretch: Boolean,
-    snap: Boolean,
+    compact: Boolean,
   },
   data () {
     const { colors } = this.$theme;
@@ -64,6 +64,21 @@ export default {
     };
   },
   computed: {
+    cols () {
+      const breakpointName = this.$vuetify.breakpoint.name;
+      if (this.compact) {
+        switch (breakpointName) {
+          case 'xs':
+          case 'sm': return 12;
+          default: return 6;
+        }
+      } else {
+        switch (breakpointName) {
+          case 'xs': return 12;
+          default: return 6;
+        }
+      }
+    },
     isSummaryEmpty () {
       return DiaryItem.areNutrientsEmpty(this.summary);
     },

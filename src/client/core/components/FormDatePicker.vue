@@ -6,16 +6,29 @@
   )
     template(v-slot:activator="{ on }")
       label.form-date-picker__wrapper
-        v-text-field(
+        v-text-field.form-date-picker__text-field(
+          v-show="!onlyIcon"
           v-model="localValue"
           v-on="on"
+          :loading="loading"
           :label="label"
           :disabled="disabled || loading"
-          :append-icon="appendIcon ? $theme.icons.mdiCalendar : ''"
-          :prepend-icon="!appendIcon ? $theme.icons.mdiCalendar : ''"
+          :solo="solo"
+          :append-icon="!solo && appendIcon ? $theme.icons.mdiCalendar : ''"
+          :prepend-icon="!solo && !appendIcon ? $theme.icons.mdiCalendar : ''"
+          :append-inner-icon="solo && appendIcon ? $theme.icons.mdiCalendar : ''"
+          :prepend-inner-icon="solo && !appendIcon ? $theme.icons.mdiCalendar : ''"
           readonly
           hide-details
         )
+        v-btn(
+          v-show="onlyIcon"
+          :loading="loading"
+          icon
+          small
+          @click="menu = true"
+        )
+          v-icon {{ $theme.icons.mdiCalendar }}
     v-date-picker(
       v-model="localValue"
       :first-day-of-week="1"
@@ -38,6 +51,8 @@ export default {
     disabled: Boolean,
     loading: Boolean,
     appendIcon: Boolean,
+    onlyIcon: Boolean,
+    solo: Boolean,
   },
   data: () => ({
     menu: false,
@@ -55,4 +70,7 @@ export default {
 .form-date-picker
   &__wrapper
     width: 100%
+
+  &__text-field
+    border-radius: 0
 </style>

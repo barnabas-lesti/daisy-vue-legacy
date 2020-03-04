@@ -1,6 +1,5 @@
 import http from '../http';
 import utils from '../utils';
-import storage from '../storage';
 
 import Notification from '../../models/notification';
 
@@ -66,10 +65,6 @@ export default {
   },
   async 'notify/error' (context, payload) {
     return context.dispatch('notify', { type: Notification.types.ERROR, ...getNotificationFromPayload(payload) });
-  },
-
-  'storage/save' (context, { id, ...payload }) {
-    storage.saveToLocalStorage(id, payload);
   },
 };
 

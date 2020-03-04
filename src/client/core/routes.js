@@ -11,19 +11,19 @@ router.addRoutes([
     path: '/dashboard',
     name: 'dashboard',
     titleKey: 'core.views.dashboard.title',
-    component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "core.views.dashboard" */ './views/Dashboard.vue'),
   },
   {
     path: '/profile',
     name: 'profile',
     titleKey: 'core.views.profile.title',
-    component: () => import(/* webpackChunkName: "profile" */ './views/Profile.vue'),
+    component: () => import(/* webpackChunkName: "core.views.profile" */ './views/Profile.vue'),
   },
   {
     path: '/register',
     name: 'register',
     titleKey: 'core.views.register.title',
-    component: () => import(/* webpackChunkName: "register" */ './views/register/Register.vue'),
+    component: () => import(/* webpackChunkName: "core.views.register" */ './views/register/Register.vue'),
     meta: {
       isPublic: true,
     },
@@ -32,7 +32,7 @@ router.addRoutes([
     path: '/sign-in',
     name: 'signIn',
     titleKey: 'core.views.signIn.title',
-    component: () => import(/* webpackChunkName: "sign-in" */ './views/sign-in/SignIn.vue'),
+    component: () => import(/* webpackChunkName: "core.views.sign-in" */ './views/sign-in/SignIn.vue'),
     meta: {
       isPublic: true,
     },

@@ -22,7 +22,7 @@ describe('E2E / Regression', () => {
       .submit();
 
     // Sign in
-    cy.get('input[name="password"]')
+    cy.get('.sign-in-form input[name="password"]')
       .type(user.password);
     cy.get('form')
       .submit();

@@ -10,6 +10,7 @@
             v-model="dateString"
             :label="$t('health.views.diary.datePicker')"
             :loading="loading"
+            solo
           )
 
     v-row
@@ -124,14 +125,18 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import DietItem from '../../models/diet-item';
-import FormDatePicker from '../../../core/components/FormDatePicker';
-import DietTable from '../../components/DietTable';
-import DietTableFilters from '../../components/DietTableFilters';
-import NutrientSummaryChart from '../../components/NutrientSummaryChart';
-import SelectModal from '../../components/SelectModal';
-import FoodModal from '../../components/FoodModal';
-import RecipeModal from '../../components/RecipeModal';
+import store from '../../core/plugins/store';
+
+import DietItem from '../models/diet-item';
+import DiaryItem from '../models/diary-item';
+
+import FormDatePicker from '../../core/components/FormDatePicker';
+import DietTable from '../components/DietTable';
+import DietTableFilters from '../components/DietTableFilters';
+import NutrientSummaryChart from '../components/NutrientSummaryChart';
+import SelectModal from '../components/SelectModal';
+import FoodModal from '../components/FoodModal';
+import RecipeModal from '../components/RecipeModal';
 
 export default {
   components: {
@@ -246,13 +251,25 @@ export default {
       }
     },
   },
-  created () {
-    this.diaryItemCache = this.diaryItem;
-  },
   watch: {
     async '$route.params.dateString' (newDateString) {
       await this.$store.dispatch('health/diary/ensureItems', [ newDateString ]);
     },
+  },
+  created () {
+    this.diaryItemCache = this.diaryItem;
+  },
+  async beforeRouteEnter (to, from, next) {
+    const { dateString } = to.params;
+    if (DiaryItem.isDateStringValid(dateString)) {
+      await Promise.all([
+        store.dispatch('health/diet/ensureItems'),
+        store.dispatch('health/diary/ensureItems', [ dateString ]),
+      ]);
+      next();
+    } else {
+      next({ name: 'health.diary' });
+    }
   },
 };
 </script>

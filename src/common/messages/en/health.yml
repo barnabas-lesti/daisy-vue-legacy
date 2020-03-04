@@ -113,6 +113,7 @@ components:
         unknown: Unknown error occurred
 
 widgets:
+  dashboardTitle: Health trends and data
   nutrientSummary:
     title: Nutrient summary
     date: Date
