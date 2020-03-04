@@ -1,16 +1,11 @@
 <template lang="pug">
-  v-card.nutrient-summary-widget
-    v-card-title.d-block
-      .title.pr-8 {{ $t('health.widgets.nutrientSummary.title') }}
-      .caption {{ dateString }}
-      .nutrient-summary-widget__date-picker
-        form-date-picker(
-          v-model="dateString"
-          :label="$t('health.widgets.nutrientSummary.date')"
-          :loading="isLoading"
-          only-icon
-        )
-    v-card-text
+  .nutrient-summary-widget
+    widget-frame(
+      v-model="dateString"
+      :title="$t('health.widgets.nutrientSummary.title')"
+      :caption="dateString"
+      :loading="isLoading"
+    )
       nutrient-summary-chart(
         v-if="diaryItem && diaryItem.items.length > 0"
         :summary="nutrientSummary"
@@ -23,13 +18,13 @@
 
 <script>
 import DiaryItem from '../models/diary-item';
-import FormDatePicker from '../../core/components/FormDatePicker';
+import WidgetFrame from '../../core/components/WidgetFrame';
 import NutrientSummaryChart from '../components/NutrientSummaryChart';
 
 export default {
   name: 'NutrientSummaryWidget',
   components: {
-    FormDatePicker,
+    WidgetFrame,
     NutrientSummaryChart,
   },
   props: {

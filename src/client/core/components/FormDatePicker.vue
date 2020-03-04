@@ -2,12 +2,10 @@
   v-menu.form-date-picker(
     v-model="menu"
     :disabled="disabled || loading"
-    min-width="0"
   )
     template(v-slot:activator="{ on }")
-      label.form-date-picker__wrapper
+      label.form-date-picker__wrapper(v-if="!onlyIcon")
         v-text-field.form-date-picker__text-field(
-          v-show="!onlyIcon"
           v-model="localValue"
           v-on="on"
           :loading="loading"
@@ -21,14 +19,14 @@
           readonly
           hide-details
         )
-        v-btn(
-          v-show="onlyIcon"
-          :loading="loading"
-          icon
-          small
-          @click="menu = true"
-        )
-          v-icon {{ $theme.icons.mdiCalendar }}
+      v-btn(
+        v-else
+        v-on="on"
+        :loading="loading"
+        icon
+        small
+      )
+        v-icon {{ $theme.icons.mdiCalendar }}
     v-date-picker(
       v-model="localValue"
       :first-day-of-week="1"

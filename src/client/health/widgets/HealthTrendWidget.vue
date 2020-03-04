@@ -1,16 +1,11 @@
 <template lang="pug">
-  v-card.health-trend-widget
-    v-card-title.d-block
-      .title.pr-8 {{ $t('health.widgets.healthTrend.title') }}
-      .caption {{ dateRangeString }}
-      .health-trend-widget__date-picker
-        form-date-picker(
-          v-model="dateString"
-          :label="$t('health.widgets.healthTrend.date')"
-          :loading="isLoading"
-          only-icon
-        )
-    v-card-text
+  .health-trend-widget
+    widget-frame(
+      v-model="dateString"
+      :title="$t('health.widgets.healthTrend.title')"
+      :caption="dateRangeString"
+      :loading="isLoading"
+    )
       .d-block
         v-select(
           v-model="trendType"
@@ -29,7 +24,7 @@
 
 <script>
 import DiaryItem from '../models/diary-item';
-import FormDatePicker from '../../core/components/FormDatePicker';
+import WidgetFrame from '../../core/components/WidgetFrame';
 import HealthTrendChart from '../components/HealthTrendChart';
 
 const nutrientNames = {
@@ -47,7 +42,7 @@ const trendTypes = {
 export default {
   name: 'HealthTrendWidget',
   components: {
-    FormDatePicker,
+    WidgetFrame,
     HealthTrendChart,
   },
   props: {
