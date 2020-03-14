@@ -1,6 +1,6 @@
-# Aurora Web App
+# Daisy Web App
 
-Web application and data API for Aurora.
+Web application and data API for Daisy.
 
 ## Development
 
@@ -15,25 +15,25 @@ npm run start
 npm run start:client
 
 # Start the BE server in production mode
-npm run start:prod
+npm run start:server:prod
 
 # Stop the BE prod. server
-npm run stop:prod
+npm run stop:server:prod
 
 # Lint and autofix formatting errors
 npm run lint
 
-# Run e2e tests with electron UI
-npm run test
+# Run client side functional and e2e tests
+npm run test:client
 
-# Run e2e tests in terminal
-npm run test:run
+# Run server side integration tests
+npm run test:server
 
 # Build the client bundle with development config
-npm run build
+npm run build:client
 
 # Build the client bundle with production config
-npm run build:prod
+npm run build:client:prod
 ```
 
 _Yarn can also be used of course._
