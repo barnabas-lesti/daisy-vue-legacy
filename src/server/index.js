@@ -1,50 +1,64 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const proxy = require('express-http-proxy');
 const cors = require('cors');
 
 const config = require('./config');
 const logger = require('./logger');
+const db = require('./db');
 
 class Server {
   constructor () {
     this._app = express();
-
-    this._app.use([
-      bodyParser.json(),
-      express.static(config.DIST_FOLDER_PATH),
-    ]);
-    this._cors();
-    this._serviceProxy();
-    this._spaResolver();
+    this._apiRouters = {};
   }
 
   async start () {
+    this._handleErrors();
+    this._initRoutes();
+    db.connect();
+
     logger.info(`Using configuration: "${config.env.NODE_ENV}"`);
     const server = await this._app.listen(config.env.PORT);
     const { address } = server.address();
     logger.info(`Server running at http://${address}:${config.env.PORT}`);
   }
 
+  addApiRouters (domain, routers) {
+    if (!this._apiRouters[domain]) this._apiRouters[domain] = [];
+    this._apiRouters[domain].push(...routers);
+  }
+
   getApp () {
     return this._app;
   }
 
-  _cors () {
-    this._app.use(cors({
-      exposedHeaders: 'authorization',
-    }));
+  _handleErrors () {
+    process.on('uncaughtException', error => logger.error(error));
+    process.on('unhandledRejection', error => logger.error(error));
   }
 
-  _serviceProxy () {
-    const { SERVICES } = config.env;
-    for (const servicePrefix of Object.keys(SERVICES)) {
-      this._app.use(`/api/${servicePrefix}`, proxy(SERVICES[servicePrefix]));
-    }
-  }
+  _initRoutes () {
+    // Common file and parser setup
+    this._app.use([
+      bodyParser.json(),
+      cors({ exposedHeaders: config.AUTH_HEADER }),
+      express.static(config.DIST_FOLDER_PATH),
+    ]);
 
-  _spaResolver () {
+    // API routes
+    const routes = require('./routes');
+    this._app.use('/api', [
+      require('./middlewares/auth/seed')(),
+      ...routes.public,
+
+      require('./middlewares/auth/guard')(),
+      ...routes.private,
+
+      (req, res, next) => res.status(404).send(),
+    ]);
+
+    // SPA resolver
     this._app.use((req, res) => res.sendFile(path.join(config.DIST_FOLDER_PATH, 'index.html')));
   }
 }

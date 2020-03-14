@@ -4,9 +4,8 @@
 dist.zip
 
 # Tests
-/test/videos
-/test/screenshots
-/cypress
+/test/client/videos
+/test/client/screenshots
 
 # Sensitive env config
 env/*

@@ -1,0 +1,9 @@
+{
+  "testFiles": "**/*.test.js",
+  "integrationFolder": "test/client/tests",
+  "pluginsFile": "test/client/plugins/index.js",
+  "supportFile": "test/client/support/index.js",
+  "screenshotsFolder": "test/client/screenshots",
+  "fixturesFolder": false,
+  "video": false
+}

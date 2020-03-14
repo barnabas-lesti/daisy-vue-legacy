@@ -1,0 +1,255 @@
+common:
+  appTitle: Daisy
+  units:
+    g: g
+    ml: ml
+    calories: cal
+    percent: '%'
+    pieces: piece | pieces
+    plates: plate | plates
+    serving: serving
+    mug: mug | mugs
+    cup: cup | cups
+    teaspoon: teaspoon | teaspoons
+
+components:
+  commonFormDatePicker:
+    cancel: Cancel
+    save: Save
+
+  commonModal:
+    confirm: Confirm
+    cancel: Cancel
+    remove: Delete
+    edit: Edit
+    removeWarning: Are you sure you want to delete the item?
+
+  layoutNavbarProfileMenu:
+    profile: Profile
+    signOut: Sign out
+
+  registerForm:
+    signInLink: Already have an account? Sign in!
+    labels:
+      email: Email
+      password: Password
+      passwordConfirm: Password confirmation
+      submit: Register
+    errors:
+      email:
+        required: Email is required
+        email: Email format is invalid
+      password:
+        required: Password is required
+      passwordConfirm:
+        required: Password confirmation is required
+        match: Passwords must match
+      server:
+        registrationDisabled: Registration is currently disabled
+        alreadyExists: User with given email address already exists
+        unknown: Unknown error occurred
+
+  signInForm:
+    registerLink: Don't have an account? Register!
+    labels:
+      email: Email
+      password: Password
+      submit: Sign in
+    errors:
+      email:
+        required: Email is required
+        email: Email format is invalid
+      password:
+        required: Password is required
+      server:
+        invalidCredentials: Invalid credentials
+        notFound: User not found
+        sessionExpired: Session expired, please sign in again
+        unknown: Unknown error occurred
+
+  dashboardNutrientSummaryWidget:
+    title: Nutrient summary
+    date: Date
+    noItems: No items added for today. To show the nutrient summary, {0}
+    noItemsLink: add items to this day.
+  dashboardHealthTrendWidget:
+    title: Health trend
+    date: Date of week
+    noItems: No items added for today. To show the nutrient summary, {0}
+    noItemsLink: add items to this day.
+    trendTypes: Trend type
+    trendTypeOptions:
+      macros: Macros
+      calories: Calories
+    legend:
+      labels:
+        calories: Calories (cal)
+        carbs: Carbs (g)
+        protein: Protein (g)
+        fat: Fat (g)
+      days:
+        1: '{0}, Mo'
+        2: '{0}, Tu'
+        3: '{0}, We'
+        4: '{0}, Th'
+        5: '{0}, Fr'
+        6: '{0}, Sa'
+        0: '{0}, Su'
+
+  dietSelectModal:
+    title: 'Add/remove items'
+
+  dietNutrientSummaryChart:
+    noData: Nothing to display
+    table:
+      calories: Calories
+      carbs: Carbs
+      protein: Protein
+      fat: Fat
+    legend:
+      calories: Calories (cal)
+      carbs: Carbs (g)
+      protein: Protein (g)
+      fat: Fat (g)
+
+  dietTable:
+    search: Search
+    noData: No items available
+    noResults: No items found
+    loading: Loading items...
+    itemsPerPage: Per page
+    itemsPerPageAll: All
+    name: Name
+    amount: Amount
+    serving: Serving
+    itemType: Type
+    calories: Calories
+    carbs: Carbs (g)
+    protein: Protein (g)
+    fat: Fat (g)
+    filters:
+      title: Filters
+      showFoods: Show food
+      showRecipes: Show recipes
+
+  dietTableFilters:
+    search: Search
+
+  dietFoodModal:
+    title:
+      new: New food
+      edit: Edit food
+      view: View food
+    form:
+      name: Name
+      description: Description
+      calories: Calories
+      carbs: Carbs (g)
+      protein: Protein (g)
+      fat: Fat (g)
+      serving:
+        unit: Serving unit
+        value: Serving value
+    errors:
+      name:
+        required: Name is required
+      server:
+        unknown: Unknown error occurred
+
+  dietRecipeModal:
+    title:
+      new: New recipe
+      edit: Edit recipe
+      view: View recipe
+    form:
+      name: Name
+      description: Description
+      serving:
+        unit: Serving unit
+        value: Serving value
+    onlyShowSelected: Only show selected
+    ingredientSelector: Select ingredients
+    general: General
+    ingredients: Ingredients
+    summary: Nutrients
+    noIngredients: Add ingredients to see the nutrient breakdown
+    errors:
+      name:
+        required: Name is required
+      server:
+        unknown: Unknown error occurred
+
+views:
+  register:
+    title: Register
+    notifications:
+      success: Registration successful
+
+  signIn:
+    title: Sign in
+    notifications:
+      success: 'Signed in as "{email}"'
+
+  profile:
+    title: Profile
+    general:
+      title: General
+      notifications:
+        updated: Profile updated
+      labels:
+        email: Email
+        fullName: Full name
+        profileImageUrl: Profile image URL
+        submit: Update profile
+      errors:
+        server:
+          unknown: Unknown error occurred
+    password:
+      title: Password
+      notifications:
+        updated: Password updated
+      labels:
+        password: Current password
+        newPassword: New password
+        newPasswordConfirm: Password confirmation
+        submit: Update password
+      errors:
+        password:
+          required: Current password is required
+        newPassword:
+          required: New password is required
+        newPasswordConfirm:
+          required: New password confirmation is required
+          match: New password and its confirmation must match
+        server:
+          invalidCredentials: Old password invalid
+          unknown: Unknown error occurred
+
+  dashboard:
+    title: Dashboard
+
+  diary:
+    title: Diary
+    datePicker: Date
+    summary: Summary
+    consumption: Consumption
+    nutrientSummary: Nutrient summary
+    noItems: Add items to display the nutrient breakdown
+    notifications:
+      saved: Diary item successfully saved
+      unknownError: Unknown error occurred
+
+  diet:
+    title: Food & Recipes
+    search: Search
+    newFoodButton: Create food
+    newRecipeButton: Create recipe
+    showFoods: Show food
+    showRecipes: Show recipes
+    notifications:
+      food:
+        saved: Food successfully saved
+        removed: Food successfully deleted
+      recipe:
+        saved: Recipe successfully saved
+        removed: Recipe successfully deleted

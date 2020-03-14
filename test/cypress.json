@@ -1,9 +1,0 @@
-{
-  "testFiles": "**/*.test.js",
-  "integrationFolder": "test/tests",
-  "pluginsFile": "test/plugins/index.js",
-  "supportFile": "test/support/index.js",
-  "screenshotsFolder": "test/screenshots",
-  "fixturesFolder": false,
-  "video": false
-}
